@@ -34,9 +34,9 @@ const HeroSection = () => {
       {stats.map((stat, index) => (
         <div
           key={index}
-          className={`border-2 border-red-500 relative flex items-center justify-between py-5 px-4 rounded-lg shadow-lg overflow-hidden text-white ${stat.color}`}
+          className={`relative flex items-center justify-between py-5 px-4 rounded-lg shadow-lg overflow-hidden text-white ${stat.color}`}
         >
-          <div className="border-2 border-red-500  absolute inset-y-0 left-0 w-1/2 bg-white/20 blur-3xl"></div>
+          <div className=" absolute inset-y-0 left-0 w-1/2 bg-white/20 blur-3xl"></div>
 
           <div className="relative z-10 ">
             <p className="text-lg font-bold pb-2">{stat.title}</p>

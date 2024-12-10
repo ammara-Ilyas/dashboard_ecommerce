@@ -4,6 +4,7 @@ import { SidebarProvider } from "@/contextApi/SidebarContext";
 import { ThemeProvider } from "@/contextApi/ThemeContext";
 import { ProductProvider } from "@/contextApi/ProductContext";
 import Navbar from "@/components/header/Navbar";
+import Sidebar from "@/components/header/Sidebar";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -33,6 +34,7 @@ export default function RootLayout({ children }) {
             <ProductProvider>
               <SidebarProvider>
                 <Navbar />
+                <Sidebar />
                 {children}
               </SidebarProvider>
             </ProductProvider>

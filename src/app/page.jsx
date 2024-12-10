@@ -6,19 +6,23 @@ import HeroSection from "@/components/widgets/dashboard/DashboardStats";
 import ProductList from "@/components/widgets/dashboard/ProductList";
 import { useTheme } from "@/contextApi/ThemeContext";
 import TotalSalesChart from "@/components/widgets/dashboard/TotalSalesChart";
+import { useSidebar } from "@/contextApi/SidebarContext";
+
 const Home = () => {
   const { isDarkMode } = useTheme();
+  const { isSidebarOpen } = useSidebar();
 
   return (
-    <div className={`${isDarkMode ? "dark" : ""}`}>
-      <div className="flex bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white min-h-screen">
-        <Sidebar />
-        <div className="flex-grow ml-64">
-          <div className="p-4">
-            <HeroSection />
-            <ProductList />
-            <TotalSalesChart />
-          </div>
+    <div className="relative overflow-hidden  dark:bg-gray-900 text-gray-800 dark:text-white">
+      <div
+        className={`transform ${
+          isSidebarOpen ? "translate-x-0 w-[80%]" : "-translate-x-[0%] w-[98%]"
+        } transition-transform duration-300 ease-in-out ml-auto`}
+      >
+        <div className="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white min-h-screen">
+          <HeroSection />
+          <ProductList />
+          <TotalSalesChart />
         </div>
       </div>
     </div>

@@ -15,7 +15,7 @@ const Navbar = () => {
 
   return (
     <div className={`${isDarkMode ? "dark" : ""}`}>
-      <header className="flex w-[100vw] justify-between items-center bg-white shadow p-4">
+      <header className="flex w-[98vw] justify-between items-center bg-white shadow p-4">
         <div className="flex items-center">
           <h1 className="mr-4 text-xl font-bold text-blue-600">ECOMMERCE</h1>
           <button
