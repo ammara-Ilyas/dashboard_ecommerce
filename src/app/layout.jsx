@@ -2,6 +2,7 @@ import localFont from "next/font/local";
 import { UserProvider } from "@/contextApi/UserContext";
 import { SidebarProvider } from "@/contextApi/SidebarContext";
 import { ThemeProvider } from "@/contextApi/ThemeContext";
+import { ProductProvider } from "@/contextApi/ProductContext";
 import Navbar from "@/components/header/Navbar";
 import "./globals.css";
 
@@ -29,10 +30,12 @@ export default function RootLayout({ children }) {
       >
         <ThemeProvider>
           <UserProvider>
-            <SidebarProvider>
-              <Navbar />
-              {children}
-            </SidebarProvider>
+            <ProductProvider>
+              <SidebarProvider>
+                <Navbar />
+                {children}
+              </SidebarProvider>
+            </ProductProvider>
           </UserProvider>
         </ThemeProvider>
       </body>

@@ -27,6 +27,7 @@ const HeroSection = () => {
       icon: <FaStar className="text-white text-4xl" />,
     },
   ];
+  console.log("dashboard Stats");
 
   return (
     <div className="grid grid-cols-1 pb-9 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-4">

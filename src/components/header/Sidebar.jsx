@@ -1,7 +1,7 @@
 "use client";
 import { useSidebar } from "@/contextApi/SidebarContext";
 import { List, ListItem, ListItemText } from "@mui/material";
-
+// import { NestedList } from "./miniComponents/NestedList";
 const Sidebar = () => {
   const menuItems = [
     "Dashboard",
@@ -14,6 +14,7 @@ const Sidebar = () => {
     "Home Bottom Banners",
   ];
   const { isSidebarOpen } = useSidebar();
+  console.log("Sidebar open state:", isSidebarOpen);
 
   return (
     <div
@@ -23,7 +24,7 @@ const Sidebar = () => {
       <List>
         {menuItems.map((item) => (
           <ListItem
-            button
+            button={true}
             key={item}
             className="hover:bg-gray-200 cursor-pointer"
           >
@@ -31,6 +32,7 @@ const Sidebar = () => {
           </ListItem>
         ))}
       </List>
+      {/* <NestedList /> */}
     </div>
   );
 };

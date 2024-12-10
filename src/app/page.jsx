@@ -2,10 +2,10 @@
 
 import Navbar from "@/components/header/Navbar";
 import Sidebar from "@/components/header/Sidebar";
-import HeroSection from "@/components/widgets/DashboardStats";
-import ProductList from "@/components/widgets/ProductList";
+import HeroSection from "@/components/widgets/dashboard/DashboardStats";
+import ProductList from "@/components/widgets/dashboard/ProductList";
 import { useTheme } from "@/contextApi/ThemeContext";
-
+import TotalSalesChart from "@/components/widgets/dashboard/TotalSalesChart";
 const Home = () => {
   const { isDarkMode } = useTheme();
 
@@ -17,6 +17,7 @@ const Home = () => {
           <div className="p-4">
             <HeroSection />
             <ProductList />
+            <TotalSalesChart />
           </div>
         </div>
       </div>

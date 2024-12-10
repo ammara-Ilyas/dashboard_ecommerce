@@ -19,6 +19,7 @@ const Navbar = () => {
         <div className="flex items-center">
           <h1 className="mr-4 text-xl font-bold text-blue-600">ECOMMERCE</h1>
           <button
+            button="true"
             onClick={toggleSidebar}
             className="p-2 text-xl bg-gray-200 rounded-full hover:text-blue-600"
           >
