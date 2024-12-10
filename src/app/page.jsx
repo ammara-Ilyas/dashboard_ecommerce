@@ -13,17 +13,15 @@ const Home = () => {
   const { isSidebarOpen } = useSidebar();
 
   return (
-    <div className="relative overflow-hidden  dark:bg-gray-900 text-gray-800 dark:text-white">
+    <div className="relative overflow-hidden  dark:bg-gray-900 text-gray-800 dark:text-white min-h-screen">
       <div
         className={`transform ${
           isSidebarOpen ? "translate-x-0 w-[80%]" : "-translate-x-[0%] w-[98%]"
         } transition-transform duration-300 ease-in-out ml-auto`}
       >
-        <div className="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white min-h-screen">
-          <HeroSection />
-          <ProductList />
-          <TotalSalesChart />
-        </div>
+        <HeroSection />
+        <ProductList />
+        <TotalSalesChart />
       </div>
     </div>
   );
