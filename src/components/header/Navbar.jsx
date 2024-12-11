@@ -12,6 +12,7 @@ const Navbar = () => {
   const { isDarkMode } = useTheme();
   const { isSidebarOpen, toggleSidebar } = useSidebar();
   const { user } = useUser();
+  console.log("Nav bar");
 
   return (
     <div className={`${isDarkMode ? "dark" : ""}`}>

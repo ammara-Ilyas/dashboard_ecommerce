@@ -14,7 +14,7 @@
     "@mui/icons-material": "^6.1.10",
     "@mui/material": "^6.1.10",
     "chart.js": "^4.4.7",
-    "next": "^15.0.4",
+    "next": "^14.2.20",
     "react": "^18",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",

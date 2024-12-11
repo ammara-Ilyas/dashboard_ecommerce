@@ -9,126 +9,306 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
+import { useTheme } from "@mui/material";
+import { useProducts } from "@/contextApi/ProductContext";
 
-export default function ProductUploadForm() {
-  const [darkMode, setDarkMode] = useState(false);
-  const [rating, setRating] = useState(0);
+function ProductUploadForm() {
+  let {
+    formData,
+    setFormData,
+    categories,
+    subCategories,
+    location,
+    rams,
+    weights,
+    sizes,
+  } = useProducts();
+
+  const { isDarkMode } = useTheme();
+
+  // Handle input changes for all fields
+  const handleFormData = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Form Data Submitted:", formData);
+  };
 
   return (
     <div
       className={`${
-        darkMode ? "bg-gray-900 text-white" : "bg-white text-black"
+        isDarkMode ? "bg-gray-900 text-white" : "bg-white text-black"
       } min-h-screen p-8`}
     >
-      <form className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-md space-y-6">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white border-[1px] dark:bg-gray-800 p-6 rounded-lg shadow-md space-y-6"
+      >
         {/* Basic Information */}
         <div>
           <h2 className="text-lg font-semibold mb-4">Basic Information</h2>
-          <div className="grid grid-cols-2 gap-6">
-            <TextField
-              label="Product Name"
-              fullWidth
-              className="dark:text-white dark:border-gray-600 dark:bg-gray-700"
-            />
-            <TextField
-              label="Description"
-              fullWidth
-              multiline
-              rows={3}
-              className="dark:text-white dark:border-gray-600 dark:bg-gray-700"
-            />
+          <div className="grid grid-cols-1 gap-6">
+            <div className="flex flex-col ">
+              <InputLabel
+                shrink
+                className="uppercase text-black text-[16px] font-semibold "
+              >
+                Product name
+              </InputLabel>
+              <TextField
+                name="name"
+                value={formData.name}
+                onChange={handleFormData}
+                fullWidth
+              />
+            </div>
+            <div className="flex flex-col ">
+              <InputLabel
+                shrink
+                className="uppercase text-black text-[16px] font-semibold "
+              >
+                Description
+              </InputLabel>
+              <TextField
+                name="description"
+                value={formData.description}
+                onChange={handleFormData}
+                fullWidth
+                multiline
+                rows={3}
+              />
+            </div>
           </div>
         </div>
 
         {/* Category Details */}
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 gap-6">
           <FormControl fullWidth>
-            <InputLabel className="dark:text-gray-200">Category</InputLabel>
-            <Select className="dark:text-white dark:bg-gray-700">
-              <MenuItem value="none">None</MenuItem>
-              <MenuItem value="electronics">Electronics</MenuItem>
-              <MenuItem value="fashion">Fashion</MenuItem>
+            <InputLabel
+              shrink
+              className="uppercase text-black text-[16px] font-semibold "
+            >
+              category
+            </InputLabel>{" "}
+            <Select
+              name="category"
+              value={formData.category}
+              onChange={handleFormData}
+              className="mt-3"
+            >
+              {categories.map((cate, i) => (
+                <MenuItem value={cate} key={i}>
+                  {cate}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
           <FormControl fullWidth>
-            <InputLabel className="dark:text-gray-200">Sub Category</InputLabel>
-            <Select className="dark:text-white dark:bg-gray-700">
-              <MenuItem value="none">None</MenuItem>
-              <MenuItem value="mobiles">Mobiles</MenuItem>
-              <MenuItem value="clothing">Clothing</MenuItem>
+            <InputLabel
+              shrink
+              className="uppercase text-black text-[16px] font-semibold "
+            >
+              sub category
+            </InputLabel>{" "}
+            <Select
+              name="subCategory"
+              value={formData.subCategory}
+              onChange={handleFormData}
+              className="mt-3"
+            >
+              {subCategories.map((cate, i) => (
+                <MenuItem value={cate} key={i}>
+                  {cate}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
-          <TextField
-            label="Price"
-            fullWidth
-            type="number"
-            className="dark:text-white dark:border-gray-600 dark:bg-gray-700"
-          />
         </div>
 
-        {/* Product Attributes */}
         <div className="grid grid-cols-4 gap-6">
-          <TextField
-            label="SKU"
-            fullWidth
-            className="dark:text-white dark:border-gray-600 dark:bg-gray-700"
-          />
-          <TextField
-            label="Stock"
-            fullWidth
-            type="number"
-            className="dark:text-white dark:border-gray-600 dark:bg-gray-700"
-          />
-          <TextField
-            label="Brand"
-            fullWidth
-            className="dark:text-white dark:border-gray-600 dark:bg-gray-700"
-          />
-          <TextField
-            label="Discount"
-            fullWidth
-            type="number"
-            className="dark:text-white dark:border-gray-600 dark:bg-gray-700"
-          />
+          <div className="flex flex-col ">
+            <InputLabel
+              shrink
+              className="uppercase text-black text-[16px] font-semibold "
+            >
+              Product Price
+            </InputLabel>
+            <TextField
+              name="price"
+              type="number"
+              value={formData.price}
+              onChange={handleFormData}
+              fullWidth
+            />
+          </div>
+          <div className="flex flex-col ">
+            <InputLabel
+              shrink
+              className="uppercase text-black text-[16px] font-semibold "
+            >
+              Old Price
+            </InputLabel>
+            <TextField
+              name="oldPrice"
+              type="number"
+              value={formData.oldPrice}
+              onChange={handleFormData}
+              fullWidth
+            />
+          </div>
+          <div className="flex flex-col ">
+            <InputLabel
+              shrink
+              className="uppercase text-black text-[16px] font-semibold "
+            >
+              Product Stocks
+            </InputLabel>
+            <TextField
+              name="stock"
+              type="number"
+              value={formData.stock}
+              onChange={handleFormData}
+              fullWidth
+            />
+          </div>
         </div>
 
         {/* Additional Details */}
         <div className="grid grid-cols-3 gap-6">
-          <TextField
-            label="Weight"
-            fullWidth
-            type="number"
-            className="dark:text-white dark:border-gray-600 dark:bg-gray-700"
-          />
-          <TextField
-            label="Size"
-            fullWidth
-            className="dark:text-white dark:border-gray-600 dark:bg-gray-700"
-          />
           <FormControl fullWidth>
-            <InputLabel className="dark:text-gray-200">Location</InputLabel>
-            <Select className="dark:text-white dark:bg-gray-700">
-              <MenuItem value="warehouse1">Warehouse 1</MenuItem>
-              <MenuItem value="warehouse2">Warehouse 2</MenuItem>
+            <InputLabel
+              shrink
+              className="uppercase text-black text-[16px] font-semibold"
+            >
+              Product Weight
+            </InputLabel>{" "}
+            <Select
+              name="weight"
+              value={formData.weight}
+              onChange={handleFormData}
+              className="mt-3"
+            >
+              {weights.map((weight, i) => (
+                <MenuItem value={weight} key={i}>
+                  {weight}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth>
+            <InputLabel
+              shrink
+              className="uppercase text-black text-[16px] font-semibold"
+            >
+              Product Rams
+            </InputLabel>
+            <Select
+              name="ram"
+              value={formData.ram}
+              onChange={handleFormData}
+              className="mt-3"
+              displayEmpty
+            >
+              {rams.map((ram, i) => (
+                <MenuItem value={ram} key={i}>
+                  {ram}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth>
+            <InputLabel
+              shrink
+              className="uppercase text-black text-[16px] font-semibold"
+            >
+              Product Size
+            </InputLabel>{" "}
+            <Select
+              name="size"
+              value={formData.size}
+              onChange={handleFormData}
+              className="mt-3"
+            >
+              {sizes.map((size, i) => (
+                <MenuItem value={size} key={i}>
+                  {size}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </div>
-
-        {/* Media and Ratings */}
+        <div className="grid grid-cols-3 gap-6">
+          <div className="flex flex-col ">
+            <InputLabel
+              shrink
+              className="uppercase text-black text-[16px] font-semibold "
+            >
+              Brand
+            </InputLabel>
+            <TextField
+              name="brand"
+              value={formData.brand}
+              onChange={handleFormData}
+              fullWidth
+            />
+          </div>
+          <div className="flex flex-col ">
+            <InputLabel
+              shrink
+              className="uppercase text-black text-[16px] font-semibold "
+            >
+              Discount
+            </InputLabel>
+            <TextField
+              name="discount"
+              type="number"
+              value={formData.discount}
+              onChange={handleFormData}
+              fullWidth
+            />
+          </div>
+          <div className="flex items-center gap-4">
+            <h3 className="font-semibold">Rating:</h3>
+            <Rating value={formData.rating} onChange={handleFormData} />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 ">
+          <FormControl fullWidth>
+            <InputLabel
+              shrink
+              className="uppercase text-black text-[16px] font-semibold"
+            >
+              Location
+            </InputLabel>{" "}
+            <Select
+              name="location"
+              value={formData.location}
+              onChange={handleFormData}
+              className="mt-3"
+            >
+              {location.map((loc, i) => (
+                <MenuItem value={loc} key={i}>
+                  {loc}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
+        {/* Media  */}
         <div className="space-y-4">
           <div>
             <h3 className="font-semibold">Media</h3>
             <input
               type="file"
+              name="media"
+              onChange={handleFormData}
               className="block w-full mt-2 text-gray-500 dark:text-gray-300"
-            />
-          </div>
-          <div className="flex items-center gap-4">
-            <h3 className="font-semibold">Rating:</h3>
-            <Rating
-              value={rating}
-              onChange={(e, newValue) => setRating(newValue)}
-              className="dark:text-gray-400"
             />
           </div>
         </div>
@@ -136,6 +316,7 @@ export default function ProductUploadForm() {
         {/* Submit Button */}
         <div className="text-center">
           <Button
+            type="submit"
             variant="contained"
             className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
           >
@@ -146,3 +327,5 @@ export default function ProductUploadForm() {
     </div>
   );
 }
+
+export default ProductUploadForm;

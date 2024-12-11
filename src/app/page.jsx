@@ -7,7 +7,6 @@ import ProductList from "@/components/widgets/dashboard/ProductList";
 import { useTheme } from "@/contextApi/ThemeContext";
 import TotalSalesChart from "@/components/widgets/dashboard/TotalSalesChart";
 import { useSidebar } from "@/contextApi/SidebarContext";
-
 const Home = () => {
   const { isDarkMode } = useTheme();
   const { isSidebarOpen } = useSidebar();
@@ -19,6 +18,7 @@ const Home = () => {
           isSidebarOpen ? "translate-x-0 w-[80%]" : "-translate-x-[0%] w-[98%]"
         } transition-transform duration-300 ease-in-out ml-auto`}
       >
+        <Sidebar />
         <HeroSection />
         <ProductList />
         <TotalSalesChart />

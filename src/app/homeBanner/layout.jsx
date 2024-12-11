@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
       <div
         className={`transform ${
           isSidebarOpen ? "translate-x-0 w-[80%]" : "-translate-x-[0%] w-[98%]"
-        } transition-transform duration-300 ease-in-out ml-auto `}
+        } transition-transform duration-300 ease-in-out ml-auto`}
       >
         {children}
       </div>

@@ -16,6 +16,8 @@ export const SidebarProvider = ({ children }) => {
 
 export const useSidebar = () => {
   const context = useContext(SidebarContext);
+  console.log("Nav bar Provider");
+
   if (!context) {
     throw new Error("useSidebar must be used within a SidebarProvider");
   }

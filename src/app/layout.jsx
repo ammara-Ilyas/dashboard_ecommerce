@@ -30,15 +30,15 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider>
-          <UserProvider>
-            <ProductProvider>
-              <SidebarProvider>
+          <SidebarProvider>
+            <UserProvider>
+              <ProductProvider>
                 <Navbar />
                 <Sidebar />
                 {children}
-              </SidebarProvider>
-            </ProductProvider>
-          </UserProvider>
+              </ProductProvider>
+            </UserProvider>
+          </SidebarProvider>
         </ThemeProvider>
       </body>
     </html>

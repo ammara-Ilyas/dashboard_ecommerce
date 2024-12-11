@@ -2,130 +2,151 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
 import { MdDashboard, MdLogout, MdCategory } from "react-icons/md";
 import { useSidebar } from "@/contextApi/SidebarContext";
 
 const Sidebar = () => {
-  const { isSidebarOpen } = useSidebar();
-  const [expanded, setExpanded] = useState(false);
+  const { isSidebarOpen } = useSidebar(); // Sidebar context for visibility toggle
+  const [openMenu, setOpenMenu] = useState(null); // State to track the currently open menu
 
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
+  // Handle dropdown toggle
+  const toggleMenu = (menu) => {
+    setOpenMenu((prev) => (prev === menu ? null : menu));
   };
 
   return (
     <div
-      className={`w-[270px] h-[85vh] fixed bottom-0 left-0  shadow-lg flex flex-col justify-between ${
+      className={`w-[270px] h-[85vh] fixed bottom-0 left-0 shadow-lg flex flex-col justify-between ${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       } transition-transform duration-300 ease-in-out bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300`}
     >
       {/* Sidebar menu */}
       <div className="p-4">
         <ul className="space-y-2">
-          <Link href="/">
-            <li className="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-700">
+          {/* Dashboard */}
+          <li>
+            <Link
+              href="/"
+              className="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-700"
+            >
               <MdDashboard className="text-xl" />
               <span>Dashboard</span>
-            </li>
-          </Link>
+            </Link>
+          </li>
 
-          <Accordion
-            expanded={expanded === "panel1"}
-            onChange={handleChange("panel1")}
-            className="rounded-lg"
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1-content"
-              id="panel1-header"
-              className="hover:bg-blue-100 dark:hover:bg-gray-700"
+          {/* Categories Dropdown */}
+          <li>
+            <button
+              onClick={() => toggleMenu("categories")}
+              className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-700"
             >
-              <Typography className="text-gray-700 dark:text-gray-300 flex items-center">
-                <MdCategory className="text-xl mr-2" />
-                Categories
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ul className="ml-4 space-y-4">
-                <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
-                  <Link href="category/categorylist">Category List</Link>
-                </li>
-                <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
-                  <Link href="category/categoryadd"> Add a Category </Link>
-                </li>
-                <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
-                  <Link href="category/subCategoryList">
-                    Sub Category List{" "}
+              <span className="flex items-center space-x-2">
+                <MdCategory className="text-xl" />
+                <span>Categories</span>
+              </span>
+              <span
+                className={`transform ${
+                  openMenu === "categories" ? "rotate-180" : ""
+                }`}
+              >
+                ▼
+              </span>
+            </button>
+            {openMenu === "categories" && (
+              <ul className="ml-6 mt-2 space-y-2">
+                <li>
+                  <Link
+                    href="/category/categorylist"
+                    className="block hover:text-blue-600 dark:hover:text-blue-400"
+                  >
+                    Category List
                   </Link>
                 </li>
-                <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
-                  <Link href="category/subCategoryAdd">
-                    Add a Sub Category{" "}
+                <li>
+                  <Link
+                    href="/category/categoryadd"
+                    className="block hover:text-blue-600 dark:hover:text-blue-400"
+                  >
+                    Add a Category
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/category/subCategoryList"
+                    className="block hover:text-blue-600 dark:hover:text-blue-400"
+                  >
+                    Sub Category List
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/category/subCategoryAdd"
+                    className="block hover:text-blue-600 dark:hover:text-blue-400"
+                  >
+                    Add a Sub Category
                   </Link>
                 </li>
               </ul>
-            </AccordionDetails>
-          </Accordion>
+            )}
+          </li>
 
-          {/* Accordion Menu for Products */}
-          <Accordion
-            expanded={expanded === "panel2"}
-            onChange={handleChange("panel2")}
-            className="rounded-lg"
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel2-content"
-              id="panel2-header"
-              className="hover:bg-blue-100 dark:hover:bg-gray-700"
+          {/* Products Dropdown */}
+          <li>
+            <button
+              onClick={() => toggleMenu("products")}
+              className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-700"
             >
-              <Typography className="text-gray-700 dark:text-gray-300 flex items-center">
-                <MdCategory className="text-xl mr-2" />
-                Products
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ul className="ml-4 space-y-4">
+              <span className="flex items-center space-x-2">
+                <MdCategory className="text-xl" />
+                <span>Products</span>
+              </span>
+              <span
+                className={`transform ${
+                  openMenu === "products" ? "rotate-180" : ""
+                }`}
+              >
+                ▼
+              </span>
+            </button>
+            {openMenu === "products" && (
+              <ul className="ml-6 mt-2 space-y-2">
                 <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
-                  Product List
+                  <Link href="/product/productList">Product List</Link>
                 </li>
                 <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
-                  Add a Product
+                  <Link href="/product/productAdd">Add a Product</Link>
                 </li>
                 <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
-                  Manage RAM
+                  <Link href="/product/addProductRam">Manage RAM</Link>
                 </li>
                 <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
-                  Manage Weight
+                  <Link href="/product/addProductWeight">Manage Weight</Link>
+                </li>
+                <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
+                  <Link href="/product/addProductSize">Manage Size</Link>
                 </li>
               </ul>
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion
-            expanded={expanded === "panel3"}
-            onChange={handleChange("panel3")}
-            className="rounded-lg"
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel3-content"
-              id="panel3-header"
-              className="hover:bg-blue-100 dark:hover:bg-gray-700"
+            )}
+          </li>
+          <li>
+            <button
+              onClick={() => toggleMenu("homeBanner")}
+              className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-700"
             >
-              <Typography className="text-gray-700 dark:text-gray-300 flex items-center">
-                <MdCategory className="text-xl mr-2" />
-                Home Side Banner
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ul className="ml-4 space-y-4">
+              <span className="flex items-center space-x-2">
+                <MdCategory className="text-xl" />
+                <span>Home Side Banner</span>
+              </span>
+              <span
+                className={`transform ${
+                  openMenu === "homeBanner" ? "rotate-180" : ""
+                }`}
+              >
+                ▼
+              </span>
+            </button>
+            {openMenu === "homeBanner" && (
+              <ul className="ml-6 mt-2 space-y-2">
                 <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
                   Banner List
                 </li>
@@ -133,10 +154,15 @@ const Sidebar = () => {
                   Banner Add
                 </li>
               </ul>
-            </AccordionDetails>
-          </Accordion>
+            )}
+          </li>
+
+          {/* Orders */}
           <li>
-            <Link href="/order">
+            <Link
+              href="/order"
+              className="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-700"
+            >
               <span>Orders</span>
             </Link>
           </li>

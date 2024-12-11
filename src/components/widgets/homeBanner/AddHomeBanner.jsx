@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { Button } from "@mui/material";
 import { CloudUpload } from "@mui/icons-material";

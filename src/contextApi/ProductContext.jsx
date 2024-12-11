@@ -53,18 +53,77 @@ const originalProducts = [
   },
 ];
 
+const countries = [
+  "Afghanistan",
+  "Albania",
+  "Algeria",
+  "Andorra",
+  "Angola",
+  "Argentina",
+  "Armenia",
+  "Australia",
+  "Austria",
+  "Azerbaijan",
+  "Bahamas",
+  "Bahrain",
+  "Bangladesh",
+  "Barbados",
+  "Belarus",
+  "Belgium",
+  "Belize",
+  "Benin",
+  "Bhutan",
+  "Bolivia",
+];
+
+let productData = {
+  name: "",
+  description: "",
+  category: "",
+  subCategory: "",
+  price: 0,
+  oldPrice: 0,
+  weight: 0,
+  ram: 0,
+  brand: "",
+  stock: 0,
+  discount: 0,
+  location: "",
+  size: "",
+  rating: 0,
+};
+let productSizes = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
+
 export const ProductProvider = ({ children }) => {
   const [categories, setCategories] = useState(cate);
+  const [subCategories, setSubCategories] = useState(cate);
+  const [location, setLocation] = useState(countries);
+  const [sizes, setSizes] = useState(productSizes);
+  const [weights, setWeights] = useState(productSizes);
+  const [rams, setRams] = useState(productSizes);
   const [products, setProducts] = useState(originalProducts);
+  const [formData, setFormData] = useState(productData);
 
   return (
     <ProductContext.Provider
       value={{
         categories,
         setCategories,
+        subCategories,
+        setSubCategories,
+        weights,
+        setWeights,
+        rams,
+        setRams,
+        sizes,
+        setSizes,
+        location,
+        setLocation,
         products,
         setProducts,
         originalProducts,
+        formData,
+        setFormData,
       }}
     >
       {children}
