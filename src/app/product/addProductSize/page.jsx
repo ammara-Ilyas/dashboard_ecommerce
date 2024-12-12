@@ -5,12 +5,8 @@ const page = () => {
   return (
     <>
       <Header
-        title="Add Category"
-        breadcrumb={[
-          { label: "Dashboard", href: "/" },
-          { label: "Category", href: "/category" },
-          { label: "Add Category", href: "/add-category" },
-        ]}
+        title="Add Products ize"
+        breadcrumb={["Dashboard", "Product", "Product Size"]}
       />
       <ProductSize />
     </>

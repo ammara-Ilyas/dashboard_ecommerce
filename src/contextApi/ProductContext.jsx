@@ -93,14 +93,22 @@ let productData = {
   rating: 0,
 };
 let productSizes = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
-
+let rams = [
+  { id: 1, value: "4GB" },
+  { id: 2, value: "8GB" },
+];
+const weights = [
+  { id: 1, value: "2KG" },
+  { id: 2, value: "4KG" },
+  { id: 3, value: "5KG" },
+];
 export const ProductProvider = ({ children }) => {
   const [categories, setCategories] = useState(cate);
   const [subCategories, setSubCategories] = useState(cate);
   const [location, setLocation] = useState(countries);
-  const [sizes, setSizes] = useState(productSizes);
-  const [weights, setWeights] = useState(productSizes);
-  const [rams, setRams] = useState(productSizes);
+  const [sizesList, setSizesList] = useState(productSizes);
+  const [weightsList, setWeightsList] = useState(weights);
+  const [ramList, setRamList] = useState(rams);
   const [products, setProducts] = useState(originalProducts);
   const [formData, setFormData] = useState(productData);
 
@@ -111,12 +119,12 @@ export const ProductProvider = ({ children }) => {
         setCategories,
         subCategories,
         setSubCategories,
-        weights,
-        setWeights,
-        rams,
-        setRams,
-        sizes,
-        setSizes,
+        weightsList,
+        setWeightsList,
+        ramList,
+        setRamList,
+        sizesList,
+        setSizesList,
         location,
         setLocation,
         products,

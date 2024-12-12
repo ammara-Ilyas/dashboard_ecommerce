@@ -1,3 +1,4 @@
+"use client";
 import ProductTabel from "../../miniComponents/ProductTabel";
 import { useProducts } from "@/contextApi/ProductContext";
 

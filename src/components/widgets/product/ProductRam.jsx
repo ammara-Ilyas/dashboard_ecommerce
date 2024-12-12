@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import {
   TextField,
@@ -9,16 +10,14 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  InputLabel,
   Paper,
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
-
+import { useProducts } from "@/contextApi/ProductContext";
 export default function AddProductRAM() {
+  const { ramList, setRamList } = useProducts();
   const [ram, setRam] = useState("");
-  const [ramList, setRamList] = useState([
-    { id: 1, value: "4GB" },
-    { id: 2, value: "8GB" },
-  ]);
 
   const [editMode, setEditMode] = useState(false);
   const [editId, setEditId] = useState(null);
@@ -34,9 +33,11 @@ export default function AddProductRAM() {
       );
       setEditMode(false);
       setEditId(null);
-    } else {
+    } else if (ram !== "") {
       // Add new RAM
       setRamList([...ramList, { id: Date.now(), value: ram }]);
+    } else {
+      alert("write ram");
     }
     setRam(""); // Clear the input
   };
@@ -55,20 +56,23 @@ export default function AddProductRAM() {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      {/* Page Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Add Product RAM</h1>
-      </div>
-
       {/* RAM Input Form */}
       <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-        <TextField
-          label="Product RAM"
-          value={ram}
-          onChange={(e) => setRam(e.target.value)}
-          fullWidth
-          className="mb-4"
-        />
+        <div className="flex flex-col ">
+          <InputLabel
+            shrink
+            className="uppercase text-black text-[16px] font-semibold "
+          >
+            Product RAM
+          </InputLabel>
+          <TextField
+            value={ram}
+            type="number"
+            onChange={(e) => setRam(e.target.value)}
+            fullWidth
+            className="mb-4"
+          />
+        </div>
         <Button
           variant="contained"
           color="primary"

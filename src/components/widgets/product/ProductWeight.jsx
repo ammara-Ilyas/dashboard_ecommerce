@@ -10,33 +10,33 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  InputLabel,
   Paper,
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
-
+import { useProducts } from "@/contextApi/ProductContext";
 export default function AddProductWeight() {
+  const { weightsList, setWeightsList } = useProducts();
   const [weight, setWeight] = useState("");
-  const [weightList, setWeightList] = useState([
-    { id: 1, value: "2KG" },
-    { id: 2, value: "4KG" },
-    { id: 3, value: "5KG" },
-  ]);
-
   const [editMode, setEditMode] = useState(false);
   const [editId, setEditId] = useState(null);
 
   // Add or Edit Product Weight
   const handleAddOrEditWeight = () => {
-    if (editMode) {
-      setWeightList(
-        weightList.map((item) =>
-          item.id === editId ? { ...item, value: weight } : item
-        )
-      );
-      setEditMode(false);
-      setEditId(null);
+    if (weight !== "") {
+      if (editMode) {
+        setWeightsList(
+          weightsList.map((item) =>
+            item.id === editId ? { ...item, value: weight } : item
+          )
+        );
+        setEditMode(false);
+        setEditId(null);
+      } else {
+        setWeightsList([...weightsList, { id: Date.now(), value: weight }]);
+      }
     } else {
-      setWeightList([...weightList, { id: Date.now(), value: weight }]);
+      alert("add weight");
     }
     setWeight("");
   };
@@ -50,25 +50,27 @@ export default function AddProductWeight() {
 
   // Delete Weight
   const handleDelete = (id) => {
-    setWeightList(weightList.filter((item) => item.id !== id));
+    setWeightsList(weightsList.filter((item) => item.id !== id));
   };
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      {/* Page Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Add Product WEIGHT</h1>
-      </div>
-
       {/* Weight Input Form */}
       <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-        <TextField
-          label="Product WEIGHT"
-          value={weight}
-          onChange={(e) => setWeight(e.target.value)}
-          fullWidth
-          className="mb-4"
-        />
+        <div className="flex flex-col ">
+          <InputLabel
+            shrink
+            className="uppercase text-black text-[16px] font-semibold "
+          >
+            Product Weight
+          </InputLabel>
+          <TextField
+            value={weight}
+            onChange={(e) => setWeight(e.target.value)}
+            fullWidth
+            className="mb-4 uppercase"
+          />
+        </div>
         <Button
           variant="contained"
           color="primary"
@@ -92,7 +94,7 @@ export default function AddProductWeight() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {weightList.map((item) => (
+            {weightsList.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>{item.value}</TableCell>
                 <TableCell>

@@ -9,6 +9,8 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
+import { CloudUpload as CloudUploadIcon } from "@mui/icons-material";
+
 import { useTheme } from "@mui/material";
 import { useProducts } from "@/contextApi/ProductContext";
 
@@ -19,9 +21,9 @@ function ProductUploadForm() {
     categories,
     subCategories,
     location,
-    rams,
-    weights,
-    sizes,
+    ramList,
+    weightsList,
+    sizesList,
   } = useProducts();
 
   const { isDarkMode } = useTheme();
@@ -40,10 +42,20 @@ function ProductUploadForm() {
     console.log("Form Data Submitted:", formData);
   };
 
+  const [image, setImage] = useState(null);
+
+  // Handle file input and preview
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file); // Temporary preview URL
+      setImage(imageUrl);
+    }
+  };
   return (
     <div
       className={`${
-        isDarkMode ? "bg-gray-900 text-white" : "bg-white text-black"
+        isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
       } min-h-screen p-8`}
     >
       <form
@@ -53,7 +65,7 @@ function ProductUploadForm() {
         {/* Basic Information */}
         <div>
           <h2 className="text-lg font-semibold mb-4">Basic Information</h2>
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 gap-6 ">
             <div className="flex flex-col ">
               <InputLabel
                 shrink
@@ -194,7 +206,7 @@ function ProductUploadForm() {
               onChange={handleFormData}
               className="mt-3"
             >
-              {weights.map((weight, i) => (
+              {weightsList.map((weight, i) => (
                 <MenuItem value={weight} key={i}>
                   {weight}
                 </MenuItem>
@@ -215,7 +227,7 @@ function ProductUploadForm() {
               className="mt-3"
               displayEmpty
             >
-              {rams.map((ram, i) => (
+              {ramList.map((ram, i) => (
                 <MenuItem value={ram} key={i}>
                   {ram}
                 </MenuItem>
@@ -235,7 +247,7 @@ function ProductUploadForm() {
               onChange={handleFormData}
               className="mt-3"
             >
-              {sizes.map((size, i) => (
+              {sizesList.map((size, i) => (
                 <MenuItem value={size} key={i}>
                   {size}
                 </MenuItem>
@@ -300,7 +312,7 @@ function ProductUploadForm() {
             </Select>
           </FormControl>
         </div>
-        {/* Media  */}
+        {/* Media 
         <div className="space-y-4">
           <div>
             <h3 className="font-semibold">Media</h3>
@@ -311,8 +323,41 @@ function ProductUploadForm() {
               className="block w-full mt-2 text-gray-500 dark:text-gray-300"
             />
           </div>
-        </div>
+        </div> */}
+        <div className="space-y-4">
+          <h3 className="font-semibold text-gray-700">Media</h3>
 
+          <label
+            htmlFor="file-upload"
+            className="flex flex-col items-center justify-center w-48 h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 transition-all"
+          >
+            {/* Show Image Preview or Default Upload State */}
+            {image ? (
+              <img
+                src={image}
+                alt="Uploaded"
+                className="w-full h-full object-cover rounded-lg"
+              />
+            ) : (
+              <div className="flex flex-col items-center gap-2">
+                <CloudUploadIcon className="text-gray-400" fontSize="large" />
+                <p className="text-sm text-gray-500 dark:text-gray-300">
+                  Click to upload
+                </p>
+              </div>
+            )}
+
+            {/* Hidden File Input */}
+            <input
+              id="file-upload"
+              type="file"
+              name="media"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+          </label>
+        </div>
         {/* Submit Button */}
         <div className="text-center">
           <Button

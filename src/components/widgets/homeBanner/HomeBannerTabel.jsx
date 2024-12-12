@@ -37,7 +37,7 @@ const HomeBannerTabel = () => {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen flex flex-col items-center">
-      <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-3xl">
+      <div className="bg-white shadow-md rounded-lg p-6 w-full ">
         <h2 className="text-lg font-semibold mb-4">Image and Action</h2>
         <table className="w-full border-collapse border border-gray-300">
           <thead>

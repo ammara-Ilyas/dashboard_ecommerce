@@ -6,11 +6,7 @@ const page = () => {
     <>
       <Header
         title="Add Category"
-        breadcrumb={[
-          { label: "Dashboard", href: "/" },
-          { label: "Category", href: "/category" },
-          { label: "Add Category", href: "/add-category" },
-        ]}
+        breadcrumb={["Dashboard", "Home Banner", "Add home Banner"]}
       />
       <MediaAndPublish />
     </>

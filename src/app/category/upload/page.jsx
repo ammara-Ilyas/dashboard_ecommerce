@@ -7,11 +7,7 @@ const page = () => {
     <div className="min-h-screen bg-gray-100 p-6">
       <Header
         title="Add Category"
-        breadcrumb={[
-          { label: "Dashboard", href: "/" },
-          { label: "Category", href: "/category" },
-          { label: "Add Category", href: "/add-category" },
-        ]}
+        breadcrumb={["Dashboard", "Category", "Add Category"]}
       />
       <div className="mt-6">
         <CategoryForm />

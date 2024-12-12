@@ -4,14 +4,7 @@ import OrderTable from "@/components/widgets/order/OrderTabel";
 const page = () => {
   return (
     <>
-      <Header
-        title="Add Category"
-        breadcrumb={[
-          { label: "Dashboard", href: "/" },
-          { label: "Category", href: "/category" },
-          { label: "Add Category", href: "/add-category" },
-        ]}
-      />
+      <Header title="Order" breadcrumb={["Dashboard", "Order"]} />
       <OrderTable />
     </>
   );

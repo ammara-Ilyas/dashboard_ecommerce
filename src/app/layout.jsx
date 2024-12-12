@@ -35,7 +35,7 @@ export default function RootLayout({ children }) {
               <ProductProvider>
                 <Navbar />
                 <Sidebar />
-                {children}
+                <main className="bg-gray-100">{children}</main>
               </ProductProvider>
             </UserProvider>
           </SidebarProvider>

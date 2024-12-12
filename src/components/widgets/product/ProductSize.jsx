@@ -11,49 +11,61 @@ import {
   TableRow,
   Paper,
   IconButton,
+  InputLabel,
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
-
+import { useProducts } from "@/contextApi/ProductContext";
 const ProductSize = () => {
+  const { sizesList, setSizesList } = useProducts();
   const [size, setSize] = useState("");
-  const [sizes, setSizes] = useState(["XL", "Xs", "S", "xl", "XS"]);
+  // const [sizesList, setSizes] = useState(["XL", "Xs", "S", "xl", "XS"]);
   const [editIndex, setEditIndex] = useState(null);
 
   const handleAddSize = () => {
-    if (size.trim() && !sizes.includes(size)) {
-      if (editIndex !== null) {
-        const updatedSizes = [...sizes];
-        updatedSizes[editIndex] = size;
-        setSizes(updatedSizes);
-        setEditIndex(null);
-      } else {
-        setSizes([...sizes, size]);
+    if (size !== "") {
+      if (size.trim() && !sizesList.includes(size)) {
+        if (editIndex !== null) {
+          const updatedSizes = [...sizesList];
+          updatedSizes[editIndex] = size;
+          setSizesList(updatedSizes);
+          setEditIndex(null);
+        } else {
+          setSizesList([...sizesList, size]);
+        }
+        setSize("");
       }
-      setSize("");
+    } else {
+      alert("Write sizes first");
     }
   };
 
   const handleEdit = (index) => {
-    setSize(sizes[index]);
+    setSize(sizesList[index]);
     setEditIndex(index);
   };
 
   const handleDelete = (index) => {
-    setSizes(sizes.filter((_, i) => i !== index));
+    setSizesList(sizesList.filter((_, i) => i !== index));
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      {/* Input and Button Section */}
+    <div className="bg-white p-6 rounded-lg shadow-md mb-6">
       <div className="mb-6">
-        <TextField
-          label="Product Size"
-          variant="outlined"
-          value={size}
-          onChange={(e) => setSize(e.target.value)}
-          fullWidth
-          className="mb-4"
-        />
+        <div className="flex flex-col ">
+          <InputLabel
+            shrink
+            className="uppercase text-black text-[16px] font-semibold "
+          >
+            Product Size
+          </InputLabel>
+          <TextField
+            variant="outlined"
+            value={size}
+            onChange={(e) => setSize(e.target.value)}
+            fullWidth
+            className="mb-4"
+          />
+        </div>
         <Button
           onClick={handleAddSize}
           variant="contained"
@@ -77,7 +89,7 @@ const ProductSize = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sizes.map((size, index) => (
+            {sizesList.map((size, index) => (
               <TableRow key={index} className="hover:bg-gray-100">
                 <TableCell>{size}</TableCell>
                 <TableCell>

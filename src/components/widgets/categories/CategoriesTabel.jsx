@@ -18,7 +18,6 @@ const CategoryList = () => {
   return (
     <div className="p-6 bg-gray-50">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold text-gray-700">Category List</h1>
         <Button
           variant="contained"
           color="primary"

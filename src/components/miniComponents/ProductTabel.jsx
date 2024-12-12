@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import ProductFilter from "./ProductFilter";
 // import ProductTable from "@/components/ProductTable";

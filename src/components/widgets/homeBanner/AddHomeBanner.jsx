@@ -22,7 +22,7 @@ const MediaAndPublish = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen flex flex-col items-center justify-center">
+    <div className="p-6  bg-gray-100 py-20 flex flex-col items-center justify-center">
       <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
         <h2 className="text-lg font-semibold mb-4">Media And Published</h2>
 
@@ -44,11 +44,9 @@ const MediaAndPublish = () => {
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            className="opacity-0 absolute w-full h-full cursor-pointer"
+            className="opacity-0 absolute w-full h-full cursor-pointer border-2 border-red-600"
           />
         </div>
-
-        {/* Publish Button */}
         <Button
           variant="contained"
           color="primary"
