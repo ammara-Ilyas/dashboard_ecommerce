@@ -1,9 +1,8 @@
 // layout.jsx
 "use client";
-import { useSidebar } from "@/contextApi/SidebarContext";
-
+import { useCategory } from "@/contextApi/CategoriesContext";
 const Layout = ({ children }) => {
-  const { isSidebarOpen } = useSidebar();
+  const { isSidebarOpen } = useCategory();
 
   return (
     <div className="relative  overflow-hidden dark:bg-gray-900 text-gray-800 dark:text-white min-h-screen">

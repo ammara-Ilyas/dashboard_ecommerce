@@ -1,21 +1,21 @@
 "use client";
 import { createContext, useState, useContext } from "react";
 
-const SidebarContext = createContext();
-export const SidebarProvider = ({ children }) => {
+const CategoryContext = createContext();
+export const CategoryProvider = ({ children }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
 
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
 
   return (
-    <SidebarContext.Provider value={{ isSidebarOpen, toggleSidebar }}>
+    <CategoryContext.Provider value={{ isSidebarOpen, toggleSidebar }}>
       {children}
-    </SidebarContext.Provider>
+    </CategoryContext.Provider>
   );
 };
 
-export const useSidebar = () => {
-  const context = useContext(SidebarContext);
+export const useCategory = () => {
+  const context = useContext(CategoryContext);
   console.log("Nav bar Provider");
 
   if (!context) {

@@ -1,6 +1,6 @@
 import localFont from "next/font/local";
 import { UserProvider } from "@/contextApi/UserContext";
-import { SidebarProvider } from "@/contextApi/SidebarContext";
+import { CategoryProvider } from "@/contextApi/CategoriesContext";
 import { ThemeProvider } from "@/contextApi/ThemeContext";
 import { ProductProvider } from "@/contextApi/ProductContext";
 import Navbar from "@/components/header/Navbar";
@@ -30,7 +30,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider>
-          <SidebarProvider>
+          <CategoryProvider>
             <UserProvider>
               <ProductProvider>
                 <Navbar />
@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
                 <main className="bg-gray-100">{children}</main>
               </ProductProvider>
             </UserProvider>
-          </SidebarProvider>
+          </CategoryProvider>
         </ThemeProvider>
       </body>
     </html>

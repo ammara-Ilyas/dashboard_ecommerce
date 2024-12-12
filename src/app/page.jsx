@@ -6,7 +6,7 @@ import HeroSection from "@/components/widgets/dashboard/DashboardStats";
 import ProductList from "@/components/widgets/dashboard/ProductList";
 import { useTheme } from "@/contextApi/ThemeContext";
 import TotalSalesChart from "@/components/widgets/dashboard/TotalSalesChart";
-import { useSidebar } from "@/contextApi/SidebarContext";
+import { useSidebar } from "@/contextApi/CategoriesContext";
 const Home = () => {
   const { isDarkMode } = useTheme();
   const { isSidebarOpen } = useSidebar();

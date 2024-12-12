@@ -3,10 +3,9 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { MdDashboard, MdLogout, MdCategory } from "react-icons/md";
-import { useSidebar } from "@/contextApi/SidebarContext";
-
+import { useCategory } from "@/contextApi/CategoriesContext";
 const Sidebar = () => {
-  const { isSidebarOpen } = useSidebar(); // Sidebar context for visibility toggle
+  const { isSidebarOpen } = useCategory(); // Sidebar context for visibility toggle
   const [openMenu, setOpenMenu] = useState(null); // State to track the currently open menu
 
   // Handle dropdown toggle

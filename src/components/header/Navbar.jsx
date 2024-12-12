@@ -1,16 +1,15 @@
 "use client";
-import { useSidebar } from "@/contextApi/SidebarContext";
 import { useUser } from "@/contextApi/UserContext";
 import { RiMenuUnfold4Line } from "react-icons/ri";
 import ThemeToggle from "../miniComponents/ThemeToggle";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { useTheme } from "@/contextApi/ThemeContext";
-
+import { useCategory } from "@/contextApi/CategoriesContext";
 import { LuMenu } from "react-icons/lu";
 
 const Navbar = () => {
   const { isDarkMode } = useTheme();
-  const { isSidebarOpen, toggleSidebar } = useSidebar();
+  const { isSidebarOpen, toggleSidebar } = useCategory();
   const { user } = useUser();
   console.log("Nav bar");
 
