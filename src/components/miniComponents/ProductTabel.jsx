@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import ProductFilter from "./ProductFilter";
+import { useRouter } from "next/navigation";
 // import ProductTable from "@/components/ProductTable";
 import { useProducts } from "@/contextApi/ProductContext";
 import {
@@ -14,33 +15,29 @@ import {
   IconButton,
 } from "@mui/material";
 import { AiFillEye, AiFillEdit, AiFillDelete } from "react-icons/ai";
+import { set } from "date-fns";
 
 const ProductTabel = () => {
-  const { products } = useProducts();
-  // const [filteredProducts, setFilteredProducts] = useState(products);
+  const { products, setProducts, setFormData, FormData } = useProducts();
+  const router = useRouter();
+  const handleEdit = (id, row) => {
+    console.log(("id", id));
+    console.log(("row", row));
+    // setFormData(row);
+    console.log("form in edit", FormData);
 
-  // const categories = ["All", "Electronics", "Groceries", "Fashion"];
+    setFormData(products.filter((item) => item.id !== id));
+    router.push(`/product/upload`);
+  };
+  const handlePreview = (id) => {
+    console.log(("id", id));
+    router.push(`/product/${id}`);
+  };
 
-  // const handleSearch = (query) => {
-  //   const lowercasedQuery = query.toLowerCase();
-  //   const filtered = products.filter(
-  //     (product) =>
-  //       product.name.toLowerCase().includes(lowercasedQuery) ||
-  //       product.description.toLowerCase().includes(lowercasedQuery)
-  //   );
-  //   setFilteredProducts(filtered);
-  // };
-
-  // const handleFilter = (category) => {
-  //   if (category === "All") {
-  //     setFilteredProducts(products);
-  //   } else {
-  //     const filtered = products.filter(
-  //       (product) => product.category === category
-  //     );
-  //     setFilteredProducts(filtered);
-  //   }
-  // };
+  // Handle Delete Button
+  const handleDelete = (id) => {
+    setProducts(products.filter((item) => item.id !== id));
+  };
 
   return (
     <div className="p-4 dark:bg-gray-900 dark:text-white bg-gray-100">
@@ -105,15 +102,24 @@ const ProductTabel = () => {
                   {"☆".repeat(5 - row.rating)}
                 </TableCell>
                 <TableCell>
-                  <div className="flex space-x-2">
-                    <IconButton className="bg-purple-500 text-white hover:bg-purple-700 p-2 rounded">
-                      <AiFillEye />
+                  <div className="flex space-x-2 text- border-2 border-yellow-300">
+                    <IconButton
+                      onClick={() => handlePreview(row.id)}
+                      className="bg-purple-500 text-white hover:bg-purple-700 p-2 rounded"
+                    >
+                      <AiFillEye className="text-lg" />
                     </IconButton>
-                    <IconButton className="bg-green-500 text-white hover:bg-green-700 p-2 rounded">
-                      <AiFillEdit />
+                    <IconButton
+                      onClick={() => handleEdit(row.id, row)}
+                      className="bg-green-500 text-white hover:bg-green-700 p-2 rounded"
+                    >
+                      <AiFillEdit className="text-lg" />
                     </IconButton>
-                    <IconButton className="bg-red-500 text-white hover:bg-red-700 p-2 rounded">
-                      <AiFillDelete />
+                    <IconButton
+                      onClick={() => handleDelete(row.id)}
+                      className="bg-red-500 text-white hover:bg-red-700 p-2 rounded"
+                    >
+                      <AiFillDelete className="text-lg" />
                     </IconButton>
                   </div>
                 </TableCell>

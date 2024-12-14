@@ -143,7 +143,7 @@ function ProductUploadForm() {
           </FormControl>
         </div>
 
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid grid-cols-3 gap-6">
           <div className="flex flex-col ">
             <InputLabel
               shrink
@@ -228,7 +228,7 @@ function ProductUploadForm() {
               displayEmpty
             >
               {ramList.map((ram, i) => (
-                <MenuItem value={ram} key={i}>
+                <MenuItem value={ram} key={i - 1}>
                   {ram}
                 </MenuItem>
               ))}
@@ -248,7 +248,7 @@ function ProductUploadForm() {
               className="mt-3"
             >
               {sizesList.map((size, i) => (
-                <MenuItem value={size} key={i}>
+                <MenuItem value={size} key={i + 1}>
                   {size}
                 </MenuItem>
               ))}
