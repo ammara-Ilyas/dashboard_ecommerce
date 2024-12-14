@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Button,
   TextField,
@@ -18,38 +18,48 @@ import { useProducts } from "@/contextApi/ProductContext";
 const ProductSize = () => {
   const { sizesList, setSizesList } = useProducts();
   const [size, setSize] = useState("");
-  // const [sizesList, setSizes] = useState(["XL", "Xs", "S", "xl", "XS"]);
-  const [editIndex, setEditIndex] = useState(null);
+  const [editId, setEditId] = useState(null);
+  const [editMode, setEditMode] = useState(null);
+  const messagesEndRef = useRef(null);
 
-  const handleAddSize = () => {
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [editId]);
+  const handleAddOrEditSize = () => {
     if (size !== "") {
-      if (size.trim() && !sizesList.includes(size)) {
-        if (editIndex !== null) {
-          const updatedSizes = [...sizesList];
-          updatedSizes[editIndex] = size;
-          setSizesList(updatedSizes);
-          setEditIndex(null);
-        } else {
-          setSizesList([...sizesList, size]);
-        }
-        setSize("");
+      if (editMode) {
+        setSizesList(
+          sizesList.map((item) =>
+            item.id === editId ? { ...item, value: size } : item
+          )
+        );
+        setEditMode(false);
+        setEditId(null);
+      } else {
+        setSizesList([...sizesList, { id: Date.now(), value: size }]);
       }
     } else {
-      alert("Write sizes first");
+      alert("add size");
     }
+    setSize("");
   };
 
-  const handleEdit = (index) => {
-    setSize(sizesList[index]);
-    setEditIndex(index);
+  const handleEdit = (id) => {
+    size = sizesList.filter((item) => item.id == id);
+    // setSize(size.size);
+    setEditId(id);
+    setEditMode(true);
   };
 
-  const handleDelete = (index) => {
-    setSizesList(sizesList.filter((_, i) => i !== index));
+  const handleDelete = (id) => {
+    setSizesList(sizesList.filter((item) => item.id !== id));
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+    <div
+      className="bg-white p-6 rounded-lg shadow-md mb-6"
+      ref={messagesEndRef}
+    >
       <div className="mb-6">
         <div className="flex flex-col ">
           <InputLabel
@@ -67,13 +77,13 @@ const ProductSize = () => {
           />
         </div>
         <Button
-          onClick={handleAddSize}
+          onClick={handleAddOrEditSize}
           variant="contained"
           color="primary"
           fullWidth
           className="bg-blue-600 text-white hover:bg-blue-700"
         >
-          Publish and View
+          {editMode ? "Update Size" : "Publish and View"}
         </Button>
       </div>
 
@@ -93,10 +103,16 @@ const ProductSize = () => {
               <TableRow key={index} className="hover:bg-gray-100">
                 <TableCell>{size}</TableCell>
                 <TableCell>
-                  <IconButton onClick={() => handleEdit(index)} color="primary">
+                  <IconButton
+                    onClick={() => handleEdit(size.id)}
+                    color="primary"
+                  >
                     <Edit />
                   </IconButton>
-                  <IconButton onClick={() => handleDelete(index)} color="error">
+                  <IconButton
+                    onClick={() => handleDelete(size.id)}
+                    color="error"
+                  >
                     <Delete />
                   </IconButton>
                 </TableCell>

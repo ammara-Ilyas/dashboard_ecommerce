@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   TextField,
   Button,
@@ -20,7 +20,11 @@ export default function AddProductWeight() {
   const [weight, setWeight] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [editId, setEditId] = useState(null);
+  const messagesEndRef = useRef(null);
 
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [editId]);
   // Add or Edit Product Weight
   const handleAddOrEditWeight = () => {
     if (weight !== "") {
@@ -54,7 +58,7 @@ export default function AddProductWeight() {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6 bg-gray-100 min-h-screen" ref={messagesEndRef}>
       {/* Weight Input Form */}
       <div className="bg-white p-6 rounded-lg shadow-md mb-6">
         <div className="flex flex-col ">

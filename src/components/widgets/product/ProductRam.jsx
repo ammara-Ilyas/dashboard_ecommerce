@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   TextField,
   Button,
@@ -21,7 +21,11 @@ export default function AddProductRAM() {
 
   const [editMode, setEditMode] = useState(false);
   const [editId, setEditId] = useState(null);
+  const messagesEndRef = useRef(null);
 
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [editId]);
   // Handle Add/Edit RAM
   const handleAddOrEditRam = () => {
     if (editMode) {
@@ -55,7 +59,7 @@ export default function AddProductRAM() {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6 bg-gray-100 min-h-screen" ref={messagesEndRef}>
       {/* RAM Input Form */}
       <div className="bg-white p-6 rounded-lg shadow-md mb-6">
         <div className="flex flex-col ">
@@ -67,7 +71,6 @@ export default function AddProductRAM() {
           </InputLabel>
           <TextField
             value={ram}
-            type="number"
             onChange={(e) => setRam(e.target.value)}
             fullWidth
             className="mb-4"

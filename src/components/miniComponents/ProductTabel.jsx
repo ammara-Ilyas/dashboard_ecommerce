@@ -20,14 +20,13 @@ import { set } from "date-fns";
 const ProductTabel = () => {
   const { products, setProducts, setFormData, FormData } = useProducts();
   const router = useRouter();
-  const handleEdit = (id, row) => {
-    console.log(("id", id));
-    console.log(("row", row));
-    // setFormData(row);
+  const handleEdit = (id) => {
     console.log("form in edit", FormData);
-
-    setFormData(products.filter((item) => item.id !== id));
-    router.push(`/product/upload`);
+    let editProduct = products.find((item) => item.id !== id);
+    if (editProduct) {
+      setFormData(editProduct);
+      router.push(`/product/upload`);
+    }
   };
   const handlePreview = (id) => {
     console.log(("id", id));

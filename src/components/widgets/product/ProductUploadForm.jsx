@@ -206,9 +206,9 @@ function ProductUploadForm() {
               onChange={handleFormData}
               className="mt-3"
             >
-              {weightsList.map((weight, i) => (
-                <MenuItem value={weight} key={i}>
-                  {weight}
+              {weightsList.map((weight) => (
+                <MenuItem value={weight.weight} key={weight.id}>
+                  {weight.weight}
                 </MenuItem>
               ))}
             </Select>
@@ -227,9 +227,9 @@ function ProductUploadForm() {
               className="mt-3"
               displayEmpty
             >
-              {ramList.map((ram, i) => (
-                <MenuItem value={ram} key={i - 1}>
-                  {ram}
+              {ramList.map((ram) => (
+                <MenuItem value={ram.ram} key={ram.id}>
+                  {ram.ram}
                 </MenuItem>
               ))}
             </Select>
@@ -248,8 +248,8 @@ function ProductUploadForm() {
               className="mt-3"
             >
               {sizesList.map((size, i) => (
-                <MenuItem value={size} key={i + 1}>
-                  {size}
+                <MenuItem value={size.size} key={size.id}>
+                  {size.size}
                 </MenuItem>
               ))}
             </Select>

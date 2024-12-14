@@ -1,38 +1,24 @@
 "use client";
 import React from "react";
-import { IconButton, Button } from "@mui/material";
+import { IconButton } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
-
-const images = [
-  {
-    id: 1,
-    src: "/images/sale1.jpg",
-    alt: "Big Sale - 50% Off",
-  },
-  {
-    id: 2,
-    src: "/images/sale2.jpg",
-    alt: "End of Season Sale - 50% Off",
-  },
-  {
-    id: 3,
-    src: "/images/sale3.jpg",
-    alt: "Festive Sale",
-  },
-  {
-    id: 4,
-    src: "/images/sale4.jpg",
-    alt: "Crazy Deals - ₹499",
-  },
-];
+import { useRouter } from "next/navigation";
+import { useCategory } from "@/contextApi/CategoriesContext";
 
 const HomeBannerTabel = () => {
+  const { bannerList, setBannerList, setBannerFormData } = useCategory();
+  const router = useRouter();
+
   const handleEdit = (id) => {
-    alert(`Edit image with ID: ${id}`);
+    const bannerToEdit = bannerList.find((item) => item.id === id);
+    if (bannerToEdit) {
+      setBannerFormData(bannerToEdit); // Set the selected banner data in the context
+      router.push(`/homeBanner/upload`); // Navigate to the upload route
+    }
   };
 
   const handleDelete = (id) => {
-    alert(`Delete image with ID: ${id}`);
+    setBannerList(bannerList.filter((item) => item.id !== id));
   };
 
   return (
@@ -51,7 +37,7 @@ const HomeBannerTabel = () => {
             </tr>
           </thead>
           <tbody>
-            {images.map((image) => (
+            {bannerList.map((image) => (
               <tr key={image.id} className="border-b hover:bg-gray-100">
                 <td className="py-2 px-4">
                   <img
