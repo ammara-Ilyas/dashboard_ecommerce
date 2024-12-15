@@ -81,9 +81,7 @@ export default function AddProductWeight() {
           fullWidth
           onClick={handleAddOrEditWeight}
           className="bg-blue-600 hover:bg-blue-700"
-        >
-          {editMode ? "Update WEIGHT" : "Publish and View"}
-        </Button>
+        ></Button>
       </div>
 
       {/* Weight List Table */}

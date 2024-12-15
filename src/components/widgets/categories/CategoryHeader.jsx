@@ -1,7 +1,8 @@
 "use client";
-const Header = ({ title, breadcrumb }) => {
+import Button from "@/components/miniComponents/Button";
+const Header = ({ title, breadcrumb, addBtn }) => {
   return (
-    <div className="flex justify-between mt-5 items-center px-6 py-4 bg-white shadow-md w-[95%] mx-auto  rounded-xl border-[1px]">
+    <div className="flex justify-between mt-5  items-center px-6 py-4 bg-white shadow-md w-[95%] mx-auto  rounded-xl border-[1px]">
       <h1 className="text-xl font-semibold text-gray-800">{title}</h1>
       <div className="text-sm text-gray-600">
         {breadcrumb.map((crumb, index) => (
@@ -14,6 +15,13 @@ const Header = ({ title, breadcrumb }) => {
             )}
           </span>
         ))}
+        {addBtn ? (
+          <>
+            <Button title={addBtn.title} handleButton={addBtn.handleButton} />
+          </>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

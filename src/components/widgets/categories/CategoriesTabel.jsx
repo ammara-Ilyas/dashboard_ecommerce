@@ -1,33 +1,36 @@
-// components/CategoryList.js
+"use client";
 import React from "react";
 import { Button, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-const categories = [
-  { image: "/images/jewellery.png", name: "Jewellery", color: "#d3ffd9" },
-  { image: "/images/wellness.png", name: "Wellness", color: "#fff3ff" },
-  { image: "/images/beauty.png", name: "Beauty", color: "#e3fffa" },
-  { image: "/images/groceries.png", name: "Groceries", color: "#ffe8f8" },
-  { image: "/images/footwear.png", name: "Footwear", color: "#def3ff" },
-];
-
+import { useCategory } from "@/contextApi/CategoriesContext";
+import { useRouter } from "next/navigation";
 const CategoryList = () => {
-  console.log("categories");
+  const { categories, setCategories, setCategoryForm } = useCategory();
+  const router = useRouter();
+  // Handle Delete Functionality
+  const handleDelete = (id) => {
+    setCategories(categories.filter((category) => category.id !== id));
+  };
+
+  // Handle Edit Functionality
+  const handleEdit = (id) => {
+    const cate = categories.find((category) => category.id == id);
+    if (cate) {
+      setCategoryForm({
+        id: cate.id, // Include the ID for updating
+        name: cate.name,
+        image: cate.image,
+        color: cate.color,
+      });
+      router.push("/category/uploadCategory");
+    }
+  };
 
   return (
-    <div className="p-6 bg-gray-50">
-      <div className="flex justify-between items-center mb-4">
-        <Button
-          variant="contained"
-          color="primary"
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-        >
-          Add Category
-        </Button>
-      </div>
+    <div className="p-6 bg-gray-50 w-[98%] mx-auto">
       <div className="bg-white shadow rounded">
-        <table className="min-w-full border-collapse border border-gray-300">
+        <table className="min-w-full rounded-md border-collapse border border-gray-300">
           <thead>
             <tr className="bg-blue-100">
               <th className="py-3 px-6 text-left text-sm font-medium text-gray-700">
@@ -63,21 +66,23 @@ const CategoryList = () => {
                 <td className="py-3 px-6">
                   <span
                     className="py-1 px-3 rounded-full text-sm"
-                    style={{ backgroundColor: category.color }}
+                    // style={{ backgroundColor: category.color }}
                   >
                     {category.color}
                   </span>
                 </td>
-                <td className="py-3 px-6 text-center">
+                <td className="py-3 px-6 text-center text-sm">
                   <IconButton
                     aria-label="edit"
-                    className="text-blue-500 hover:text-blue-700"
+                    className="bg-green-500 text-white hover:bg-green-700 text-sm p-1 rounded"
+                    onClick={() => handleEdit(category.id)}
                   >
                     <EditIcon />
                   </IconButton>
                   <IconButton
                     aria-label="delete"
-                    className="text-red-500 hover:text-red-700"
+                    className="bg-red-500 text-white hover:bg-red-700 p-1 ml-2 text-sm rounded"
+                    onClick={() => handleDelete(category.id)}
                   >
                     <DeleteIcon />
                   </IconButton>

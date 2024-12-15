@@ -10,7 +10,7 @@ import { LuMenu } from "react-icons/lu";
 const Navbar = () => {
   const { isDarkMode } = useTheme();
   const { isSidebarOpen, toggleSidebar } = useCategory();
-  const { user } = useUser();
+  const { user, togglePanel } = useUser();
   console.log("Nav bar");
 
   return (
@@ -29,7 +29,7 @@ const Navbar = () => {
         <div className="flex items-center space-x-4">
           <ThemeToggle />
           <div className="p-2 text-xl bg-gray-200 rounded-full hover:text-blue-600">
-            <IoIosNotificationsOutline />
+            <IoIosNotificationsOutline onClick={togglePanel} />
           </div>
           <img
             src="https://via.placeholder.com/40"

@@ -99,7 +99,7 @@ const ProductView = ({ id }) => {
       <div>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum unde esse
         vero facilis, magnam nihil incidunt eius ex quia nulla? Molestiae sit
-        porro possimus quam.
+        porro possimus quam.+
       </div>
     </div>
   );

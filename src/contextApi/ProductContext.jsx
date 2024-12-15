@@ -4,8 +4,7 @@ import { useStepContext } from "@mui/material";
 import { createContext, useState, useContext } from "react";
 
 const ProductContext = createContext();
-const cate = ["Electronics", "Groceries", "Fashion", "Groceries"];
-const subCate = ["Laptops", "Cooking Essentials", "Women", "Groceries"];
+
 const originalProducts = [
   {
     id: 1,
@@ -151,7 +150,6 @@ let rams = [
   { id: 60, ram: "6GB" },
   { id: 85, ram: "8 GB" },
 ];
-"2KG", "3KG", "4KG", "5KG";
 const weights = [
   { id: 995, weight: "5KG" },
   { id: 905, weight: "4KG" },
@@ -159,8 +157,6 @@ const weights = [
   { id: 915, weight: "2KG" },
 ];
 export const ProductProvider = ({ children }) => {
-  const [categories, setCategories] = useState(cate);
-  const [subCategories, setSubCategories] = useState(subCate);
   const [location, setLocation] = useState(countries);
   const [sizesList, setSizesList] = useState(productSizes);
   const [weightsList, setWeightsList] = useState(weights);
@@ -171,10 +167,6 @@ export const ProductProvider = ({ children }) => {
   return (
     <ProductContext.Provider
       value={{
-        categories,
-        setCategories,
-        subCategories,
-        setSubCategories,
         weightsList,
         setWeightsList,
         ramList,

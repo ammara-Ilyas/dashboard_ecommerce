@@ -1,23 +1,23 @@
 "use client";
 import React from "react";
+import CategoryList from "@/components/widgets/categories/CategoriesTabel";
 import Header from "@/components/widgets/categories/CategoryHeader";
-import ProductList from "@/components/widgets/dashboard/ProductList";
-import Button from "@/components/miniComponents/Button";
 import { useRouter } from "next/navigation";
 const page = () => {
   const router = useRouter();
   const handleButton = () => {
     console.log("clicked");
-    router.push("/product/upload");
+    router.push("/category/uploadCategory");
   };
+
   return (
     <>
       <Header
-        title="Products"
-        breadcrumb={["Dashboard", "Product", "Product List"]}
-        addBtn={{ title: "Add Product", handleButton: handleButton }}
+        title="Category List"
+        breadcrumb={["Dashboard", "Category", "Category List"]}
+        addBtn={{ title: "Add Category", handleButton: handleButton }}
       />
-      <ProductList />
+      <CategoryList />
     </>
   );
 };

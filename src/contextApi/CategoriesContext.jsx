@@ -22,9 +22,56 @@ const banner = [
     alt: "Crazy Deals - ₹499",
   },
 ];
-
+const subCategoryData = [
+  {
+    image: "/images/fashion.png", // Use your own image path
+    name: "Fashion",
+    subcategories: ["Men", "Women"],
+  },
+  {
+    image: "/images/electronics.png", // Use your own image path
+    name: "Electronics",
+    subcategories: ["Mobiles", "Laptops", "Smart Watch Accessories", "Cameras"],
+  },
+];
+const cate = [
+  ({
+    id: 1,
+    color: "blue",
+    category: "Electronics",
+    image: "/images/footwear.png",
+  },
+  {
+    id: 2,
+    color: "red",
+    category: "Groceries",
+    image: "/images/footwear.png",
+  },
+  { id: 3, color: "blue", category: "Fashion", image: "/images/footwear.png" },
+  {
+    id: 4,
+    color: "blue",
+    category: "Electronics",
+    image: "/images/footwear.png",
+  }),
+];
+const cateform = {
+  id: 0,
+  cate: "",
+  color: "",
+  img: "",
+};
+const subCateform = {
+  id: 0,
+  cate: null,
+  subCate: "",
+};
 const CategoryContext = createContext();
 export const CategoryProvider = ({ children }) => {
+  const [categories, setCategories] = useState(cate);
+  const [subCategories, setSubCategories] = useState(subCategoryData);
+  const [categoryForm, setCategoryForm] = useState(cateform);
+  const [subCategoryForm, setSubCategoryForm] = useState(subCateform);
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [bannerList, setBannerList] = useState(banner);
   const [bannerFormData, setBannerFormData] = useState(null);
@@ -34,6 +81,14 @@ export const CategoryProvider = ({ children }) => {
   return (
     <CategoryContext.Provider
       value={{
+        categories,
+        setCategories,
+        categoryForm,
+        setCategoryForm,
+        subCategories,
+        setSubCategories,
+        subCategoryForm,
+        setSubCategoryForm,
         isSidebarOpen,
         toggleSidebar,
         bannerList,

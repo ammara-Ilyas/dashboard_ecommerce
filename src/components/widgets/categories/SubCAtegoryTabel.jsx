@@ -1,4 +1,4 @@
-// components/CategoryTable.js
+"use client";
 import Image from "next/image";
 import {
   Table,
@@ -10,12 +10,13 @@ import {
   Chip,
   Paper,
 } from "@mui/material";
+import { useCategory } from "@/contextApi/CategoriesContext";
+const CategoryTable = () => {
+  const { subCategories, setSubCategories } = useCategory();
 
-const CategoryTable = ({ data }) => {
   return (
     <TableContainer component={Paper} className="rounded-lg shadow-lg">
       <Table>
-        {/* Table Header */}
         <TableHead>
           <TableRow>
             <TableCell className="!bg-blue-600 !text-white font-semibold">
@@ -32,7 +33,7 @@ const CategoryTable = ({ data }) => {
 
         {/* Table Body */}
         <TableBody>
-          {data.map((category, index) => (
+          {subCategories.map((category, index) => (
             <TableRow key={index} className="even:bg-gray-100">
               {/* Category Image */}
               <TableCell>

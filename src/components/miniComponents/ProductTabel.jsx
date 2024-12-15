@@ -69,56 +69,64 @@ const ProductTabel = () => {
           </TableHead>
           <TableBody>
             {products.map((row, index) => (
-              <TableRow
-                key={index}
-                className="dark:hover:bg-gray-700 hover:bg-gray-200"
-              >
+              <TableRow key={index} className="">
                 <TableCell>
-                  <div>
-                    <div>{row.product}</div>
-                    <div className="text-gray-500 text-sm dark:text-gray-400">
-                      Lorem Ipsum is simple...
+                  <div className="flex gap-3 items-center">
+                    <img src={row.media} alt={row.name} className="w-[50px]" />
+                    <div>
+                      <div className="font-semibold">{row.name}</div>
+                      <div className="text-gray-500 text-sm dark:text-gray-400">
+                        Lorem Ipsum is simple...
+                      </div>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell>{row.category}</TableCell>
                 <TableCell>{row.subCategory}</TableCell>
                 <TableCell>
-                  <span className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded-full text-xs">
+                  <span className=" py-1  p-3 dark:bg-gray-800 bg-gray-500 text-white rounded-md text-xs">
                     {row.brand}
                   </span>
                 </TableCell>
                 <TableCell>
                   <div className="line-through text-red-500">
-                    Rs {row.priceOld}
+                    Rs {row.oldPrice}
                   </div>
                   <div className="font-semibold text-green-500">
-                    Rs {row.priceNew}
+                    Rs {row.price}
                   </div>
                 </TableCell>
-                <TableCell>
-                  {"★".repeat(row.rating)}
-                  {"☆".repeat(5 - row.rating)}
+                <TableCell className="text-yellow-400 text-[20px]">
+                  {Array.from({ length: 5 })
+                    .map((_, index) => {
+                      if (index < Math.floor(row.rating)) {
+                        return "★";
+                      } else if (index < row.rating) {
+                        return "☆";
+                      }
+                    })
+                    .join("")}
                 </TableCell>
+
                 <TableCell>
-                  <div className="flex space-x-2 text- border-2 border-yellow-300">
+                  <div className="flex space-x-2 text-[15px] ">
                     <IconButton
                       onClick={() => handlePreview(row.id)}
                       className="bg-purple-500 text-white hover:bg-purple-700 p-2 rounded"
                     >
-                      <AiFillEye className="text-lg" />
+                      <AiFillEye className="text-[15px]" />
                     </IconButton>
                     <IconButton
                       onClick={() => handleEdit(row.id, row)}
                       className="bg-green-500 text-white hover:bg-green-700 p-2 rounded"
                     >
-                      <AiFillEdit className="text-lg" />
+                      <AiFillEdit className="text-[15px]" />
                     </IconButton>
                     <IconButton
                       onClick={() => handleDelete(row.id)}
                       className="bg-red-500 text-white hover:bg-red-700 p-2 rounded"
                     >
-                      <AiFillDelete className="text-lg" />
+                      <AiFillDelete className="text-[15px]" />
                     </IconButton>
                   </div>
                 </TableCell>
