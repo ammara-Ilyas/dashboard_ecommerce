@@ -8,11 +8,23 @@ import {
   TableHead,
   TableRow,
   Chip,
+  IconButton,
   Paper,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { useCategory } from "@/contextApi/CategoriesContext";
+
 const CategoryTable = () => {
   const { subCategories, setSubCategories } = useCategory();
+
+  // Handle Deletion of a Subcategory
+  const handleDeleteSubcategory = (categoryIndex, subIndex) => {
+    const updatedSubCategories = [...subCategories];
+    updatedSubCategories[categoryIndex].subcategories.splice(subIndex, 1);
+
+    // Update the state
+    setSubCategories(updatedSubCategories);
+  };
 
   return (
     <TableContainer component={Paper} className="rounded-lg shadow-lg">
@@ -33,8 +45,8 @@ const CategoryTable = () => {
 
         {/* Table Body */}
         <TableBody>
-          {subCategories.map((category, index) => (
-            <TableRow key={index} className="even:bg-gray-100">
+          {subCategories.map((category, categoryIndex) => (
+            <TableRow key={categoryIndex} className="even:bg-gray-100">
               {/* Category Image */}
               <TableCell>
                 <div className="flex items-center justify-center">
@@ -62,6 +74,14 @@ const CategoryTable = () => {
                       label={sub}
                       color="primary"
                       className="!bg-blue-100 !text-blue-600 !font-semibold"
+                      onDelete={() =>
+                        handleDeleteSubcategory(categoryIndex, subIndex)
+                      }
+                      deleteIcon={
+                        <IconButton size="small">
+                          <CloseIcon fontSize="small" />
+                        </IconButton>
+                      }
                     />
                   ))}
                 </div>

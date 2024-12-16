@@ -7,6 +7,8 @@ import { useCategory } from "@/contextApi/CategoriesContext";
 import { useRouter } from "next/navigation";
 const CategoryList = () => {
   const { categories, setCategories, setCategoryForm } = useCategory();
+  console.log("categories", categories);
+
   const router = useRouter();
   // Handle Delete Functionality
   const handleDelete = (id) => {
@@ -30,21 +32,13 @@ const CategoryList = () => {
   return (
     <div className="p-6 bg-gray-50 w-[98%] mx-auto">
       <div className="bg-white shadow rounded">
-        <table className="min-w-full rounded-md border-collapse border border-gray-300">
-          <thead>
-            <tr className="bg-blue-100">
-              <th className="py-3 px-6 text-left text-sm font-medium text-gray-700">
-                Image
-              </th>
-              <th className="py-3 px-6 text-left text-sm font-medium text-gray-700">
-                Category
-              </th>
-              <th className="py-3 px-6 text-left text-sm font-medium text-gray-700">
-                Color
-              </th>
-              <th className="py-3 px-6 text-center text-sm font-medium text-gray-700">
-                Action
-              </th>
+        <table className="min-w-full rounded-md border-collapse  border border-gray-300">
+          <thead className="dark:bg-blue-900 bg-blue-600 text-white font-semibold uppercase">
+            <tr className="">
+              <th className="py-3 px-6 text-left text-sm ">Image</th>
+              <th className="py-3 px-6 text-left text-sm ">Category</th>
+              <th className="py-3 px-6 text-left text-sm ">Color</th>
+              <th className="py-3 px-6 text-center text-sm ">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -65,7 +59,7 @@ const CategoryList = () => {
                 <td className="py-3 px-6">{category.name}</td>
                 <td className="py-3 px-6">
                   <span
-                    className="py-1 px-3 rounded-full text-sm"
+                    className="py-1 px-3 capitalize rounded-full text-sm"
                     // style={{ backgroundColor: category.color }}
                   >
                     {category.color}

@@ -6,9 +6,13 @@ import { useRouter } from "next/navigation";
 
 const CategoryForm = () => {
   const router = useRouter();
-  const { categories, setCategories, subCategoryForm, setSubCategoryForm } =
-    useCategory();
-  const [parentCategory, setParentCategory] = useState("");
+  const {
+    subCategories,
+    categories,
+    setSubCategories,
+    subCategoryForm,
+    setSubCategoryForm,
+  } = useCategory();
 
   // Function to generate a unique ID using Date.now()
   const generateUniqueId = () =>
@@ -26,10 +30,10 @@ const CategoryForm = () => {
 
   // Handle Parent Category Selection
   const handleParentCategoryChange = (e) => {
-    setParentCategory(e.target.value);
+    const { value } = e.target;
     setSubCategoryForm((prev) => ({
       ...prev,
-      parentCate: e.target.value, // Update parentCate in form state
+      parentCate: value,
     }));
   };
 
@@ -40,10 +44,10 @@ const CategoryForm = () => {
     if (subCate && parentCate) {
       if (subCategoryForm.id) {
         // Edit functionality: Update existing subcategory
-        const updatedCategories = categories.map((cat) =>
-          cat.id === subCategoryForm.id ? { ...subCategoryForm } : cat
+        const updatedSubCategories = subCategories.map((sub) =>
+          sub.id === subCategoryForm.id ? { ...subCategoryForm } : sub
         );
-        setCategories(updatedCategories);
+        setSubCategories(updatedSubCategories);
         alert("Sub-category updated successfully!");
       } else {
         // Add new subcategory
@@ -51,7 +55,7 @@ const CategoryForm = () => {
           ...subCategoryForm,
           id: generateUniqueId(),
         };
-        setCategories((prev) => [...prev, newSubCategory]);
+        setSubCategories((prev) => [...prev, newSubCategory]);
         alert("New sub-category added successfully!");
       }
 
@@ -61,7 +65,6 @@ const CategoryForm = () => {
         parentCate: "",
         subCate: "",
       });
-      setParentCategory("");
       router.push("/category/subList");
     } else {
       alert("Please fill out all fields.");
@@ -77,7 +80,7 @@ const CategoryForm = () => {
             Parent Category
           </label>
           <Select
-            value={parentCategory}
+            value={subCategoryForm.parentCate || ""}
             onChange={handleParentCategoryChange}
             fullWidth
             displayEmpty

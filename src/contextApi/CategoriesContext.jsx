@@ -35,26 +35,32 @@ const subCategoryData = [
   },
 ];
 const cate = [
-  ({
+  {
     id: 1,
     color: "blue",
-    category: "Electronics",
+    name: "Electronics",
     image: "/images/footwear.png",
   },
   {
     id: 2,
     color: "red",
-    category: "Groceries",
+    name: "Groceries",
     image: "/images/footwear.png",
   },
-  { id: 3, color: "blue", category: "Fashion", image: "/images/footwear.png" },
+  {
+    id: 3,
+    color: "blue",
+    name: "Fashion",
+    image: "/images/footwear.png",
+  },
   {
     id: 4,
     color: "blue",
-    category: "Electronics",
+    name: "Electronics",
     image: "/images/footwear.png",
-  }),
+  },
 ];
+
 const cateform = {
   id: 0,
   cate: "",
@@ -63,7 +69,7 @@ const cateform = {
 };
 const subCateform = {
   id: 0,
-  cate: null,
+  parentCate: null,
   subCate: "",
 };
 const CategoryContext = createContext();
