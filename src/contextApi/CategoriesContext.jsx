@@ -69,8 +69,8 @@ const cateform = {
 };
 const subCateform = {
   id: 0,
-  parentCate: null,
-  subCate: "",
+  parentCate: "",
+  subCate: [],
 };
 const CategoryContext = createContext();
 export const CategoryProvider = ({ children }) => {

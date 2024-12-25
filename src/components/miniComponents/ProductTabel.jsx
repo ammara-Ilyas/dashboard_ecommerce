@@ -28,16 +28,16 @@ const ProductTabel = () => {
       router.push(`/product/upload`);
     }
   };
-  const handlePreview = (id) => {
-    console.log(("id", id));
-    router.push(`/product/${id}`);
-  };
 
   // Handle Delete Button
   const handleDelete = (id) => {
     setProducts(products.filter((item) => item.id !== id));
   };
 
+  const handlePreview = (id) => {
+    console.log(("id", id));
+    router.push(`/product/${id}`);
+  };
   return (
     <div className="p-4 dark:bg-gray-900 dark:text-white bg-gray-100">
       <TableContainer component={Paper} className="dark:bg-gray-800 bg-white">

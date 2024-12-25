@@ -40,23 +40,46 @@ const CategoryForm = () => {
   // Handle Submit: Add or Edit functionality
   const handleSubmit = () => {
     const { subCate, parentCate } = subCategoryForm;
+    console.log("sub form", subCategoryForm);
 
     if (subCate && parentCate) {
-      if (subCategoryForm.id) {
-        // Edit functionality: Update existing subcategory
-        const updatedSubCategories = subCategories.map((sub) =>
-          sub.id === subCategoryForm.id ? { ...subCategoryForm } : sub
-        );
+      const existingCategoryIndex = subCategories.findIndex(
+        (sub) => sub.name == parentCate
+      );
+
+      console.log("existing", existingCategoryIndex);
+      if (existingCategoryIndex !== -1) {
+        // Category exists, add the subcategory to its subcategories array
+        const updatedSubCategories = [...subCategories];
+        const existingCategory = updatedSubCategories[existingCategoryIndex];
+        console.log("existing", existingCategory);
+
+        if (!existingCategory.subcategories.includes(subCate)) {
+          existingCategory.subcategories.push(subCate);
+          alert(`Sub-category "${subCate}" added to "${parentCate}".`);
+        } else {
+          alert(
+            `Sub-category "${subCate}" already exists under "${parentCate}".`
+          );
+        }
+
         setSubCategories(updatedSubCategories);
-        alert("Sub-category updated successfully!");
       } else {
-        // Add new subcategory
-        const newSubCategory = {
-          ...subCategoryForm,
-          id: generateUniqueId(),
+        // Category does not exist, add it as a new category with the subcategory
+        const selectedCategory = categories.find(
+          (cat) => cat.cate == parentCate
+        );
+
+        const newCategory = {
+          name: parentCate,
+          image: selectedCategory ? selectedCategory.img : null,
+          subcategories: [subCate],
         };
-        setSubCategories((prev) => [...prev, newSubCategory]);
-        alert("New sub-category added successfully!");
+
+        setSubCategories((prev) => [...prev, newCategory]);
+        alert(
+          `New category "${parentCate}" with sub-category "${subCate}" added.`
+        );
       }
 
       // Reset form state
@@ -65,7 +88,7 @@ const CategoryForm = () => {
         parentCate: "",
         subCate: "",
       });
-      router.push("/category/subList");
+      router.push("/category/subCategories");
     } else {
       alert("Please fill out all fields.");
     }
@@ -87,11 +110,11 @@ const CategoryForm = () => {
             className="!border-gray-300 !shadow-sm"
           >
             <MenuItem value="" disabled>
-              Select Parent Category
+              None
             </MenuItem>
             {categories.map((item) => (
-              <MenuItem value={item.name} key={item.id}>
-                {item.name}
+              <MenuItem value={item.cate} key={item.id}>
+                {item.cate}
               </MenuItem>
             ))}
           </Select>

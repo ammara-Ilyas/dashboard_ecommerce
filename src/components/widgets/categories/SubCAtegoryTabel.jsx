@@ -12,10 +12,13 @@ import {
   Paper,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { AiFillEye, AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { useCategory } from "@/contextApi/CategoriesContext";
+import { useEffect, useState } from "react";
 
 const CategoryTable = () => {
-  const { subCategories, setSubCategories } = useCategory();
+  const { subCategories, setSubCategories, categories, setCategories } =
+    useCategory();
 
   // Handle Deletion of a Subcategory
   const handleDeleteSubcategory = (categoryIndex, subIndex) => {
@@ -78,8 +81,8 @@ const CategoryTable = () => {
                         handleDeleteSubcategory(categoryIndex, subIndex)
                       }
                       deleteIcon={
-                        <IconButton size="small">
-                          <CloseIcon fontSize="small" />
+                        <IconButton size="small font-sm border-2 border-red-500 text-black">
+                          <CloseIcon fontSize="small text-sm absolute top-0 right-0" />
                         </IconButton>
                       }
                     />
