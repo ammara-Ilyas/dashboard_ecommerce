@@ -9,6 +9,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      transitionProperty: {
+        height: "height",
+      },
       colors: {
         background: "var(--background)", // Custom variable for background color
         foreground: "var(--foreground)", // Custom variable for foreground color

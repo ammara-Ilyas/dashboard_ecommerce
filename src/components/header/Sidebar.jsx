@@ -6,7 +6,8 @@ import { useCategory } from "@/contextApi/CategoriesContext";
 import { IoChevronForwardOutline } from "react-icons/io5";
 import { FaProductHunt } from "react-icons/fa6";
 import { BiSolidCategory } from "react-icons/bi";
-
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
+import HomeIcon from "@mui/icons-material/Home";
 const Sidebar = () => {
   const { isSidebarOpen } = useCategory();
   const [openMenu, setOpenMenu] = useState(null);
@@ -72,22 +73,38 @@ const Sidebar = () => {
           <li>
             <button
               onClick={() => toggleMenu("homeBanner")}
-              className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-700"
+              className={`w-full flex items-center justify-between p-2 rounded-lg transition-all duration-300 focus:bg-gray-300 hover:bg-blue-100${
+                openMenu === "homeBanner"
+                  ? " dark:bg-gray-600 text-blue-600"
+                  : " dark:hover:bg-gray-700"
+              }`}
             >
-              <span className="flex items-center space-x-2">
-                <MdCategory className="text-xl" />
-                <span>Home Side Banner</span>
+              <span className="flex items-center space-x-2 transform transition-transform duration-300">
+                <HomeIcon className="text-[20px]" />
+                <span
+                  className={`transition-transform ${
+                    openMenu === "homeBanner"
+                      ? "translate-x-2"
+                      : "translate-x-0"
+                  }`}
+                >
+                  Home Side Banner
+                </span>
               </span>
               <span
-                className={`transform ${
-                  openMenu === "homeBanner" ? "rotate-90" : ""
+                className={`transform transition-transform duration-300 ${
+                  openMenu === "homeBanner" ? "rotate-90" : "rotate-0"
                 }`}
               >
                 <IoChevronForwardOutline />
               </span>
             </button>
-            {openMenu === "homeBanner" && (
-              <ul className="ml-6 pt-2 pl-6 border-l border-gray-400 space-y-[12px] transition-all duration-300 ease-in-out">
+            <div
+              className={`overflow-hidden transition-all duration-500 ${
+                openMenu === "homeBanner" ? "max-h-screen mt-2" : "max-h-0"
+              }`}
+            >
+              <ul className="ml-6 pt-2 pl-6 border-l border-gray-400 space-y-[12px] transition-all duration-500 ease-in-out">
                 {bannerList.name.map((item, index) => (
                   <li
                     key={index}
@@ -97,28 +114,43 @@ const Sidebar = () => {
                   </li>
                 ))}
               </ul>
-            )}
+            </div>
           </li>
+
           {/* Products Dropdown */}
           <li>
             <button
               onClick={() => toggleMenu("products")}
-              className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-700"
+              className={`w-full flex items-center justify-between p-2 rounded-lg transition-all duration-300 focus:bg-gray-300 hover:bg-blue-100${
+                openMenu === "products"
+                  ? " dark:bg-gray-600 text-blue-600"
+                  : " dark:hover:bg-gray-700"
+              }`}
             >
-              <span className="flex items-center space-x-2 ">
+              <span className="flex items-center space-x-2 transform transition-transform duration-300">
                 <FaProductHunt className="text-xl" />
-                <span>Products</span>
+                <span
+                  className={`transition-transform ${
+                    openMenu === "products" ? "translate-x-2" : "translate-x-0"
+                  }`}
+                >
+                  Products
+                </span>
               </span>
               <span
-                className={`transform ${
-                  openMenu === "products" ? "rotate-90 " : ""
+                className={`transform transition-transform duration-300 ${
+                  openMenu === "products" ? "rotate-90" : "rotate-0"
                 }`}
               >
                 <IoChevronForwardOutline />
               </span>
             </button>
-            {openMenu === "products" && (
-              <ul className="ml-6 pt-2 pl-6 border-l border-gray-400 space-y-[12px] transition-all duration-300 ease-in-out">
+            <div
+              className={`overflow-hidden transition-all duration-500 ${
+                openMenu === "products" ? "max-h-screen mt-2" : "max-h-0"
+              }`}
+            >
+              <ul className="ml-6 pt-2 pl-6 border-l border-gray-400 space-y-[12px] transition-all duration-500 ease-in-out">
                 {productList.name.map((item, index) => (
                   <li
                     key={index}
@@ -128,28 +160,42 @@ const Sidebar = () => {
                   </li>
                 ))}
               </ul>
-            )}
+            </div>
           </li>
           {/* Categories Dropdown */}
           <li>
             <button
               onClick={() => toggleMenu("category")}
-              className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-700"
+              className={`w-full flex items-center justify-between p-2 rounded-lg transition-all duration-300 focus:bg-gray-300 hover:bg-blue-100${
+                openMenu === "category"
+                  ? " dark:bg-gray-600 text-blue-600"
+                  : " dark:hover:bg-gray-700"
+              }`}
             >
-              <span className="flex items-center space-x-2">
+              <span className="flex items-center space-x-2 transform transition-transform duration-300">
                 <BiSolidCategory className="text-xl" />
-                <span>Category</span>
+                <span
+                  className={`transition-transform ${
+                    openMenu === "category" ? "translate-x-2" : "translate-x-0"
+                  }`}
+                >
+                  Category
+                </span>
               </span>
               <span
-                className={`transform ${
-                  openMenu === "category" ? "rotate-90" : ""
+                className={`transform transition-transform duration-300 ${
+                  openMenu === "category" ? "rotate-90" : "rotate-0"
                 }`}
               >
                 <IoChevronForwardOutline />
               </span>
             </button>
-            {openMenu === "category" && (
-              <ul className="ml-6 pt-2 pl-6 border-l border-gray-400 space-y-[12px] transition-all duration-300 ease-in-out">
+            <div
+              className={`overflow-hidden transition-all duration-500 ${
+                openMenu === "category" ? "max-h-screen mt-2" : "max-h-0"
+              }`}
+            >
+              <ul className="ml-6 pt-2 pl-6 border-l border-gray-400 space-y-[12px] transition-all duration-500 ease-in-out">
                 {cateList.name.map((item, index) => (
                   <li
                     key={index}
@@ -159,7 +205,7 @@ const Sidebar = () => {
                   </li>
                 ))}
               </ul>
-            )}
+            </div>
           </li>
 
           {/* Orders */}
@@ -168,7 +214,10 @@ const Sidebar = () => {
               href="/order"
               className="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-700"
             >
-              <span>Orders</span>
+              <span className="flex items-center space-x-2">
+                <AssignmentTurnedInIcon className="text-xl" />
+                <span>Orders</span>
+              </span>
             </Link>
           </li>
         </ul>
