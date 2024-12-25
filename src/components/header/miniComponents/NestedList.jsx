@@ -1,64 +1,54 @@
-// import * as React from "react";
-// import ListSubheader from "@mui/material/ListSubheader";
-// import List from "@mui/material/List";
-// import ListItemButton from "@mui/material/ListItemButton";
-// import ListItemIcon from "@mui/material/ListItemIcon";
-// import ListItemText from "@mui/material/ListItemText";
-// import Collapse from "@mui/material/Collapse";
-// import InboxIcon from "@mui/icons-material/MoveToInbox";
-// import DraftsIcon from "@mui/icons-material/Drafts";
-// import SendIcon from "@mui/icons-material/Send";
-// import ExpandLess from "@mui/icons-material/ExpandLess";
-// import ExpandMore from "@mui/icons-material/ExpandMore";
-// import StarBorder from "@mui/icons-material/StarBorder";
+"use client";
+import React, { useState } from "react";
+import { IoChevronForwardOutline } from "react-icons/io5";
 
-// export const NestedList = () => {
-//   const [open, setOpen] = React.useState(true);
+export const NestedList = ({ title, list, icon }) => {
+  const [openMenu, setOpenMenu] = useState(null); // State to track the currently open menu
 
-//   const handleClick = () => {
-//     setOpen(!open);
-//   };
+  // Handle dropdown toggle
+  const toggleMenu = (menu) => {
+    setOpenMenu((prev) => (prev === menu ? null : menu));
+    console.log("Clicked");
+  };
 
-//   return (
-//     <List
-//       sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-//       component="nav"
-//       aria-labelledby="nested-list-subheader"
-//       subheader={
-//         <ListSubheader component="div" id="nested-list-subheader">
-//           Nested List Items
-//         </ListSubheader>
-//       }
-//     >
-//       <ListItemButton>
-//         <ListItemIcon>
-//           <SendIcon />
-//         </ListItemIcon>
-//         <ListItemText primary="Sent mail" />
-//       </ListItemButton>
-//       <ListItemButton>
-//         <ListItemIcon>
-//           <DraftsIcon />
-//         </ListItemIcon>
-//         <ListItemText primary="Drafts" />
-//       </ListItemButton>
-//       <ListItemButton onClick={handleClick}>
-//         <ListItemIcon>
-//           <InboxIcon />
-//         </ListItemIcon>
-//         <ListItemText primary="Inbox" />
-//         {open ? <ExpandLess /> : <ExpandMore />}
-//       </ListItemButton>
-//       <Collapse in={open} timeout="auto" unmountOnExit>
-//         <List component="div" disablePadding>
-//           <ListItemButton sx={{ pl: 4 }}>
-//             <ListItemIcon>
-//               <StarBorder />
-//             </ListItemIcon>
-//             <ListItemText primary="Starred" />
-//           </ListItemButton>
-//         </List>
-//       </Collapse>
-//     </List>
-//   );
-// };
+  <div>
+    <button
+      onClick={() => toggleMenu({ title })}
+      className="w-full border-2 border-red-900 flex items-center justify-between p-2 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-700"
+    >
+      <span className="flex items-center space-x-2 ">
+        {icon}
+        <span className="capitalize">{title}</span>
+      </span>
+      <span
+        className={`transform ${openMenu === `${title}` ? "rotate-90 " : ""}`}
+      >
+        <IoChevronForwardOutline />
+      </span>
+    </button>
+    {openMenu === title && (
+      <ul className="ml-4 pt-2 pl-6 border-l border-gray-400 space-y-[12px] transition-all duration-300 ease-in-out">
+        <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
+          <Link href="/product/productList">Product List</Link>
+        </li>
+        {list.name.map((item, index) => (
+          <li
+            key={index}
+            className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
+          >
+            <Link href={list.link[index]}>{item}</Link>
+          </li>
+        ))}
+        <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
+          <Link href="/product/addProductRam">Manage RAM</Link>
+        </li>
+        <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
+          <Link href="/product/addProductWeight">Manage Weight</Link>
+        </li>
+        <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
+          <Link href="/product/addProductSize">Manage Size</Link>
+        </li>
+      </ul>
+    )}
+  </div>;
+};

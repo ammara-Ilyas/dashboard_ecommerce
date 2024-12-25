@@ -1,26 +1,63 @@
 "use client";
-
 import React, { useState } from "react";
 import Link from "next/link";
 import { MdDashboard, MdLogout, MdCategory } from "react-icons/md";
 import { useCategory } from "@/contextApi/CategoriesContext";
-const Sidebar = () => {
-  const { isSidebarOpen } = useCategory(); // Sidebar context for visibility toggle
-  const [openMenu, setOpenMenu] = useState(null); // State to track the currently open menu
+import { IoChevronForwardOutline } from "react-icons/io5";
+import { FaProductHunt } from "react-icons/fa6";
+import { BiSolidCategory } from "react-icons/bi";
 
-  // Handle dropdown toggle
+const Sidebar = () => {
+  const { isSidebarOpen } = useCategory();
+  const [openMenu, setOpenMenu] = useState(null);
+
   const toggleMenu = (menu) => {
     setOpenMenu((prev) => (prev === menu ? null : menu));
+    console.log("Clicked");
+  };
+  let cateList = {
+    name: [
+      "Category List",
+      "Category upload",
+      "Sub Category list",
+      "Sub Category upload",
+    ],
+    link: [
+      "/category/listCate",
+      "/category/uploadCategory",
+      "/category/subList",
+      "/category/uploadSubCategory",
+    ],
+  };
+  let productList = {
+    name: [
+      "Product List",
+      "Product upload",
+      "Product Weight",
+      "Product Ram",
+      "Product Size",
+    ],
+    link: [
+      "/product/products",
+      "/product/upload",
+      "/product/weight",
+      "/product/ram",
+      "/product/size",
+    ],
+  };
+  let bannerList = {
+    name: ["Home Banner List", "Home Banner upload"],
+    link: ["/homeBanner/banners", "/homeBanner/upload"],
   };
 
   return (
     <div
-      className={`w-[270px] h-[85vh] fixed bottom-0 left-0 shadow-lg flex flex-col justify-between ${
+      className={`w-[270px] h-[89vh] fixed bottom-0 pointer-events-auto z-50  bg-white  shadow-lg flex flex-col justify-between ${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       } transition-transform duration-300 ease-in-out bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300`}
     >
       {/* Sidebar menu */}
-      <div className="p-4">
+      <div className="p-4 mt-6">
         <ul className="space-y-2">
           {/* Dashboard */}
           <li>
@@ -31,101 +68,6 @@ const Sidebar = () => {
               <MdDashboard className="text-xl" />
               <span>Dashboard</span>
             </Link>
-          </li>
-
-          {/* Categories Dropdown */}
-          <li>
-            <button
-              onClick={() => toggleMenu("categories")}
-              className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-700"
-            >
-              <span className="flex items-center space-x-2">
-                <MdCategory className="text-xl" />
-                <span>Categories</span>
-              </span>
-              <span
-                className={`transform ${
-                  openMenu === "categories" ? "rotate-180" : ""
-                }`}
-              >
-                ▼
-              </span>
-            </button>
-            {openMenu === "categories" && (
-              <ul className="ml-6 mt-2 space-y-2">
-                <li>
-                  <Link
-                    href="/category/categorylist"
-                    className="block hover:text-blue-600 dark:hover:text-blue-400"
-                  >
-                    Category List
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/category/categoryadd"
-                    className="block hover:text-blue-600 dark:hover:text-blue-400"
-                  >
-                    Add a Category
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/category/subCategoryList"
-                    className="block hover:text-blue-600 dark:hover:text-blue-400"
-                  >
-                    Sub Category List
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/category/subCategoryAdd"
-                    className="block hover:text-blue-600 dark:hover:text-blue-400"
-                  >
-                    Add a Sub Category
-                  </Link>
-                </li>
-              </ul>
-            )}
-          </li>
-
-          {/* Products Dropdown */}
-          <li>
-            <button
-              onClick={() => toggleMenu("products")}
-              className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-700"
-            >
-              <span className="flex items-center space-x-2">
-                <MdCategory className="text-xl" />
-                <span>Products</span>
-              </span>
-              <span
-                className={`transform ${
-                  openMenu === "products" ? "rotate-180" : ""
-                }`}
-              >
-                ▼
-              </span>
-            </button>
-            {openMenu === "products" && (
-              <ul className="ml-6 mt-2 space-y-2">
-                <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
-                  <Link href="/product/productList">Product List</Link>
-                </li>
-                <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
-                  <Link href="/product/productAdd">Add a Product</Link>
-                </li>
-                <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
-                  <Link href="/product/addProductRam">Manage RAM</Link>
-                </li>
-                <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
-                  <Link href="/product/addProductWeight">Manage Weight</Link>
-                </li>
-                <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
-                  <Link href="/product/addProductSize">Manage Size</Link>
-                </li>
-              </ul>
-            )}
           </li>
           <li>
             <button
@@ -138,20 +80,84 @@ const Sidebar = () => {
               </span>
               <span
                 className={`transform ${
-                  openMenu === "homeBanner" ? "rotate-180" : ""
+                  openMenu === "homeBanner" ? "rotate-90" : ""
                 }`}
               >
-                ▼
+                <IoChevronForwardOutline />
               </span>
             </button>
             {openMenu === "homeBanner" && (
-              <ul className="ml-6 mt-2 space-y-2">
-                <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
-                  Banner List
-                </li>
-                <li className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
-                  Banner Add
-                </li>
+              <ul className="ml-6 pt-2 pl-6 border-l border-gray-400 space-y-[12px] transition-all duration-300 ease-in-out">
+                {bannerList.name.map((item, index) => (
+                  <li
+                    key={index}
+                    className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
+                  >
+                    <Link href={bannerList.link[index]}>{item}</Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+          {/* Products Dropdown */}
+          <li>
+            <button
+              onClick={() => toggleMenu("products")}
+              className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-700"
+            >
+              <span className="flex items-center space-x-2 ">
+                <FaProductHunt className="text-xl" />
+                <span>Products</span>
+              </span>
+              <span
+                className={`transform ${
+                  openMenu === "products" ? "rotate-90 " : ""
+                }`}
+              >
+                <IoChevronForwardOutline />
+              </span>
+            </button>
+            {openMenu === "products" && (
+              <ul className="ml-6 pt-2 pl-6 border-l border-gray-400 space-y-[12px] transition-all duration-300 ease-in-out">
+                {productList.name.map((item, index) => (
+                  <li
+                    key={index}
+                    className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
+                  >
+                    <Link href={productList.link[index]}>{item}</Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+          {/* Categories Dropdown */}
+          <li>
+            <button
+              onClick={() => toggleMenu("category")}
+              className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-700"
+            >
+              <span className="flex items-center space-x-2">
+                <BiSolidCategory className="text-xl" />
+                <span>Category</span>
+              </span>
+              <span
+                className={`transform ${
+                  openMenu === "category" ? "rotate-90" : ""
+                }`}
+              >
+                <IoChevronForwardOutline />
+              </span>
+            </button>
+            {openMenu === "category" && (
+              <ul className="ml-6 pt-2 pl-6 border-l border-gray-400 space-y-[12px] transition-all duration-300 ease-in-out">
+                {cateList.name.map((item, index) => (
+                  <li
+                    key={index}
+                    className="hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
+                  >
+                    <Link href={cateList.link[index]}>{item}</Link>
+                  </li>
+                ))}
               </ul>
             )}
           </li>

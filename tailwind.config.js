@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: "class", // Enable class-based dark mode (you can also use 'media' if you want to follow the user's system preference)
+  important: true, // Ensures Tailwind classes have higher priority
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
