@@ -6,6 +6,7 @@ import HeroSection from "@/components/widgets/dashboard/DashboardStats";
 import ProductList from "@/components/widgets/dashboard/ProductList";
 import TotalSalesChart from "@/components/widgets/dashboard/TotalSalesChart";
 import { useCategory } from "@/contextApi/CategoriesContext";
+import NotificationsDropdown from "@/components/widgets/notification/NotificationsDropdown";
 const Home = () => {
   const { isSidebarOpen } = useCategory();
 

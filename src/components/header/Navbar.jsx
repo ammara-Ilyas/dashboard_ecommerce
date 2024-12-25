@@ -6,6 +6,7 @@ import { useCategory } from "@/contextApi/CategoriesContext";
 import { LuMenu } from "react-icons/lu";
 import Image from "next/image";
 import logo from "/public/image/logo.png";
+import NotificationDropdown from "../miniComponents/NotificationPannel";
 const Navbar = () => {
   const { isSidebarOpen, toggleSidebar } = useCategory();
   const { user, togglePanel } = useUser();
@@ -32,9 +33,14 @@ const Navbar = () => {
           </button>
         </div>
         <div className="flex items-center space-x-4">
-          <div className="p-2 text-xl bg-gray-200 rounded-full hover:text-blue-600">
-            <IoIosNotificationsOutline onClick={togglePanel} />
+          <div
+            className="p-2 text-xl bg-gray-200 rounded-full hover:text-blue-600"
+            onClick={togglePanel}
+            aria-label="Notifications"
+          >
+            <IoIosNotificationsOutline />
           </div>
+
           <img
             src="https://via.placeholder.com/40"
             alt="profile"

@@ -25,3 +25,18 @@ body {
     text-wrap: balance;
   }
 }
+
+.notification-dropdown-enter {
+  transform: translateY(100%);
+}
+.notification-dropdown-enter-active {
+  transform: translateY(0);
+  transition: transform 300ms;
+}
+.notification-dropdown-exit {
+  transform: translateY(0);
+}
+.notification-dropdown-exit-active {
+  transform: translateY(100%);
+  transition: transform 300ms;
+}
