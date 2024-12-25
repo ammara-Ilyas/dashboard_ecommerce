@@ -38,26 +38,26 @@ const cate = [
   {
     id: 1,
     color: "blue",
-    name: "Electronics",
-    image: "/images/footwear.png",
+    cate: "Electronics",
+    img: "/images/footwear.png",
   },
   {
     id: 2,
     color: "red",
-    name: "Groceries",
-    image: "/images/footwear.png",
+    cate: "Groceries",
+    img: "/images/footwear.png",
   },
   {
     id: 3,
     color: "blue",
-    name: "Fashion",
-    image: "/images/footwear.png",
+    cate: "Fashion",
+    img: "/images/footwear.png",
   },
   {
     id: 4,
     color: "blue",
-    name: "Electronics",
-    image: "/images/footwear.png",
+    cate: "Electronics",
+    img: "/images/footwear.png",
   },
 ];
 

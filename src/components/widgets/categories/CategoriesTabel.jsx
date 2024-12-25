@@ -18,11 +18,14 @@ const CategoryList = () => {
   // Handle Edit Functionality
   const handleEdit = (id) => {
     const cate = categories.find((category) => category.id == id);
+    console.log("cate", cate);
+    console.log("id", id);
+
     if (cate) {
       setCategoryForm({
         id: cate.id, // Include the ID for updating
-        name: cate.name,
-        image: cate.image,
+        cate: cate.cate,
+        img: cate.img,
         color: cate.color,
       });
       router.push("/category/uploadCategory");
@@ -51,12 +54,12 @@ const CategoryList = () => {
               >
                 <td className="py-3 px-6">
                   <img
-                    src={category.image}
-                    alt={category.name}
+                    src={category.img}
+                    alt={category.cate}
                     className="w-10 h-10 rounded-full"
                   />
                 </td>
-                <td className="py-3 px-6">{category.name}</td>
+                <td className="py-3 px-6">{category.cate}</td>
                 <td className="py-3 px-6">
                   <span
                     className="py-1 px-3 capitalize rounded-full text-sm"

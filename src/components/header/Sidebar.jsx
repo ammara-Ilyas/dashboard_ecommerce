@@ -24,9 +24,9 @@ const Sidebar = () => {
       "Sub Category upload",
     ],
     link: [
-      "/category/listCate",
+      "/category/categories",
       "/category/uploadCategory",
-      "/category/subList",
+      "/category/subCategories",
       "/category/uploadSubCategory",
     ],
   };

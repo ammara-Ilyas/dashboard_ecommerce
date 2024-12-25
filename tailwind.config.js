@@ -11,6 +11,7 @@ module.exports = {
     extend: {
       transitionProperty: {
         height: "height",
+        width: "width",
       },
       colors: {
         background: "var(--background)", // Custom variable for background color

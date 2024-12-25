@@ -52,10 +52,11 @@ const Form = () => {
         setCategories((prev) => [...prev, newCategory]);
         alert("New category added successfully!");
       }
-      router.push("/category/listCate");
+      router.push("/category/categories");
     } else {
       alert("add form");
     }
+    console.log("categories", categories);
 
     // Reset form state
     setCategoryForm({
