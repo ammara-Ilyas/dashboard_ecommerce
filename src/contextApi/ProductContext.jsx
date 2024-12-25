@@ -23,6 +23,23 @@ const originalProducts = [
     rating: 4.5,
     location: "Warehouse A",
     media: "https://via.placeholder.com/150?text=Smartphone+X1",
+    published: "2024-09-11T06:33:27.831Z",
+    reviews: [
+      {
+        name: "Alice Johnson",
+        date: "2024-12-20",
+        text: "Amazing phone with great features!",
+        rating: 5,
+        imageUrl: "https://via.placeholder.com/50?text=AJ",
+      },
+      {
+        name: "Bob Smith",
+        date: "2024-12-18",
+        text: "Good performance but battery life is average.",
+        rating: 4,
+        imageUrl: "https://via.placeholder.com/50?text=BS",
+      },
+    ],
   },
   {
     id: 2,
@@ -41,6 +58,23 @@ const originalProducts = [
     rating: 4.8,
     location: "Warehouse B",
     media: "https://via.placeholder.com/150?text=Gaming+Laptop+G5",
+    published: "2024-09-11T06:33:27.831Z",
+    reviews: [
+      {
+        name: "Charlie Brown",
+        date: "2024-12-19",
+        text: "Best laptop for gaming!",
+        rating: 5,
+        imageUrl: "https://via.placeholder.com/50?text=CB",
+      },
+      {
+        name: "Daisy Green",
+        date: "2024-12-17",
+        text: "Great for gaming, but it heats up sometimes.",
+        rating: 4,
+        imageUrl: "https://via.placeholder.com/50?text=DG",
+      },
+    ],
   },
   {
     id: 3,
@@ -59,6 +93,23 @@ const originalProducts = [
     rating: 4.2,
     location: "Warehouse C",
     media: "https://via.placeholder.com/150?text=Wireless+Earbuds+Z3",
+    published: "2024-09-11T06:33:27.831Z",
+    reviews: [
+      {
+        name: "Alice White",
+        date: "2024-12-16",
+        text: "Excellent sound quality and comfortable to wear.",
+        rating: 5,
+        imageUrl: "https://via.placeholder.com/50?text=AW",
+      },
+      {
+        name: "Frank Black",
+        date: "2024-12-14",
+        text: "Good for the price, but not very durable.",
+        rating: 3,
+        imageUrl: "https://via.placeholder.com/50?text=FB",
+      },
+    ],
   },
   {
     id: 4,
@@ -77,6 +128,23 @@ const originalProducts = [
     rating: 4.6,
     location: "Warehouse D",
     media: "https://via.placeholder.com/150?text=Smartwatch+Pro+7",
+    published: "2024-09-11T06:33:27.831Z",
+    reviews: [
+      {
+        name: "Emily Stone",
+        date: "2024-12-13",
+        text: "Accurate health tracking and excellent GPS.",
+        rating: 5,
+        imageUrl: "https://via.placeholder.com/50?text=ES",
+      },
+      {
+        name: "George White",
+        date: "2024-12-11",
+        text: "Stylish design but battery drains quickly.",
+        rating: 4,
+        imageUrl: "https://via.placeholder.com/50?text=GW",
+      },
+    ],
   },
   {
     id: 5,
@@ -95,6 +163,23 @@ const originalProducts = [
     rating: 4.7,
     location: "Warehouse E",
     media: "https://via.placeholder.com/150?text=4K+Ultra+HD+TV",
+    published: "2024-09-11T06:33:27.831Z",
+    reviews: [
+      {
+        name: "Hannah Grey",
+        date: "2024-12-10",
+        text: "Crisp picture quality and vibrant colors.",
+        rating: 5,
+        imageUrl: "https://via.placeholder.com/50?text=HG",
+      },
+      {
+        name: "Ian Black",
+        date: "2024-12-08",
+        text: "Good value for the price but lacks some smart features.",
+        rating: 4,
+        imageUrl: "https://via.placeholder.com/50?text=IB",
+      },
+    ],
   },
 ];
 

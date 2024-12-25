@@ -1,28 +1,42 @@
 "use client";
-import React, { useState, useEffect, use } from "react";
-import { Box, Typography, Chip, IconButton } from "@mui/material";
-import { Category, Memory, Star, CalendarToday } from "@mui/icons-material";
-import { clsx } from "clsx";
+import React, { useState, useEffect } from "react";
+import { Box, Typography, Chip } from "@mui/material";
+import {
+  FaTags,
+  FaBoxOpen,
+  FaMemory,
+  FaStar,
+  FaCalendarAlt,
+} from "react-icons/fa";
 import { useProducts } from "@/contextApi/ProductContext";
+import CustomReview from "@/components/miniComponents/CustomReview";
 const ProductView = ({ id }) => {
   console.log("id in view", id);
 
   const { products } = useProducts();
   const [product, setProduct] = useState({});
   useEffect(() => {
-    setProduct(products.filter((item) => item.id == id));
-  }, []);
+    setProduct(products.find((item) => item.id == id));
+  }, [id, products]);
+
   return (
-    <div>
-      {" "}
+    <div
+      className="bg-white px-4
+  "
+    >
       <Box
-        className={clsx(
-          "bg-white dark:bg-gray-800 rounded-lg shadow-md p-6",
-          "grid grid-cols-1 md:grid-cols-3 gap-4"
-        )}
+        className={
+          "bg-white dark:bg-gray-800 rounded-lg  p-6 grid grid-cols-1 md:grid-cols-3 gap-4 "
+        }
       >
         {/* Product Gallery */}
-        <Box className="col-span-1">
+        <Box
+          className="col-span-1 space-y-3 
+        "
+        >
+          <span className="text-gray-600 text-sm mb-8 italic ">
+            Product Gallery
+          </span>
           <div className="relative">
             <img
               src="https://via.placeholder.com/400x300"
@@ -36,7 +50,7 @@ const ProductView = ({ id }) => {
             />
           </div>
           {/* Thumbnail Gallery */}
-          <Box className="mt-2 flex gap-2">
+          <Box className="mt-2 flex gap-2  w-[80%]">
             <img
               src={product.img}
               alt="Thumbnail 1"
@@ -52,54 +66,115 @@ const ProductView = ({ id }) => {
 
         {/* Product Details */}
         <Box className="col-span-2 flex flex-col">
+          <span className="text-gray-600 text-sm mb-2 italic">
+            Product Details
+          </span>
           {/* Product Title */}
           <Typography
             variant="h5"
-            className="font-semibold text-gray-800 dark:text-gray-100 mb-4"
+            className="font-semibold text-gray-800 dark:text-gray-100 capitalize
+             mb-4"
           >
-            {product.title}
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi
-            reiciendis soluta illo vel ipsa. Modi?
+            {product.description}
           </Typography>
 
           {/* Product Specifications */}
-          <Box className="space-y-3 text-gray-700 dark:text-gray-300">
-            <Box className="flex items-center">
-              <Category className="mr-2 text-blue-500" />
-              <Typography variant="body2">
-                Category: {product.category}
-                Lorem ipsum dolor sit amet.
-              </Typography>
-            </Box>
-
-            <Box className="flex items-center">
-              <Memory className="mr-2 text-blue-500" />
-              <Typography variant="body2">
-                RAM:{" "}
-                <span className="bg-gray-300 px-2 py-1 rounded">
-                  {product.ram}lorem2
+          <div className="space-y-2">
+            {/* Brand */}
+            <div className="flex items-center text-gray-700 dark:text-gray-400">
+              <FaTags className="mr-3 text-lg text-gray-700" />
+              <span className="font-medium w-28">Brand</span>
+              <span>
+                {" "}
+                <span
+                  className="mr-3 text-[18px]
+                "
+                >
+                  :
                 </span>
-              </Typography>
-            </Box>
+                {product.brand}
+              </span>
+            </div>
 
-            <Box className="flex items-center">
-              <Star className="mr-2 text-yellow-500" />
-              <Typography variant="body2">Review: {product.rating}</Typography>
-            </Box>
+            {/* Category */}
+            <div className="flex items-center text-gray-700 dark:text-gray-400">
+              <FaBoxOpen className="mr-3 text-lg text-gray-700" />
+              <span className="font-medium w-28">Category</span>
+              <span>
+                {" "}
+                <span
+                  className="mr-3 text-[18px]
+                "
+                >
+                  :
+                </span>
+                {product.category}
+              </span>
+            </div>
 
-            <Box className="flex items-center">
-              <CalendarToday className="mr-2 text-blue-500" />
-              <Typography variant="body2">
-                Published: {product.publish}
-              </Typography>
-            </Box>
-          </Box>
+            {/* RAM */}
+            <div className="flex items-center text-gray-700 dark:text-gray-400">
+              <FaMemory className="mr-3 text-lg text-gray-700" />
+              <span className="font-medium w-28">RAM</span>
+              <span>
+                <span
+                  className="mr-3 text-[18px]
+                "
+                >
+                  :
+                </span>
+                {product.ram}
+              </span>
+            </div>
+
+            {/* Review */}
+            <div className="flex items-center text-gray-700 dark:text-gray-400">
+              <FaStar className="mr-3 text-lg text-gray-700" />
+              <span className="font-medium w-28">Review</span>
+              <span>
+                {" "}
+                <span
+                  className="mr-3 text-[18px]
+                "
+                >
+                  :
+                </span>
+                {product.review}(4) Review
+              </span>
+            </div>
+
+            {/* Published */}
+            <div className="flex items-center text-gray-700 dark:text-gray-400">
+              <FaCalendarAlt className="mr-3 text-lg text-gray-700" />
+              <span className="font-medium w-28">Published:</span>
+              <span>
+                <span
+                  className="mr-3 text-[18px]
+                "
+                >
+                  :
+                </span>
+                {product.published}
+              </span>
+            </div>
+          </div>
         </Box>
       </Box>
-      <div>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum unde esse
-        vero facilis, magnam nihil incidunt eius ex quia nulla? Molestiae sit
-        porro possimus quam.+
+      <div
+        className="mt-1 mb-8
+       px-4"
+      >
+        <h2 className="text-xl text-black py-2">Product Description</h2>
+        <p className=" text-gray-800  ">
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industry's standard dummy text ever
+          since the 1500s, when an unknown printer took a galley of type and
+          scrambled it to make a type specimen book.
+        </p>
+      </div>
+      <div className="my-6">
+        <h2 className="text-xl text-black py-2 px-4    ">Custom Reviews</h2>
+        <CustomReview reviews={product.reviews} />
       </div>
     </div>
   );
