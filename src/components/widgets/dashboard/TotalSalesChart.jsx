@@ -8,7 +8,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js"; // Import required components
-import { Card, CardContent, Typography } from "@mui/material";
+import { Card, CardContent, grid2Classes, Typography } from "@mui/material";
 
 // Register components explicitly
 Chart.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
@@ -34,8 +34,9 @@ const TotalSalesChart = () => {
       {
         label: "Sales",
         data: [0, 5000, 0, 0, 0, 0, 0, 0, 10000, 20000, 22000, 2000],
-        backgroundColor: "rgba(59, 130, 246, 0.8)", // Blue
+        backgroundColor: "rgba(59, 130, 246, 1)",
         borderRadius: 4,
+        barThickness: 20,
       },
     ],
   };
@@ -46,32 +47,45 @@ const TotalSalesChart = () => {
       legend: {
         display: false,
       },
-      tooltip: {
-        callbacks: {
-          label: (context) => `sales: ${context.raw}`,
-        },
-      },
+      // tooltip: {
+      //   callbacks: {
+      //     label: (context) => `sales: ${context.raw}`,
+      //   },
+      // },
     },
     scales: {
       x: {
-        ticks: { color: "#4B5563" }, // Tailwind Gray-700
+        ticks: { color: "#000000	" },
+        grid: { display: false },
+        stacked: true,
       },
       y: {
-        ticks: { color: "#4B5563" }, // Tailwind Gray-700
+        ticks: { color: "	#000000	" },
+        grid: {
+          display: false,
+        },
         beginAtZero: true,
+        stacked: true,
       },
     },
   };
   console.log("total Stats");
 
   return (
-    <Card className="shadow-lg">
-      <CardContent className="">
-        <Typography variant="h6" className="text-gray-700 font-semibold mb-4 ">
+    <Card className="shadow-lg border-2 border-red-700 w-[98%] mx-auto">
+      <CardContent>
+        <Typography variant="h6" className="mb-4 font-semibold">
           Total Sales
         </Typography>
-        <div className="w-full h-96 ">
-          <Bar data={data} options={options} className=" w-full" />
+        <div className="w-full h-96 border-2 border-black">
+          <Bar
+            data={{
+              labels: data.labels,
+              datasets: data.datasets,
+            }}
+            options={options}
+            className="border-2 border-blue-800 w-full text-black"
+          />
         </div>
       </CardContent>
     </Card>
