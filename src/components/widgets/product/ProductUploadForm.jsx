@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import Image from "next/image";
 import {
   TextField,
   MenuItem,
@@ -337,6 +336,8 @@ function ProductUploadForm() {
               <Image
                 src={image}
                 alt="Uploaded"
+                width={full}
+                height={full}
                 className="w-full h-full object-cover rounded-lg"
               />
             ) : (

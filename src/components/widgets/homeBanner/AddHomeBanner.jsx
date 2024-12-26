@@ -62,6 +62,8 @@ const MediaAndPublish = () => {
             <Image
               src={selectedImage}
               alt="Uploaded"
+              width={full}
+              height={full}
               className="max-w-full h-auto rounded"
             />
           ) : (
