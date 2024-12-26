@@ -135,11 +135,12 @@ function ProductUploadForm() {
               onChange={handleFormData}
               className="mt-3"
             >
-              {subCategories.map((cate, i) => (
-                <MenuItem value={cate} key={i}>
-                  {cate}
-                </MenuItem>
-              ))}
+              {subCategories &&
+                subCategories.map((cate, i) => (
+                  <MenuItem value={cate} key={i}>
+                    {cate}
+                  </MenuItem>
+                ))}
             </Select>
           </FormControl>
         </div>
@@ -207,11 +208,12 @@ function ProductUploadForm() {
               onChange={handleFormData}
               className="mt-3"
             >
-              {weightsList.map((weight) => (
-                <MenuItem value={weight.weight} key={weight.id}>
-                  {weight.weight}
-                </MenuItem>
-              ))}
+              {weightsList &&
+                weightsList.map((weight) => (
+                  <MenuItem value={weight.weight} key={weight.id}>
+                    {weight.weight}
+                  </MenuItem>
+                ))}
             </Select>
           </FormControl>
           <FormControl fullWidth>
@@ -248,11 +250,12 @@ function ProductUploadForm() {
               onChange={handleFormData}
               className="mt-3"
             >
-              {sizesList.map((size, i) => (
-                <MenuItem value={size.size} key={size.id}>
-                  {size.size}
-                </MenuItem>
-              ))}
+              {sizesList &&
+                sizesList.map((size, i) => (
+                  <MenuItem value={size.size} key={size.id}>
+                    {size.size}
+                  </MenuItem>
+                ))}
             </Select>
           </FormControl>
         </div>
@@ -305,11 +308,12 @@ function ProductUploadForm() {
               onChange={handleFormData}
               className="mt-3"
             >
-              {location.map((loc, i) => (
-                <MenuItem value={loc} key={i}>
-                  {loc}
-                </MenuItem>
-              ))}
+              {location &&
+                location.map((loc, i) => (
+                  <MenuItem value={loc} key={i}>
+                    {loc}
+                  </MenuItem>
+                ))}
             </Select>
           </FormControl>
         </div>

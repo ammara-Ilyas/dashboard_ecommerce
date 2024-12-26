@@ -6,7 +6,6 @@ import { useCategory } from "@/contextApi/CategoriesContext";
 import { LuMenu } from "react-icons/lu";
 import Image from "next/image";
 import logo from "/public/image/logo.png";
-import NotificationDropdown from "../miniComponents/NotificationPannel";
 const Navbar = () => {
   const { isSidebarOpen, toggleSidebar } = useCategory();
   const { user, togglePanel } = useUser();
