@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import ProductFilter from "./ProductFilter";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 // import ProductTable from "@/components/ProductTable";
 import { useProducts } from "@/contextApi/ProductContext";
@@ -72,7 +73,11 @@ const ProductTabel = () => {
               <TableRow key={index} className="">
                 <TableCell>
                   <div className="flex gap-3 items-center">
-                    <img src={row.media} alt={row.name} className="w-[50px]" />
+                    <Image
+                      src={row.media}
+                      alt={row.name}
+                      className="w-[50px]"
+                    />
                     <div>
                       <div className="font-semibold">{row.name}</div>
                       <div className="text-gray-500 text-sm dark:text-gray-400">

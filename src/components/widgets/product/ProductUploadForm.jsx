@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
 import {
   TextField,
   MenuItem,
@@ -10,7 +11,7 @@ import {
   FormControl,
 } from "@mui/material";
 import { CloudUpload as CloudUploadIcon } from "@mui/icons-material";
-
+import Image from "next/image";
 import { useTheme } from "@mui/material";
 import { useProducts } from "@/contextApi/ProductContext";
 

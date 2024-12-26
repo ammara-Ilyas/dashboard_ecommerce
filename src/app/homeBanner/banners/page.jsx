@@ -3,7 +3,7 @@ import React from "react";
 import Header from "@/components/widgets/categories/CategoryHeader";
 import HomeBannerTabel from "@/components/widgets/homeBanner/HomeBannerTabel";
 import { useRouter } from "next/navigation";
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const handleButton = () => {
     console.log("clicked");
@@ -21,4 +21,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

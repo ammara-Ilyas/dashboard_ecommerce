@@ -4,7 +4,7 @@ import { IconButton } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { useCategory } from "@/contextApi/CategoriesContext";
-
+import Image from "next/image";
 const HomeBannerTabel = () => {
   const { bannerList, setBannerList, setBannerFormData } = useCategory();
   const router = useRouter();

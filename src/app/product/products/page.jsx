@@ -4,7 +4,7 @@ import Header from "@/components/widgets/categories/CategoryHeader";
 import ProductList from "@/components/widgets/dashboard/ProductList";
 import Button from "@/components/miniComponents/Button";
 import { useRouter } from "next/navigation";
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const handleButton = () => {
     console.log("clicked");
@@ -22,4 +22,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
