@@ -34,11 +34,11 @@ const subCategoryData = [
     subcategories: ["Mobiles", "Laptops", "Smart Watch Accessories", "Cameras"],
   },
 ];
-const cate = [
+const categoryData = [
   {
     id: 1,
     color: "blue",
-    cate: "Electronics",
+    cate: "Accessories",
     img: "/images/footwear.png",
   },
   {
@@ -55,7 +55,7 @@ const cate = [
   },
   {
     id: 4,
-    color: "blue",
+    color: "green",
     cate: "Electronics",
     img: "/images/footwear.png",
   },
@@ -74,7 +74,7 @@ const subCateform = {
 };
 const CategoryContext = createContext();
 export const CategoryProvider = ({ children }) => {
-  const [categories, setCategories] = useState(cate);
+  const [categories, setCategories] = useState(categoryData);
   const [subCategories, setSubCategories] = useState(subCategoryData);
   const [categoryForm, setCategoryForm] = useState(cateform);
   const [subCategoryForm, setSubCategoryForm] = useState(subCateform);
