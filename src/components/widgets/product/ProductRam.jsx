@@ -99,25 +99,26 @@ export default function AddProductRAM() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {ramList.map((item) => (
-              <TableRow key={item.id}>
-                <TableCell>{item.value}</TableCell>
-                <TableCell>
-                  <IconButton
-                    color="primary"
-                    onClick={() => handleEdit(item.id, item.value)}
-                  >
-                    <Edit />
-                  </IconButton>
-                  <IconButton
-                    color="secondary"
-                    onClick={() => handleDelete(item.id)}
-                  >
-                    <Delete />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+            {ramList &&
+              ramList.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell>{item.value}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      color="primary"
+                      onClick={() => handleEdit(item.id, item.value)}
+                    >
+                      <Edit />
+                    </IconButton>
+                    <IconButton
+                      color="secondary"
+                      onClick={() => handleDelete(item.id)}
+                    >
+                      <Delete />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

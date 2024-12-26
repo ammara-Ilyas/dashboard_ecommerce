@@ -114,11 +114,12 @@ function ProductUploadForm() {
               onChange={handleFormData}
               className="mt-3"
             >
-              {categories.map((cate, i) => (
-                <MenuItem value={cate} key={i}>
-                  {cate}
-                </MenuItem>
-              ))}
+              {categories &&
+                categories.map((cate, i) => (
+                  <MenuItem value={cate} key={i}>
+                    {cate}
+                  </MenuItem>
+                ))}
             </Select>
           </FormControl>
           <FormControl fullWidth>

@@ -99,25 +99,26 @@ const ProductSize = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sizesList.map((size, index) => (
-              <TableRow key={index} className="hover:bg-gray-100">
-                <TableCell>{size.size}</TableCell>
-                <TableCell>
-                  <IconButton
-                    onClick={() => handleEdit(size.id)}
-                    color="primary"
-                  >
-                    <Edit />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => handleDelete(size.id)}
-                    color="error"
-                  >
-                    <Delete />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+            {sizesList &&
+              sizesList.map((size, index) => (
+                <TableRow key={index} className="hover:bg-gray-100">
+                  <TableCell>{size.size}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      onClick={() => handleEdit(size.id)}
+                      color="primary"
+                    >
+                      <Edit />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => handleDelete(size.id)}
+                      color="error"
+                    >
+                      <Delete />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
