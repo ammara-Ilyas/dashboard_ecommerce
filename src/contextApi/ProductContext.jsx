@@ -22,7 +22,7 @@ const originalProducts = [
     discount: 20,
     rating: 4.5,
     location: "Warehouse A",
-    media: "https://via.placeholder.com/150?text=Smartphone+X1",
+    media: "/images/download.jpg",
     published: "2024-09-11T06:33:27.831Z",
     reviews: [
       {

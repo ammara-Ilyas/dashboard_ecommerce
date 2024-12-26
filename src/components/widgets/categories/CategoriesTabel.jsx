@@ -8,7 +8,7 @@ import { useCategory } from "@/contextApi/CategoriesContext";
 import { useRouter } from "next/navigation";
 const CategoryList = () => {
   const { categories, setCategories, setCategoryForm } = useCategory();
-  console.log("categories", categories);
+  // console.log("categories", categories);
 
   const router = useRouter();
   // Handle Delete Functionality

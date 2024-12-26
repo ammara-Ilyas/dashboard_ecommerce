@@ -72,19 +72,19 @@ const TotalSalesChart = () => {
   console.log("total Stats");
 
   return (
-    <Card className="shadow-lg border-2 border-red-700 w-[98%] mx-auto">
+    <Card className="shadow-lg w-[98%] mx-auto">
       <CardContent>
         <Typography variant="h6" className="mb-4 font-semibold">
           Total Sales
         </Typography>
-        <div className="w-full h-96 border-2 border-black">
+        <div className="w-full h-96 ">
           <Bar
             data={{
               labels: data.labels,
               datasets: data.datasets,
             }}
             options={options}
-            className="border-2 border-blue-800 w-full text-black"
+            className="w-full text-black"
           />
         </div>
       </CardContent>
