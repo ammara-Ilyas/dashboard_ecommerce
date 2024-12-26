@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import { CloudUpload } from "@mui/icons-material";
 import { useCategory } from "@/contextApi/CategoriesContext";
 import { useRouter } from "next/navigation";
-
+import Image from "next/image";
 const MediaAndPublish = () => {
   const { bannerFormData, setBannerList, bannerList, setBannerFormData } =
     useCategory();
@@ -59,7 +59,7 @@ const MediaAndPublish = () => {
         {/* Image Upload Section */}
         <div className="border-dashed border-2 border-gray-300 rounded-lg p-4 mb-6 flex flex-col items-center justify-center relative">
           {selectedImage ? (
-            <img
+            <Image
               src={selectedImage}
               alt="Uploaded"
               className="max-w-full h-auto rounded"

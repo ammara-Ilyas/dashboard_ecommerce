@@ -2,7 +2,7 @@
 import Header from "@/components/widgets/categories/CategoryHeader";
 import { useRouter } from "next/navigation";
 import CategoryTable from "@/components/widgets/categories/SubCAtegoryTabel";
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const handleButton = () => {
     console.log("clicked");
@@ -23,4 +23,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

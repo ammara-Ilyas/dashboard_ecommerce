@@ -40,10 +40,12 @@ const HomeBannerTabel = () => {
             {bannerList.map((image) => (
               <tr key={image.id} className="border-b hover:bg-gray-100">
                 <td className="py-2 px-4">
-                  <img
+                  <Image
                     src={image.src}
                     alt={image.alt}
                     className="h-24 rounded-lg object-cover"
+                    height={24}
+                    width={24}
                   />
                 </td>
                 <td className="py-2 px-4 flex items-center gap-2">

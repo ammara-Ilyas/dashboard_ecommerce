@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Chip } from "@mui/material";
+import Image from "next/image";
 import {
   FaTags,
   FaBoxOpen,
@@ -38,7 +39,7 @@ const ProductView = ({ id }) => {
             Product Gallery
           </span>
           <div className="relative">
-            <img
+            <Image
               src="https://via.placeholder.com/400x300"
               alt={product.name}
               className="rounded-lg object-cover w-full"
@@ -51,12 +52,12 @@ const ProductView = ({ id }) => {
           </div>
           {/* Thumbnail Gallery */}
           <Box className="mt-2 flex gap-2  w-[80%]">
-            <img
+            <Image
               src={product.img}
               alt="Thumbnail 1"
               className="rounded-lg w-16 h-16 object-cover border border-gray-300 cursor-pointer"
             />
-            <img
+            <Image
               src={product.img}
               alt="Thumbnail 2"
               className="rounded-lg w-16 h-16 object-cover border border-gray-300 cursor-pointer"

@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { Button, IconButton } from "@mui/material";
+import Image from "next/image";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useCategory } from "@/contextApi/CategoriesContext";
@@ -53,10 +54,12 @@ const CategoryList = () => {
                 } hover:bg-gray-100`}
               >
                 <td className="py-3 px-6">
-                  <img
+                  <Image
                     src={category.img}
                     alt={category.cate}
                     className="w-10 h-10 rounded-full"
+                    width={10}
+                    height={10}
                   />
                 </td>
                 <td className="py-3 px-6">{category.cate}</td>

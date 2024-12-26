@@ -333,7 +333,7 @@ function ProductUploadForm() {
           >
             {/* Show Image Preview or Default Upload State */}
             {image ? (
-              <img
+              <Image
                 src={image}
                 alt="Uploaded"
                 className="w-full h-full object-cover rounded-lg"

@@ -41,10 +41,12 @@ const Navbar = () => {
             <IoIosNotificationsOutline />
           </div>
 
-          <img
-            src="https://via.placeholder.com/40"
+          <Image
+            src={logo}
             alt="profile"
             className="w-10 h-10 rounded-full"
+            width={50}
+            height={50}
           />
           <div>
             <p className="text-sm font-semibold">{user.name}</p>
