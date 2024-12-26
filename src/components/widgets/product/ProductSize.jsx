@@ -101,7 +101,7 @@ const ProductSize = () => {
           <TableBody>
             {sizesList.map((size, index) => (
               <TableRow key={index} className="hover:bg-gray-100">
-                <TableCell>{size}</TableCell>
+                <TableCell>{size.size}</TableCell>
                 <TableCell>
                   <IconButton
                     onClick={() => handleEdit(size.id)}

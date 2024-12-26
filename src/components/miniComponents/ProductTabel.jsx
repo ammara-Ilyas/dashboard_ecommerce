@@ -76,6 +76,8 @@ const ProductTabel = () => {
                     <Image
                       src={row.media}
                       alt={row.name}
+                      width={50}
+                      height={50}
                       className="w-[50px]"
                     />
                     <div>

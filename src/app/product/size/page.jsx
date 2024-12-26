@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "@/components/widgets/categories/CategoryHeader";
 import ProductSize from "@/components/widgets/product/ProductSize";
-const page = () => {
+const Page = () => {
   return (
     <>
       <Header
@@ -13,4 +13,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
