@@ -1,12 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import Head from "next/head";
-import { TextField, Button, IconButton } from "@mui/material";
-import { Google } from "@mui/icons-material";
+import { CloudUpload as CloudUploadIcon } from "@mui/icons-material";
+import { TextField, Button, IconButton, CircularProgress } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "/public/image/logo.png";
+import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 export default function Signup() {
   const router = useRouter();
   const [signupForm, setSignupForm] = useState({
@@ -16,7 +17,7 @@ export default function Signup() {
     password: "",
     confirmPassword: "",
   });
-
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   // Handle input change
@@ -30,74 +31,93 @@ export default function Signup() {
     e.preventDefault();
 
     // Basic validation
-    if (!signupForm.name || !signupForm.email || !signupForm.password) {
-      setError("Please fill out all required fields.");
+    if (
+      !signupForm.name ||
+      !signupForm.email ||
+      !signupForm.password ||
+      !signupForm.confirmPassword
+    ) {
+      toast.error("Please fill out all required fields.");
+
       return;
     }
 
     if (signupForm.password !== signupForm.confirmPassword) {
-      setError("Passwords do not match.");
+      toast.error("Passwords do not match.");
       return;
     }
 
     setError("");
 
+    setLoading(true); // Start loading
+
     // Mock submission
-    console.log("Signup Form Data:", signupForm);
-    toast.success("Sign successfully", {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      theme: isDarkMode ? "dark" : "light",
-    });
-    // Reset form (optional)
-    setSignupForm({
-      name: "",
-      email: "",
-      phone: "",
-      password: "",
-      confirmPassword: "",
-    });
-    router.push("/auth/login");
+    setTimeout(() => {
+      console.log("Signup Form Data:", signupForm);
+      toast.success("Sign up successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+
+      // Reset form (optional)
+      setSignupForm({
+        name: "",
+        email: "",
+        phone: "",
+        password: "",
+        confirmPassword: "",
+      });
+
+      setLoading(false); // Stop loading
+      router.push("/auth/login");
+    }, 2000); // Simulate API delay
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-      <Head>
-        <title>Ecommerce Dashboard</title>
-        <meta name="description" content="Ecommerce Dashboard & Admin Panel" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <div className="flex w-11/12 lg:w-3/4 bg-white shadow-lg rounded-lg overflow-hidden">
+    <div className=" flex flex-col items-center  justify-center  ">
+      <div className="flex  items-center shadow-lg rounded-lg overflow-hidden gap-4">
         {/* Left Side */}
-        <div className="hidden lg:flex w-1/2 flex-col justify-center items-center bg-blue-50 p-8">
-          <h1 className="text-4xl font-bold text-blue-600 mb-4">
-            BEST UX/UI FASHION
-          </h1>
-          <h2 className="text-4xl font-extrabold text-blue-700">
-            ECOMMERCE DASHBOARD
-          </h2>
-          <p className="text-gray-600 text-center mt-4">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry standard dummy text ever
-            since the 1500s.
+        <div className=" w-[65%] mt-10 flex  flex-col   pr-0 pl-14">
+          <p className="text-[44px] leading-[48px] font-extrabold   ">
+            <span className=" text-black">BEST UX/UI FASHION </span>
+            <span className=" text-blue-700">ECOMMERCE DASHBOARD </span>
+            <span className="text-black">& ADMIN PANEL</span>
           </p>
-          <Button variant="contained" color="primary" className="mt-6" href="#">
+          <p className="text-gray-600 mt-4">
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry. Lorem Ipsum has been the industry's standard dummy text
+            ever since the 1500s, when an unknown printer took a galley of type
+            and scrambled it to make a type specimen book. It has survived not
+            only five centuries
+          </p>
+          <Button
+            variant="contained"
+            color="primary"
+            className="mt-6 ml-6 w-[20%] font-semibold py-2"
+            href="/"
+            startIcon={<CloudUploadIcon />}
+          >
             Go To Home
           </Button>
         </div>
 
         {/* Right Side */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-8 bg-gray-50">
-          <img src={logo} alt="Ecommerce Logo" className="w-16 h-16 mb-4" />
+        <div className="w-[30%] shadow-md mr-2 rounded-md py-6 bg-gray-100 ml-auto pr-0 flex justify-center items-center flex-col  ">
+          <Image
+            src={logo}
+            alt="Ecommerce Logo"
+            className="w-16 h-16 my-6"
+            width={16}
+            heigt={16}
+          />
           <h2 className="text-2xl font-semibold text-gray-800">ECOMMERCE</h2>
 
           <form
-            className="w-full max-w-sm mt-6 space-y-4"
+            className="w-[100%] flex flex-col justify-center  mt-6 space-y-4"
             onSubmit={handleSubmit}
           >
             <TextField
@@ -107,6 +127,7 @@ export default function Signup() {
               value={signupForm.name}
               onChange={handleChange}
               variant="outlined"
+              className="bg-white w-[80%] mx-auto"
             />
             <TextField
               fullWidth
@@ -115,6 +136,7 @@ export default function Signup() {
               value={signupForm.email}
               onChange={handleChange}
               variant="outlined"
+              className="bg-white w-[80%] mx-auto"
             />
             <TextField
               fullWidth
@@ -123,6 +145,7 @@ export default function Signup() {
               value={signupForm.phone}
               onChange={handleChange}
               variant="outlined"
+              className="bg-white w-[80%] mx-auto"
             />
             <TextField
               fullWidth
@@ -132,6 +155,7 @@ export default function Signup() {
               value={signupForm.password}
               onChange={handleChange}
               variant="outlined"
+              className="bg-white w-[80%] mx-auto"
             />
             <TextField
               fullWidth
@@ -141,6 +165,7 @@ export default function Signup() {
               value={signupForm.confirmPassword}
               onChange={handleChange}
               variant="outlined"
+              className="bg-white w-[80%] mx-auto"
             />
 
             {error && <div className="text-red-500 text-sm">{error}</div>}
@@ -150,9 +175,10 @@ export default function Signup() {
               type="submit"
               variant="contained"
               color="primary"
-              className="mt-4"
+              className="mt-4 w-[40%] mx-auto font-medium py-2"
+              disabled={loading}
             >
-              Sign Up
+              {loading ? <CircularProgress size={24} /> : "Sign Up"}
             </Button>
           </form>
 
@@ -161,8 +187,8 @@ export default function Signup() {
           <Button
             variant="outlined"
             color="primary"
-            startIcon={<Google />}
-            className="mt-4"
+            startIcon={<FcGoogle className="" />}
+            className="mt-4 font-semibold py-2"
           >
             Sign In With Google
           </Button>

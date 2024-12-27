@@ -6,18 +6,20 @@ import { useCategory } from "@/contextApi/CategoriesContext";
 import { LuMenu } from "react-icons/lu";
 import Image from "next/image";
 import logo from "/public/image/logo.png";
+import { usePathname } from "next/navigation";
 const Navbar = () => {
   const { isSidebarOpen, toggleSidebar } = useCategory();
   const { user, togglePanel } = useUser();
   // console.log("Nav bar");
+  const pathname = usePathname();
+  console.log("pathname", pathname);
 
   return (
     <div className={`relative`}>
       <header className="flex w-[99vw]  pointer-events-auto z-50  fixed top-0 left-0 visible justify-between items-center bg-white shadow p-4">
         <div
           className="flex items-center space-x-3
-          ml-2
-        "
+          ml-2"
         >
           <span>
             <Image src={logo} alt="logo" width={50} height={50} />

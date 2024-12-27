@@ -79,7 +79,6 @@ export const UserProvider = ({ children }) => {
     },
   ];
   const [isOpen, setIsOpen] = useState(false);
-  const [notification, setNotification] = useState(false);
 
   const [user, setUser] = useState({
     name: "Ammara Ilyas",
@@ -88,6 +87,7 @@ export const UserProvider = ({ children }) => {
     phone: 789654123,
   });
   const togglePanel = () => setIsOpen((prev) => !prev);
+  console.log("provider");
 
   return (
     <UserContext.Provider
@@ -98,8 +98,6 @@ export const UserProvider = ({ children }) => {
         isOpen,
         setIsOpen,
         notifications,
-        setNotification,
-        notification,
       }}
     >
       {children}

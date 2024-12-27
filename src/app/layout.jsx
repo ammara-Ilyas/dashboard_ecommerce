@@ -7,7 +7,7 @@ import Sidebar from "@/components/header/Sidebar";
 import TopLine from "@/components/header/TopLine";
 import NotificationsDropdown from "@/components/widgets/notification/NotificationsDropdown";
 import "./globals.css";
-
+import PathnameWrapper from "@/components/miniComponents/PathWrapper";
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -35,9 +35,9 @@ export default function RootLayout({ children }) {
             <ProductProvider>
               <TopLine />
               <NotificationsDropdown />
-              <Navbar />
-              <Sidebar />
-              <main className="bg-gray-100 pt-24">{children}</main>
+              <PathnameWrapper>
+                <main className="bg-gray-100 pt-24">{children}</main>
+              </PathnameWrapper>
             </ProductProvider>
           </UserProvider>
         </CategoryProvider>
