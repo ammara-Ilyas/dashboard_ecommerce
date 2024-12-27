@@ -13,7 +13,7 @@ const Navbar = () => {
 
   return (
     <div className={`relative`}>
-      <header className="flex w-[99vw]  pointer-events-auto z-30  fixed top-0 left-0 visible justify-between items-center bg-white shadow p-4">
+      <header className="flex w-[99vw]  pointer-events-auto z-50  fixed top-0 left-0 visible justify-between items-center bg-white shadow p-4">
         <div
           className="flex items-center space-x-3
           ml-2
