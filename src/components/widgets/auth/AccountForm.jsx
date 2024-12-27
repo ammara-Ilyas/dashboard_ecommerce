@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { TextField, Button } from "@mui/material";
 import CloudUpload from "@mui/icons-material/CloudUpload"; // Import icon for image upload placeholder
 import { useUser } from "@/contextApi/UserContext";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const AccountForm = () => {
   const { user, setUser } = useUser();
   const [formData, setFormData] = useState({
@@ -44,6 +45,15 @@ const AccountForm = () => {
     e.preventDefault();
     setUser(formData);
     console.log("User data updated:", formData);
+    toast.success("Account update successfully!", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: isDarkMode ? "dark" : "light",
+    });
   };
 
   return (

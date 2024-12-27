@@ -12,6 +12,8 @@ import {
 import { CloudUpload as CloudUploadIcon } from "@mui/icons-material";
 import Image from "next/image";
 import { useTheme } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useProducts } from "@/contextApi/ProductContext";
 
 function ProductUploadForm() {
@@ -40,6 +42,15 @@ function ProductUploadForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form Data Submitted:", formData);
+    toast.success("Product uploaded successfully!", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: isDarkMode ? "dark" : "light",
+    });
   };
 
   const [image, setImage] = useState(null);
@@ -376,6 +387,7 @@ function ProductUploadForm() {
           </Button>
         </div>
       </form>
+      <ToastContainer />
     </div>
   );
 }
