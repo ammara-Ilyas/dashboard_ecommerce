@@ -3,9 +3,12 @@ import { useUser } from "@/contextApi/UserContext";
 import { RiMenuUnfold4Line } from "react-icons/ri";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { useCategory } from "@/contextApi/CategoriesContext";
+import Avatar from "@mui/material/Avatar";
+import { blue } from "@mui/material/colors"; // Import a valid color
 import { LuMenu } from "react-icons/lu";
 import Image from "next/image";
-import logo from "@/assests/image/logo.png";
+// import logo from "../assests/image/logo.png";
+import logo from "@/assets/image/logo.png";
 import { usePathname } from "next/navigation";
 const Navbar = () => {
   const { isSidebarOpen, toggleSidebar } = useCategory();
@@ -41,14 +44,14 @@ const Navbar = () => {
           >
             <IoIosNotificationsOutline />
           </div>
+          {user.img ? (
+            <Avatar alt={user.name} src={user.img} />
+          ) : (
+            <Avatar sx={{ bgcolor: blue[800] }}>
+              {Array.from(user.name)[0]}
+            </Avatar>
+          )}
 
-          <Image
-            src={logo}
-            alt="profile"
-            className="w-10 h-10 rounded-full"
-            width={50}
-            height={50}
-          />
           <div>
             <p className="text-sm font-semibold">{user.name}</p>
             <p className="text-xs text-gray-500">{user.email}</p>

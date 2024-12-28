@@ -1,6 +1,5 @@
 "use client";
 
-import { useStepContext } from "@mui/material";
 import { createContext, useState, useContext } from "react";
 
 const ProductContext = createContext();

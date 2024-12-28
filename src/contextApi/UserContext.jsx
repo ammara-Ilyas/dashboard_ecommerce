@@ -83,7 +83,7 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState({
     name: "Ammara Ilyas",
     email: "Ammarailyas535@gmail.com",
-    img: "//////",
+    img: "",
     phone: 789654123,
   });
   const togglePanel = () => setIsOpen((prev) => !prev);

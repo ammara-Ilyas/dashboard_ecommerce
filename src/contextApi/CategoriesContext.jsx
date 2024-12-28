@@ -3,22 +3,22 @@ import { createContext, useState, useContext } from "react";
 const banner = [
   {
     id: 1,
-    src: "/images/sale1.jpg",
+    url: "/assets/banner_01.webp",
     alt: "Big Sale - 50% Off",
   },
   {
     id: 2,
-    src: "/images/sale2.jpg",
+    url: "/assets/banner_02.webp",
     alt: "End of Season Sale - 50% Off",
   },
   {
     id: 3,
-    src: "/images/sale3.jpg",
+    url: "/assets/banner_01.webp",
     alt: "Festive Sale",
   },
   {
     id: 4,
-    src: "/images/sale4.jpg",
+    url: "/assets/banner_02.webp",
     alt: "Crazy Deals - ₹499",
   },
 ];

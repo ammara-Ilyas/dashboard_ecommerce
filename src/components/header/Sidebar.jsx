@@ -53,7 +53,7 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`w-[270px] h-[89vh] fixed bottom-0 pointer-events-auto z-50  bg-white  shadow-lg flex flex-col justify-between ${
+      className={`w-[270px] h-[89vh] fixed bottom-0 pointer-events-auto z-20  bg-white  shadow-lg flex flex-col justify-between ${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       } transition-transform duration-300 ease-in-out bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300`}
     >

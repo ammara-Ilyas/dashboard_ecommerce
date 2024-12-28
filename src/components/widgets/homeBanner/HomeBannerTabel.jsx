@@ -4,16 +4,19 @@ import { IconButton } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { useCategory } from "@/contextApi/CategoriesContext";
+import bg from "@/assets/banner_01.webp";
+
 import Image from "next/image";
 const HomeBannerTabel = () => {
   const { bannerList, setBannerList, setBannerFormData } = useCategory();
   const router = useRouter();
+  console.log("banner", bannerList);
 
   const handleEdit = (id) => {
     const bannerToEdit = bannerList.find((item) => item.id === id);
     if (bannerToEdit) {
-      setBannerFormData(bannerToEdit); // Set the selected banner data in the context
-      router.push(`/homeBanner/upload`); // Navigate to the upload route
+      setBannerFormData(bannerToEdit);
+      router.push(`/homeBanner/upload`);
     }
   };
 
@@ -41,11 +44,11 @@ const HomeBannerTabel = () => {
               <tr key={image.id} className="border-b hover:bg-gray-100">
                 <td className="py-2 px-4">
                   <Image
-                    src={image.src}
+                    src={`${image.url}`}
                     alt={image.alt}
                     className="h-24 rounded-lg object-cover"
-                    height={24}
-                    width={24}
+                    height={100}
+                    width={300}
                   />
                 </td>
                 <td className="py-2 px-4 flex items-center gap-2">
