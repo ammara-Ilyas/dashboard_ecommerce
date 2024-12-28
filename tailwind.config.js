@@ -13,9 +13,18 @@ module.exports = {
         height: "height",
         width: "width",
       },
+      animation: {
+        progress: "progress 2s ease-in-out infinite",
+      },
+      keyframes: {
+        progress: {
+          "0%": { width: "0%" },
+          "100%": { width: "100%" },
+        },
+      },
       colors: {
-        background: "var(--background)", // Custom variable for background color
-        foreground: "var(--foreground)", // Custom variable for foreground color
+        background: "var(--background)",
+        foreground: "var(--foreground)",
         // Add custom colors for dark mode
         darkBackground: "#1f1f1f", // Dark background color
         darkForeground: "#f0f0f0", // Light foreground color for dark mode

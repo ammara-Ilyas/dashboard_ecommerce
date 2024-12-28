@@ -4,7 +4,7 @@ import { CloudUpload as CloudUploadIcon } from "@mui/icons-material";
 import { TextField, Button, IconButton, CircularProgress } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import logo from "/public/image/logo.png";
+import logo from "@/assests/image/logo.png";
 import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
 import Image from "next/image";

@@ -5,7 +5,7 @@ import { IoIosNotificationsOutline } from "react-icons/io";
 import { useCategory } from "@/contextApi/CategoriesContext";
 import { LuMenu } from "react-icons/lu";
 import Image from "next/image";
-import logo from "/public/image/logo.png";
+import logo from "@/assests/image/logo.png";
 import { usePathname } from "next/navigation";
 const Navbar = () => {
   const { isSidebarOpen, toggleSidebar } = useCategory();
