@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { CloudUpload as CloudUploadIcon } from "@mui/icons-material";
-import { TextField, Button, IconButton, CircularProgress } from "@mui/material";
+import { TextField, Button, CircularProgress } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import logo from "@/assests/image/logo.png";
+import logo from "@/assets/image/logo.png";
 import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -89,10 +89,10 @@ export default function Signup() {
           </p>
           <p className="text-gray-600 mt-4">
             Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries
+            industry. Lorem Ipsum has been the industry standard dummy text ever
+            since the 1500s, when an unknown printer took a galley of type and
+            scrambled it to make a type specimen book. It has survived not only
+            five centuries
           </p>
           <Button
             variant="contained"

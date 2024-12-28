@@ -7,10 +7,9 @@ import { FcGoogle } from "react-icons/fc";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
-import logo from "/public/image/logo.png";
+import logo from "@/assets/image/logo.png";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FaS } from "react-icons/fa6";
 
 export default function Login() {
   const [loginForm, setLoginForm] = useState({

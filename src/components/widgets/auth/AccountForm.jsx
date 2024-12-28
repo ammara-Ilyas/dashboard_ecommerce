@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { TextField, Button } from "@mui/material";
-import CloudUpload from "@mui/icons-material/CloudUpload"; // Import icon for image upload placeholder
+import Image from "next/image";
 import { useUser } from "@/contextApi/UserContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -67,7 +67,11 @@ const AccountForm = () => {
           >
             {/* Uploaded Image or Default Placeholder */}
             {image ? (
-              <img src={image} alt="" className="w-full h-full object-cover" />
+              <Image
+                src={image}
+                alt=""
+                className="w-full h-full object-cover"
+              />
             ) : (
               <div className="w-full h-full bg-gray-200 flex items-center justify-center">
                 <span className="text-gray-500"></span>

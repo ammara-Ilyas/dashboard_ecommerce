@@ -9,6 +9,7 @@ import {
   FaCalendarAlt,
 } from "react-icons/fa";
 import { useProducts } from "@/contextApi/ProductContext";
+import Image from "next/image";
 import CustomReview from "@/components/miniComponents/CustomReview";
 const ProductView = ({ id }) => {
   console.log("id in view", id);
@@ -38,7 +39,7 @@ const ProductView = ({ id }) => {
             Product Gallery
           </span>
           <div className="relative">
-            <img
+            <Image
               src="https://via.placeholder.com/400x300"
               alt={product.name}
               className="rounded-lg object-cover w-full"
@@ -51,12 +52,12 @@ const ProductView = ({ id }) => {
           </div>
           {/* Thumbnail Gallery */}
           <Box className="mt-2 flex gap-2  w-[80%]">
-            <img
+            <Image
               src={product.img}
               alt="Thumbnail 1"
               className="rounded-lg w-16 h-16 object-cover border border-gray-300 cursor-pointer"
             />
-            <img
+            <Image
               src={product.img}
               alt="Thumbnail 2"
               className="rounded-lg w-16 h-16 object-cover border border-gray-300 cursor-pointer"
@@ -167,7 +168,7 @@ const ProductView = ({ id }) => {
         <h2 className="text-xl text-black py-2">Product Description</h2>
         <p className=" text-gray-800  ">
           Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
+          industry. Lorem Ipsum has been the industry standard dummy text ever
           since the 1500s, when an unknown printer took a galley of type and
           scrambled it to make a type specimen book.
         </p>

@@ -1,7 +1,4 @@
 "use client";
-
-import Navbar from "@/components/header/Navbar";
-import Sidebar from "@/components/header/Sidebar";
 import HeroSection from "@/components/widgets/dashboard/DashboardStats";
 import ProductList from "@/components/widgets/dashboard/ProductList";
 import TotalSalesChart from "@/components/widgets/dashboard/TotalSalesChart";

@@ -1,6 +1,6 @@
 import React from "react";
 import Login from "@/components/widgets/auth/Login";
-import bg from "@/assests/image/bg_signup.webp";
+import bg from "@/assets/image/bg_signup.webp";
 const Page = () => {
   return (
     <>
