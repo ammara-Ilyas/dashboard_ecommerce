@@ -5,6 +5,7 @@ import { CloudUpload } from "@mui/icons-material";
 import { useCategory } from "@/contextApi/CategoriesContext";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { callPrivateApi } from "@/libs/callApis";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
 import logo from "@/assets/image/logo.png";
+import { callPublicApi } from "@/libs/callApis";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -27,7 +28,7 @@ export default function Login() {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     setLoading(true); // Start loading spinner
@@ -37,22 +38,30 @@ export default function Login() {
       setLoading(false);
       return;
     }
-    // Simulate API response
-    setTimeout(() => {
-      if (
-        loginForm.email === "user@example.com" &&
-        loginForm.password === "password123"
-      ) {
-        const token = "mock-token-123"; // Simulated token from API
-        localStorage.setItem("userToken", token); // Save token to localStorage
-        toast.success("Login successful!");
-        setLoading(false); // Stop loading spinner
-        router.push("/");
+    try {
+      const res = await callPublicApi("/auth/login", "POST", loginForm);
+      console.log("res in login ", res);
+
+      if (res.status === "error") {
+        toast.error(res.message || "Login failed");
       } else {
-        toast.error("Invalid email or password!");
-        setLoading(false);
+        toast.success(res.message || "Login successfully");
+
+        // Reset form
+        setLoginForm({
+          email: "",
+          password: "",
+        });
+
+        localStorage.setItem("token", res.token);
+        router.push("/"); // Navigate after success
       }
-    }, 2000);
+    } catch (error) {
+      console.log("error", error);
+      toast.error(error?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

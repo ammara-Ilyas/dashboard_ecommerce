@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { CloudUpload as CloudUploadIcon } from "@mui/icons-material";
 import { TextField, Button, CircularProgress } from "@mui/material";
+import { callPublicApi } from "@/libs/callApis";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "@/assets/image/logo.png";
@@ -13,7 +14,7 @@ export default function Signup() {
   const [signupForm, setSignupForm] = useState({
     name: "",
     email: "",
-    phone: "",
+    // phone: "",
     password: "",
     confirmPassword: "",
   });
@@ -27,10 +28,9 @@ export default function Signup() {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic validation
     if (
       !signupForm.name ||
       !signupForm.email ||
@@ -38,7 +38,6 @@ export default function Signup() {
       !signupForm.confirmPassword
     ) {
       toast.error("Please fill out all required fields.");
-
       return;
     }
 
@@ -47,34 +46,34 @@ export default function Signup() {
       return;
     }
 
-    setError("");
+    setLoading(true);
 
-    setLoading(true); // Start loading
+    try {
+      const res = await callPublicApi("/auth/signup", "POST", signupForm);
+      console.log("res in signup ", res);
 
-    // Mock submission
-    setTimeout(() => {
-      console.log("Signup Form Data:", signupForm);
-      toast.success("Sign up successfully!", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      if (res.status === "error" || res.status === 400) {
+        toast.error(res.message || "Signup failed");
+      } else {
+        toast.success(res.message || "Signup successfully");
 
-      // Reset form (optional)
-      setSignupForm({
-        name: "",
-        email: "",
-        phone: "",
-        password: "",
-        confirmPassword: "",
-      });
+        // Reset form
+        setSignupForm({
+          name: "",
+          email: "",
+          phone: "",
+          password: "",
+          confirmPassword: "",
+        });
 
-      setLoading(false); // Stop loading
-      router.push("/auth/login");
-    }, 2000); // Simulate API delay
+        // Optional: navigate to login
+        router.push("/auth/login");
+      }
+    } catch (error) {
+      toast.error(error?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

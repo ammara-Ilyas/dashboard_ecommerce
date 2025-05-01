@@ -1,16 +1,40 @@
 "use client";
 
-import React from "react";
-import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import Navbar from "../header/Navbar";
 import Sidebar from "../header/Sidebar";
 
 const PathnameWrapper = ({ children }) => {
+  const [showLayout, setShowLayout] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
-  const hideLayoutRoutes = ["/auth/login", "/auth/register"];
+  const token = localStorage.getItem("token");
+  const checkAccess = () => {
+    const isAuthPage =
+      pathname === "/auth/login" || pathname === "/auth/register";
 
-  const showLayout = !hideLayoutRoutes.includes(pathname);
+    if (!token && !isAuthPage) {
+      router.push("/auth/login");
+    }
+
+    setShowLayout(!!token && !isAuthPage);
+  };
+
+  useEffect(() => {
+    checkAccess();
+
+    // Listen for custom event
+    const handleTokenChange = () => {
+      checkAccess();
+    };
+
+    window.addEventListener("tokenChanged", handleTokenChange);
+    return () => {
+      window.removeEventListener("tokenChanged", handleTokenChange);
+    };
+  }, [pathname, token, router]);
 
   return (
     <div>
