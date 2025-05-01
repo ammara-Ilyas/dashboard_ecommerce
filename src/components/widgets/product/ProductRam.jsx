@@ -14,6 +14,8 @@ import {
   Paper,
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useProducts } from "@/contextApi/ProductContext";
 export default function AddProductRAM() {
   const { ramList, setRamList } = useProducts();
@@ -26,6 +28,30 @@ export default function AddProductRAM() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [editId]);
+
+  useEffect(() => {
+    const fetchBanners = async () => {
+      setLoading(true);
+      try {
+        const res = await callPublicApi("/ram", "GET");
+        console.log("res in Rams list ", res);
+
+        if (res.status === "error" || res.status === 400) {
+          toast.error(res.message || "Rams fetch failed");
+        } else {
+          toast.success(res.message || "Rams fetched successfully");
+          setRamList(res.ram);
+        }
+      } catch (error) {
+        toast.error(error?.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBanners();
+  }, [loading]);
+
   // Handle Add/Edit RAM
   const handleAddOrEditRam = () => {
     if (editMode) {
@@ -122,6 +148,7 @@ export default function AddProductRAM() {
           </TableBody>
         </Table>
       </TableContainer>
+      <ToastContainer />
     </div>
   );
 }

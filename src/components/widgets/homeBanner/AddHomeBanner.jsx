@@ -13,18 +13,21 @@ import "react-toastify/dist/ReactToastify.css";
 // toast.configure();
 
 const MediaAndPublish = () => {
-  const { bannerFormData, setBannerList, bannerList, setBannerFormData } =
-    useCategory();
-  const router = useRouter();
+  const { setBannerList, bannerList } = useCategory();
 
+  const router = useRouter();
+  const [bannerForm, setBannerForm] = useState({
+    name: "",
+    image: "",
+  });
   const [selectedImage, setSelectedImage] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
-    if (bannerFormData) {
-      setSelectedImage(bannerFormData.url);
+    if (bannerForm) {
+      setSelectedImage(bannerForm.url);
     }
-  }, [bannerFormData]);
+  }, [bannerForm]);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -38,43 +41,44 @@ const MediaAndPublish = () => {
       setSelectedImage(URL.createObjectURL(file));
     }
   };
-  const handlePublish = () => {
-    if (!selectedImage) {
-      toast.error("No image selected.");
-      return;
-    }
-
+  const handlePublish = async (e) => {
+    e.preventDefault();
     setIsUploading(true);
 
-    setTimeout(() => {
-      if (bannerFormData) {
-        // Replace the existing banner image with the new one
-        const updatedList = bannerList.map((item) =>
-          item.id === bannerFormData.id ? { ...item, url: selectedImage } : item
-        );
-        setBannerList(updatedList);
-        toast.success("Banner updated successfully!");
-      } else {
-        // Add new banner
-        const newBanner = {
-          id: Date.now(),
-          url: selectedImage,
-          alt: "Uploaded Image",
-        };
-        setBannerList([...bannerList, newBanner]);
-        toast.success("Banner published successfully!");
+    try {
+      const formData = new FormData();
+      formData.append("name", bannerForm.name);
+
+      if (!bannerForm.image) {
+        formData.append("image", bannerForm.image);
       }
 
-      setBannerFormData(null);
-      setSelectedImage(null);
+      const method = isEditMode ? "PUT" : "POST";
+      const endpoint = isEditMode ? `/banner/${bannerId}` : "/banner";
+
+      const res = await callPrivateApi(endpoint, method, formData);
+
+      if (res.status === "error" || res.status === 400) {
+        toast.error(res.message || "Action failed");
+      } else {
+        toast.success(
+          res.message || (isEditMode ? "Banner updated" : "Banner created")
+        );
+        router.push("/your-target-route");
+      }
+    } catch (err) {
+      toast.error(err.message || "Something went wrong");
+    } finally {
       setIsUploading(false);
-      router.push("/homeBanner/banners");
-    }, 2000); // Simulate upload delay
+    }
   };
 
   return (
     <div className="p-6 bg-gray-100 py-20 flex flex-col items-center justify-center">
-      <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
+      <form
+        className="bg-white shadow-md rounded-lg p-6 w-full max-w-md"
+        onSubmit={handlePublish}
+      >
         <h2 className="text-lg font-semibold mb-4">Media And Publish</h2>
 
         {/* Image Upload Section */}
@@ -100,13 +104,22 @@ const MediaAndPublish = () => {
             className="opacity-0 absolute w-full h-full cursor-pointer"
           />
         </div>
-
+        <input
+          type="text"
+          placeholder="Enter banner name"
+          value={bannerForm.name}
+          onChange={(e) =>
+            setBannerForm((prev) => ({ ...prev, name: e.target.value }))
+          }
+          className="w-full p-2 mb-4 border rounded"
+        />
         {isUploading ? (
           <CircularProgress className="mb-4" />
         ) : (
           <Button
             variant="contained"
             color="primary"
+            type="submit"
             fullWidth
             onClick={handlePublish}
             className="bg-blue-600 text-white hover:bg-blue-700"
@@ -115,7 +128,7 @@ const MediaAndPublish = () => {
             Publish and View
           </Button>
         )}
-      </div>
+      </form>
     </div>
   );
 };

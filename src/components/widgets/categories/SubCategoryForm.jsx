@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation";
 
 const CategoryForm = () => {
   const router = useRouter();
+  const [subCategories, setSubCategories] = useState([]);
   const {
-    subCategories,
     categories,
-    setSubCategories,
+
     subCategoryForm,
     setSubCategoryForm,
   } = useCategory();

@@ -1,7 +1,7 @@
 "use client";
 import Header from "@/components/widgets/categories/CategoryHeader";
 import { useRouter } from "next/navigation";
-import CategoryTable from "@/components/widgets/categories/SubCAtegoryTabel";
+import SubCategory from "@/components/widgets/categories/SubCategoryTabel";
 const Page = () => {
   const router = useRouter();
   const handleButton = () => {
@@ -17,7 +17,7 @@ const Page = () => {
         addBtn={{ title: "Add Category", handleButton: handleButton }}
       />
       <div className="min-h-screen bg-gray-100 p-6">
-        <CategoryTable />
+        <SubCategory />
       </div>
     </div>
   );
