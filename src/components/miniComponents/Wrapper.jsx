@@ -1,7 +1,6 @@
 // Wrapper.jsx
 "use client";
 import { useCategory } from "@/contextApi/CategoriesContext";
-
 const Wrapper = ({ children }) => {
   const { isSidebarOpen } = useCategory();
   console.log("isopen", isSidebarOpen);

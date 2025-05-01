@@ -5,7 +5,7 @@ const Page = () => {
     <div
       className=" -mt-24 h-[100vh]"
       style={{
-        backgroundImage: "url('@/assets/image/bg_signup.webp')'",
+        backgroundImage: "url('@l/assets/image/bg_signup.webp')'",
         backgroundSize: "cover",
         backgroundPosition: "center center",
         backgroundRepeat: "no-repeat",
