@@ -12,17 +12,21 @@ import {
   TableRow,
   InputLabel,
   Paper,
+  CircularProgress,
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useProducts } from "@/contextApi/ProductContext";
+import { callPrivateApi, callPublicApi } from "@/libs/callApis";
 export default function AddProductRAM() {
   const { ramList, setRamList } = useProducts();
   const [ram, setRam] = useState("");
 
   const [editMode, setEditMode] = useState(false);
   const [editId, setEditId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [loader, setLoader] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -30,8 +34,10 @@ export default function AddProductRAM() {
   }, [editId]);
 
   useEffect(() => {
-    const fetchBanners = async () => {
+    const fetchData = async () => {
       setLoading(true);
+      console.log("ok in useEffect of rams");
+
       try {
         const res = await callPublicApi("/ram", "GET");
         console.log("res in Rams list ", res);
@@ -40,7 +46,7 @@ export default function AddProductRAM() {
           toast.error(res.message || "Rams fetch failed");
         } else {
           toast.success(res.message || "Rams fetched successfully");
-          setRamList(res.ram);
+          setRamList(res.rams);
         }
       } catch (error) {
         toast.error(error?.message || "Something went wrong");
@@ -49,11 +55,11 @@ export default function AddProductRAM() {
       }
     };
 
-    fetchBanners();
-  }, [loading]);
+    fetchData();
+  }, []);
 
   // Handle Add/Edit RAM
-  const handleAddOrEditRam = () => {
+  const handleAddOrEditRam = async () => {
     if (editMode) {
       // Edit existing RAM
       setRamList(
@@ -65,7 +71,21 @@ export default function AddProductRAM() {
       setEditId(null);
     } else if (ram !== "") {
       // Add new RAM
-      setRamList([...ramList, { id: Date.now(), value: ram }]);
+
+      try {
+        const res = await callPrivateApi("/ram", "POST", ram);
+        console.log("res in add ram ", res);
+        if (res.status === "error" || res.status === 400) {
+          toast.error(res.message || "ram added failed");
+        } else {
+          toast.success(res.message || "ram added successfully");
+        }
+      } catch (error) {
+        toast.error(error?.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+        // to call useEffect
+      }
     } else {
       alert("write ram");
     }
@@ -80,8 +100,24 @@ export default function AddProductRAM() {
   };
 
   // Handle Delete Button
-  const handleDelete = (id) => {
-    setRamList(ramList.filter((item) => item.id !== id));
+  const handleDelete = async (id) => {
+    setRamList(ramList.filter((item) => item._id !== id));
+    setLoading(true);
+    try {
+      const res = await callPrivateApi(`/ram/${id}`, "DELETE");
+      console.log("res in ram delete ", res);
+      if (res.status === "error" || res.status === 400) {
+        toast.error(res.message || "ram added failed");
+      } else {
+        toast.success(res.message || "ram deleted successfully");
+      }
+    } catch (error) {
+      toast.error(error?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+      // to call useEffect
+      setLoader(() => !loader);
+    }
   };
 
   return (
@@ -125,26 +161,34 @@ export default function AddProductRAM() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {ramList &&
-              ramList.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell>{item.value}</TableCell>
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={2} align="center">
+                  <CircularProgress />
+                </TableCell>
+              </TableRow>
+            ) : (
+              ramList &&
+              ramList.map((ram) => (
+                <TableRow key={ram._id}>
+                  <TableCell>{ram.ram}</TableCell>
                   <TableCell>
                     <IconButton
                       color="primary"
-                      onClick={() => handleEdit(item.id, item.value)}
+                      onClick={() => handleEdit(ram._id, ram.ram)}
                     >
                       <Edit />
                     </IconButton>
                     <IconButton
                       color="secondary"
-                      onClick={() => handleDelete(item.id)}
+                      onClick={() => handleDelete(ram._id)}
                     >
                       <Delete />
                     </IconButton>
                   </TableCell>
                 </TableRow>
-              ))}
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>

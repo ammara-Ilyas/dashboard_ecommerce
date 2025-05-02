@@ -12,19 +12,48 @@ import {
   Paper,
   IconButton,
   InputLabel,
+  CircularProgress,
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
 import { useProducts } from "@/contextApi/ProductContext";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { callPrivateApi, callPublicApi } from "@/libs/callApis";
 const ProductSize = () => {
   const { sizesList, setSizesList } = useProducts();
   const [size, setSize] = useState("");
   const [editId, setEditId] = useState(null);
   const [editMode, setEditMode] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [loader, setLoader] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [editId]);
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const res = await callPublicApi("/size", "GET");
+        console.log("res in sizes list ", res);
+
+        if (res.status === "error" || res.status === 400) {
+          toast.error(res.message || "sizes fetch failed");
+        } else {
+          toast.success(res.message || "sizes fetched successfully");
+          setSizesList(res.sizes);
+        }
+      } catch (error) {
+        toast.error(error?.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleAddOrEditSize = () => {
     if (size !== "") {
       if (editMode) {
@@ -44,17 +73,31 @@ const ProductSize = () => {
     setSize("");
   };
 
-  const handleEdit = (id) => {
-    size = sizesList.filter((item) => item.id == id);
-    // setSize(size.size);
+  const handleEdit = async (id) => {
+    setLoading(true);
+
     setEditId(id);
     setEditMode(true);
   };
 
-  const handleDelete = (id) => {
-    setSizesList(sizesList.filter((item) => item.id !== id));
+  const handleDelete = async (id) => {
+    setSizesList(sizesList.filter((item) => item._id !== id));
+    try {
+      const res = await callPrivateApi(`/size/${id}`, "DELETE");
+      console.log("res in size delete ", res);
+      if (res.status === "error" || res.status === 400) {
+        toast.error(res.message || "size deleted failed");
+      } else {
+        toast.success(res.message || "size deleted successfully");
+      }
+    } catch (error) {
+      toast.error(error?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+      // to call useEffect
+      setLoader(() => !loader);
+    } // setSize(size.size);  };
   };
-
   return (
     <div
       className="bg-white p-6 rounded-lg shadow-md mb-6"
@@ -99,29 +142,38 @@ const ProductSize = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sizesList &&
-              sizesList.map((size, index) => (
-                <TableRow key={index} className="hover:bg-gray-100">
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={2} align="center">
+                  <CircularProgress />
+                </TableCell>
+              </TableRow>
+            ) : (
+              sizesList &&
+              sizesList.map((size) => (
+                <TableRow key={size._id} className="hover:bg-gray-100">
                   <TableCell>{size.size}</TableCell>
                   <TableCell>
                     <IconButton
-                      onClick={() => handleEdit(size.id)}
+                      onClick={() => handleEdit(size._id)}
                       color="primary"
                     >
                       <Edit />
                     </IconButton>
                     <IconButton
-                      onClick={() => handleDelete(size.id)}
+                      onClick={() => handleDelete(size._id)}
                       color="error"
                     >
                       <Delete />
                     </IconButton>
                   </TableCell>
                 </TableRow>
-              ))}
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
+      <ToastContainer />
     </div>
   );
 };

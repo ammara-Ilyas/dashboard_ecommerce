@@ -12,15 +12,44 @@ import {
   TableRow,
   InputLabel,
   Paper,
+  CircularProgress,
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
 import { useProducts } from "@/contextApi/ProductContext";
+import { toast, ToastContainer } from "react-toastify";
+import { callPrivateApi, callPublicApi } from "@/libs/callApis";
+import "react-toastify/dist/ReactToastify.css";
 export default function AddProductWeight() {
   const { weightsList, setWeightsList } = useProducts();
   const [weight, setWeight] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [editId, setEditId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [loader, setLoader] = useState(false);
   const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const res = await callPublicApi("/weight", "GET");
+        console.log("res in WeightList list ", res);
+
+        if (res.status === "error" || res.status === 400) {
+          toast.error(res.message || "Weights fetch failed");
+        } else {
+          toast.success(res.message || "Weights fetched successfully");
+          setWeightsList(res.weights);
+        }
+      } catch (error) {
+        toast.error(error?.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -53,8 +82,25 @@ export default function AddProductWeight() {
   };
 
   // Delete Weight
-  const handleDelete = (id) => {
-    setWeightsList(weightsList.filter((item) => item.id !== id));
+  const handleDelete = async (id) => {
+    setWeightsList(weightsList.filter((item) => item._id !== id));
+
+    setLoading(true);
+    try {
+      const res = await callPrivateApi(`/weight/${id}`, "DELETE");
+      console.log("res in weight delete ", res);
+      if (res.status === "error" || res.status === 400) {
+        toast.error(res.message || "weight deleted failed");
+      } else {
+        toast.success(res.message || "weight deleted successfully");
+      }
+    } catch (error) {
+      toast.error(error?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+      // to call useEffect
+      setLoader(() => !loader);
+    }
   };
 
   return (
@@ -80,8 +126,11 @@ export default function AddProductWeight() {
           color="primary"
           fullWidth
           onClick={handleAddOrEditWeight}
+          disabled={loading}
           className="bg-blue-600 hover:bg-blue-700"
-        ></Button>
+        >
+          {editMode ? "Update Weight" : "Add Weight"}
+        </Button>
       </div>
 
       {/* Weight List Table */}
@@ -96,29 +145,38 @@ export default function AddProductWeight() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {weightsList &&
-              weightsList.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell>{item.value}</TableCell>
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={2} align="center">
+                  <CircularProgress />
+                </TableCell>
+              </TableRow>
+            ) : (
+              weightsList &&
+              weightsList.map((weights) => (
+                <TableRow key={weights._id}>
+                  <TableCell>{weights.weight}</TableCell>
                   <TableCell>
                     <IconButton
                       color="primary"
-                      onClick={() => handleEdit(item.id, item.value)}
+                      onClick={() => handleEdit(weights._id, weights.weight)}
                     >
                       <Edit />
                     </IconButton>
                     <IconButton
                       color="secondary"
-                      onClick={() => handleDelete(item.id)}
+                      onClick={() => handleDelete(weights._id)}
                     >
                       <Delete />
                     </IconButton>
                   </TableCell>
                 </TableRow>
-              ))}
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
+      <ToastContainer />
     </div>
   );
 }

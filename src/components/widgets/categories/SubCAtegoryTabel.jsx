@@ -27,7 +27,7 @@ const SubCategory = () => {
   const { categories, setCategories } = useCategory();
 
   useEffect(() => {
-    const fetchBanners = async () => {
+    const fetchData = async () => {
       setLoading(true);
       try {
         const res = await callPublicApi("/subcategory", "GET");
@@ -46,7 +46,7 @@ const SubCategory = () => {
       }
     };
 
-    fetchBanners();
+    fetchData();
   }, [loader]);
 
   // Handle Deletion of a Subcategory

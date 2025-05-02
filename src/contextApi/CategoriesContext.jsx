@@ -78,7 +78,7 @@ export const CategoryProvider = ({ children }) => {
   const [subCategories, setSubCategories] = useState(subCategoryData);
   const [categoryForm, setCategoryForm] = useState(cateform);
   const [subCategoryForm, setSubCategoryForm] = useState(subCateform);
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [bannerList, setBannerList] = useState(banner);
   const [bannerFormData, setBannerFormData] = useState(null);
 
@@ -110,7 +110,7 @@ export const CategoryProvider = ({ children }) => {
 
 export const useCategory = () => {
   const context = useContext(CategoryContext);
-  console.log("Nav bar Provider");
+  // console.log("Nav bar Provider");
 
   if (!context) {
     throw new Error("useSidebar must be used within a SidebarProvider");

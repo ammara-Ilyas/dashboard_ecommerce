@@ -1,9 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProductFilter from "./ProductFilter";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-// import ProductTable from "@/components/ProductTable";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { callPrivateApi, callPublicApi } from "@/libs/callApis";
 import { useProducts } from "@/contextApi/ProductContext";
 import {
   Table,
@@ -14,13 +16,42 @@ import {
   TableRow,
   Paper,
   IconButton,
+  CircularProgress,
 } from "@mui/material";
 import { AiFillEye, AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { set } from "date-fns";
 
 const ProductTabel = () => {
-  const { products, setProducts, setFormData, FormData } = useProducts();
+  const { setFormData, FormData } = useProducts();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [loader, setLoader] = useState(false);
+
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const res = await callPublicApi("/products", "GET");
+        console.log("res in product list ", res);
+
+        if (res.status === "error" || res.status === 400) {
+          toast.error(res.message || "products fetch failed");
+        } else {
+          toast.success(res.message || "products fetched successfully");
+          setProducts(res.products);
+        }
+      } catch (error) {
+        toast.error(error?.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [loader]);
+
   const handleEdit = (id) => {
     console.log("form in edit", FormData);
     let editProduct = products.find((item) => item.id !== id);
@@ -31,8 +62,23 @@ const ProductTabel = () => {
   };
 
   // Handle Delete Button
-  const handleDelete = (id) => {
-    setProducts(products.filter((item) => item.id !== id));
+  const handleDelete = async (id) => {
+    setLoading(true);
+    try {
+      const res = await callPrivateApi(`product/${id}`, "DELETE");
+      console.log("res in product delete ", res);
+      if (res.status === "error" || res.status === 400) {
+        toast.error(res.message || "product deleted failed");
+      } else {
+        toast.success(res.message || "product deleted successfully");
+      }
+    } catch (error) {
+      toast.error(error?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+      // to call useEffect
+      setLoader(() => !loader);
+    }
   };
 
   const handlePreview = (id) => {
@@ -69,79 +115,93 @@ const ProductTabel = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.map((row, index) => (
-              <TableRow key={index} className="">
-                <TableCell>
-                  <div className="flex gap-3 items-center">
-                    <Image
-                      src={row.media}
-                      alt={row.name}
-                      width={50}
-                      height={50}
-                      className="w-[50px]"
-                    />
-                    <div>
-                      <div className="font-semibold">{row.name}</div>
-                      <div className="text-gray-500 text-sm dark:text-gray-400">
-                        Lorem Ipsum is simple...
-                      </div>
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell>{row.category}</TableCell>
-                <TableCell>{row.subCategory}</TableCell>
-                <TableCell>
-                  <span className=" py-1  p-3 dark:bg-gray-800 bg-gray-500 text-white rounded-md text-xs">
-                    {row.brand}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <div className="line-through text-red-500">
-                    Rs {row.oldPrice}
-                  </div>
-                  <div className="font-semibold text-green-500">
-                    Rs {row.price}
-                  </div>
-                </TableCell>
-                <TableCell className="text-yellow-400 text-[20px]">
-                  {Array.from({ length: 5 })
-                    .map((_, index) => {
-                      if (index < Math.floor(row.rating)) {
-                        return "★";
-                      } else if (index < row.rating) {
-                        return "☆";
-                      }
-                    })
-                    .join("")}
-                </TableCell>
+            {loading ? (
+              <tr>
+                <td>
+                  <CircularProgress />
+                </td>
+              </tr>
+            ) : (
+              <>
+                {products &&
+                  products.map((product, index) => (
+                    <TableRow key={product._id} className="">
+                      <TableCell>
+                        <div className="flex gap-3 items-center">
+                          <Image
+                            src={product.images[0]}
+                            alt={product.product}
+                            width={50}
+                            height={50}
+                            className="w-[50px]"
+                          />
+                          <div>
+                            <div className="font-semibold">
+                              {product.product}
+                            </div>
+                            <div className="text-gray-500 text-sm dark:text-gray-400">
+                              {product.description}
+                            </div>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>{product.category?.name}</TableCell>
+                      <TableCell>{product.subCategory?.name}</TableCell>
+                      <TableCell>
+                        <span className=" py-1  p-3 dark:bg-gray-800 bg-gray-500 text-white rounded-md text-xs">
+                          {product.brand}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <div className="line-through text-red-500">
+                          Rs {product.oldPrice}
+                        </div>
+                        <div className="font-semibold text-green-500">
+                          Rs {product.newPrice}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-yellow-400 text-[20px]">
+                        {Array.from({ length: 5 })
+                          .map((_, index) => {
+                            if (index < Math.floor(product.rating)) {
+                              return "★";
+                            } else if (index < product.rating) {
+                              return "☆";
+                            }
+                          })
+                          .join("")}
+                      </TableCell>
 
-                <TableCell>
-                  <div className="flex space-x-2 text-[15px] ">
-                    <IconButton
-                      onClick={() => handlePreview(row.id)}
-                      className="bg-purple-500 text-white hover:bg-purple-700 p-2 rounded"
-                    >
-                      <AiFillEye className="text-[15px]" />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => handleEdit(row.id, row)}
-                      className="bg-green-500 text-white hover:bg-green-700 p-2 rounded"
-                    >
-                      <AiFillEdit className="text-[15px]" />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => handleDelete(row.id)}
-                      className="bg-red-500 text-white hover:bg-red-700 p-2 rounded"
-                    >
-                      <AiFillDelete className="text-[15px]" />
-                    </IconButton>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
+                      <TableCell>
+                        <div className="flex space-x-2 text-[15px] ">
+                          <IconButton
+                            onClick={() => handlePreview(product._id)}
+                            className="bg-purple-500 text-white hover:bg-purple-700 p-2 rounded"
+                          >
+                            <AiFillEye className="text-[15px]" />
+                          </IconButton>
+                          <IconButton
+                            onClick={() => handleEdit(product._id, product)}
+                            className="bg-green-500 text-white hover:bg-green-700 p-2 rounded"
+                          >
+                            <AiFillEdit className="text-[15px]" />
+                          </IconButton>
+                          <IconButton
+                            onClick={() => handleDelete(product._id)}
+                            className="bg-red-500 text-white hover:bg-red-700 p-2 rounded"
+                          >
+                            <AiFillDelete className="text-[15px]" />
+                          </IconButton>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
+      <ToastContainer />
     </div>
   );
 };

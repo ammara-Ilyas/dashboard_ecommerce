@@ -1,6 +1,10 @@
 import React from "react";
 import Header from "@/components/widgets/categories/CategoryHeader";
 import AddProductWeight from "@/components/widgets/product/ProductWeight";
+export const metadata = {
+  title: "Add Product Weight",
+  description: "Manage product Weight options in ecommerce dashboard.",
+};
 const page = () => {
   return (
     <>
