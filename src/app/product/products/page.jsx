@@ -4,10 +4,10 @@ import Header from "@/components/widgets/categories/CategoryHeader";
 import ProductList from "@/components/widgets/dashboard/ProductList";
 import Button from "@/components/miniComponents/Button";
 import { useRouter } from "next/navigation";
-export const metadata = {
-  title: "Products",
-  description: "Manage products options in your ecommerce dashboard.",
-};
+// export const metadata = {
+//   title: "Products",
+//   description: "Manage products options in your ecommerce dashboard.",
+// };
 const Page = () => {
   const router = useRouter();
   const handleButton = () => {

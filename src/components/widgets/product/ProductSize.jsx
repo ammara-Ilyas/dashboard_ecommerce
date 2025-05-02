@@ -36,7 +36,7 @@ const ProductSize = () => {
       setLoading(true);
       try {
         const res = await callPublicApi("/size", "GET");
-        console.log("res in sizes list ", res);
+        // console.log("res in sizes list ", res);
 
         if (res.status === "error" || res.status === 400) {
           toast.error(res.message || "sizes fetch failed");
@@ -54,28 +54,64 @@ const ProductSize = () => {
     fetchData();
   }, []);
 
-  const handleAddOrEditSize = () => {
-    if (size !== "") {
-      if (editMode) {
+  const handleAddOrEditSize = async () => {
+    if (size.trim === "") {
+      toast.error("Please enter size");
+    }
+    if (editMode) {
+      setSize(size);
+      try {
+        const res = await callPrivateApi(`/size/${editId}`, "PUT", {
+          size: size,
+        });
+        // console.log("res in add size ", res);
+        if (res.status === "error" || res.status === 400) {
+          toast.error(res.message || "size updated failed");
+        } else {
+          toast.success(res.message || "size updated successfully");
+          setSize("");
+        }
         setSizesList(
           sizesList.map((item) =>
-            item.id === editId ? { ...item, value: size } : item
+            item._id === editId ? { ...item, size: size } : item
           )
         );
-        setEditMode(false);
-        setEditId(null);
-      } else {
-        setSizesList([...sizesList, { id: Date.now(), value: size }]);
+      } catch (error) {
+        toast.error(error?.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+        // to call useEffect
       }
+
+      setEditMode(false);
+      setEditId(null);
     } else {
-      alert("add size");
+      try {
+        const res = await callPrivateApi("/size", "POST", { size: size });
+        // console.log("res in add size ", res);
+        if (res.status === "error" || res.status === 400) {
+          toast.error(res.message || "size added failed");
+        } else {
+          toast.success(res.message || "size added successfully");
+          setSize("");
+          setSizesList([...sizesList, { size: size }]);
+        }
+      } catch (error) {
+        toast.error(error?.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+        // to call useEffect
+      }
     }
-    setSize("");
   };
 
   const handleEdit = async (id) => {
-    setLoading(true);
-
+    const selectedSize = sizesList.find((item) => item._id === id);
+    if (selectedSize) {
+      setSize(selectedSize.size);
+      setEditId(id);
+      setEditMode(true);
+    }
     setEditId(id);
     setEditMode(true);
   };
@@ -84,7 +120,7 @@ const ProductSize = () => {
     setSizesList(sizesList.filter((item) => item._id !== id));
     try {
       const res = await callPrivateApi(`/size/${id}`, "DELETE");
-      console.log("res in size delete ", res);
+      // console.log("res in size delete ", res);
       if (res.status === "error" || res.status === 400) {
         toast.error(res.message || "size deleted failed");
       } else {

@@ -2,7 +2,7 @@ import React from "react";
 import Header from "@/components/widgets/categories/CategoryHeader";
 import ProductSize from "@/components/widgets/product/ProductSize";
 export const metadata = {
-  title: "Add Product Size",
+  title: "Product Size",
   description: "Manage product Size options in ecommerce dashboard.",
 };
 const Page = () => {

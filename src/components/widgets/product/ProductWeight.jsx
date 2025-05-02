@@ -33,7 +33,7 @@ export default function AddProductWeight() {
       setLoading(true);
       try {
         const res = await callPublicApi("/weight", "GET");
-        console.log("res in WeightList list ", res);
+        // console.log("res in WeightList list ", res);
 
         if (res.status === "error" || res.status === 400) {
           toast.error(res.message || "Weights fetch failed");
@@ -55,30 +55,68 @@ export default function AddProductWeight() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [editId]);
   // Add or Edit Product Weight
-  const handleAddOrEditWeight = () => {
-    if (weight !== "") {
-      if (editMode) {
+  const handleAddOrEditWeight = async () => {
+    if (weight.trim === "") {
+      toast.error("Please enter weight");
+    }
+    if (editMode) {
+      setWeight(weight);
+      try {
+        const res = await callPrivateApi(`/weight/${editId}`, "PUT", {
+          weight: weight,
+        });
+        // console.log("res in update weight ", res);
+        if (res.status === "error" || res.status === 400) {
+          toast.error(res.message || "weight updated failed");
+        } else {
+          toast.success(res.message || "weight updated successfully");
+          setWeight("");
+        }
         setWeightsList(
           weightsList.map((item) =>
-            item.id === editId ? { ...item, value: weight } : item
+            item._id === editId ? { ...item, weight: weight } : item
           )
         );
-        setEditMode(false);
-        setEditId(null);
-      } else {
-        setWeightsList([...weightsList, { id: Date.now(), value: weight }]);
+      } catch (error) {
+        toast.error(error?.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+        // to call useEffect
       }
+
+      setEditMode(false);
+      setEditId(null);
+      setWeight("");
     } else {
-      alert("add weight");
+      try {
+        const res = await callPrivateApi("/weight", "POST", {
+          weight: weight,
+        });
+        // console.log("res in add weight ", res);
+        if (res.status === "error" || res.status === 400) {
+          toast.error(res.message || "weight added failed");
+        } else {
+          toast.success(res.message || "weight added successfully");
+          setWeight("");
+          setWeightsList([...weightsList, { weight: weight }]);
+        }
+      } catch (error) {
+        toast.error(error?.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+        // to call useEffect
+      }
     }
-    setWeight("");
   };
 
   // Edit Weight
-  const handleEdit = (id, value) => {
+  const handleEdit = (id) => {
+    const selectedWeight = weightsList.find((item) => item._id === id);
+    if (selectedWeight) {
+      setWeight(selectedWeight.weight);
+    }
     setEditMode(true);
     setEditId(id);
-    setWeight(value);
   };
 
   // Delete Weight
@@ -88,7 +126,7 @@ export default function AddProductWeight() {
     setLoading(true);
     try {
       const res = await callPrivateApi(`/weight/${id}`, "DELETE");
-      console.log("res in weight delete ", res);
+      // console.log("res in weight delete ", res);
       if (res.status === "error" || res.status === 400) {
         toast.error(res.message || "weight deleted failed");
       } else {
@@ -159,7 +197,7 @@ export default function AddProductWeight() {
                   <TableCell>
                     <IconButton
                       color="primary"
-                      onClick={() => handleEdit(weights._id, weights.weight)}
+                      onClick={() => handleEdit(weights._id)}
                     >
                       <Edit />
                     </IconButton>

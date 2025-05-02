@@ -40,7 +40,7 @@ export default function AddProductRAM() {
 
       try {
         const res = await callPublicApi("/ram", "GET");
-        console.log("res in Rams list ", res);
+        // console.log("res in Rams list ", res);
 
         if (res.status === "error" || res.status === 400) {
           toast.error(res.message || "Rams fetch failed");
@@ -54,31 +54,52 @@ export default function AddProductRAM() {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
   // Handle Add/Edit RAM
   const handleAddOrEditRam = async () => {
+    if (ram.trim === "") {
+      toast.error("Please enter ram");
+    }
     if (editMode) {
-      // Edit existing RAM
-      setRamList(
-        ramList.map((item) =>
-          item.id === editId ? { ...item, value: ram } : item
-        )
-      );
+      setRam(ram);
+      try {
+        const res = await callPrivateApi(`/ram/${editId}`, "PUT", {
+          ram: ram,
+        });
+        // console.log("res in add ram ", res);
+        if (res.status === "error" || res.status === 400) {
+          toast.error(res.message || "ram updated failed");
+        } else {
+          toast.success(res.message || "ram updated successfully");
+          setRam("");
+        }
+        setRamList(
+          ramList.map((item) =>
+            item._id === editId ? { ...item, ram: ram } : item
+          )
+        );
+      } catch (error) {
+        toast.error(error?.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+
       setEditMode(false);
       setEditId(null);
-    } else if (ram !== "") {
+      setRam("");
+    } else {
       // Add new RAM
-
       try {
-        const res = await callPrivateApi("/ram", "POST", ram);
-        console.log("res in add ram ", res);
+        const res = await callPrivateApi("/ram", "POST", { ram: ram });
+        // console.log("res in add ram ", res);
         if (res.status === "error" || res.status === 400) {
           toast.error(res.message || "ram added failed");
         } else {
           toast.success(res.message || "ram added successfully");
+          setRamList([...ramList, { ram: ram }]);
+          setRam(""); // Clear the input
         }
       } catch (error) {
         toast.error(error?.message || "Something went wrong");
@@ -86,17 +107,17 @@ export default function AddProductRAM() {
         setLoading(false);
         // to call useEffect
       }
-    } else {
-      alert("write ram");
     }
-    setRam(""); // Clear the input
   };
 
   // Handle Edit Button
-  const handleEdit = (id, value) => {
+  const handleEdit = (id) => {
+    const selectedRam = ramList.find((item) => item._id === id);
+    if (selectedRam) {
+      setRam(selectedRam.ram);
+    }
     setEditMode(true);
     setEditId(id);
-    setRam(value);
   };
 
   // Handle Delete Button
@@ -105,7 +126,7 @@ export default function AddProductRAM() {
     setLoading(true);
     try {
       const res = await callPrivateApi(`/ram/${id}`, "DELETE");
-      console.log("res in ram delete ", res);
+      // console.log("res in ram delete ", res);
       if (res.status === "error" || res.status === 400) {
         toast.error(res.message || "ram added failed");
       } else {
@@ -175,7 +196,7 @@ export default function AddProductRAM() {
                   <TableCell>
                     <IconButton
                       color="primary"
-                      onClick={() => handleEdit(ram._id, ram.ram)}
+                      onClick={() => handleEdit(ram._id)}
                     >
                       <Edit />
                     </IconButton>
