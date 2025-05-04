@@ -25,7 +25,7 @@ function ProductUploadForm() {
     location,
     ramList,
     weightsList,
-    sizesList,
+    sizeList,
   } = useProducts();
 
   const { isDarkMode } = useTheme();
@@ -127,8 +127,8 @@ function ProductUploadForm() {
             >
               {categories &&
                 categories.map((cate, i) => (
-                  <MenuItem value={cate} key={i}>
-                    {cate}
+                  <MenuItem value={cate.name} key={cate._id}>
+                    {cate.name}
                   </MenuItem>
                 ))}
             </Select>
@@ -148,8 +148,8 @@ function ProductUploadForm() {
             >
               {subCategories &&
                 subCategories.map((cate, i) => (
-                  <MenuItem value={cate} key={i}>
-                    {cate}
+                  <MenuItem value={cate.name} key={cate._id}>
+                    {cate.name}
                   </MenuItem>
                 ))}
             </Select>
@@ -221,7 +221,7 @@ function ProductUploadForm() {
             >
               {weightsList &&
                 weightsList.map((weight) => (
-                  <MenuItem value={weight.weight} key={weight.id}>
+                  <MenuItem value={weight.weight} key={weight._id}>
                     {weight.weight}
                   </MenuItem>
                 ))}
@@ -242,7 +242,7 @@ function ProductUploadForm() {
               displayEmpty
             >
               {ramList.map((ram) => (
-                <MenuItem value={ram.ram} key={ram.id}>
+                <MenuItem value={ram.ram} key={ram._id}>
                   {ram.ram}
                 </MenuItem>
               ))}
@@ -261,9 +261,9 @@ function ProductUploadForm() {
               onChange={handleFormData}
               className="mt-3"
             >
-              {sizesList &&
-                sizesList.map((size, i) => (
-                  <MenuItem value={size.size} key={size.id}>
+              {sizeList &&
+                sizeList.map((size) => (
+                  <MenuItem value={size.size} key={size._id}>
                     {size.size}
                   </MenuItem>
                 ))}

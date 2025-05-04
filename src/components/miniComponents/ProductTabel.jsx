@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import ProductFilter from "./ProductFilter";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import ProductListSkeleton from "@/libs/ProductSkeleton";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { callPrivateApi, callPublicApi } from "@/libs/callApis";
@@ -24,7 +25,7 @@ import { set } from "date-fns";
 const ProductTabel = () => {
   const { setFormData, FormData } = useProducts();
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [loader, setLoader] = useState(false);
 
   const router = useRouter();
@@ -116,11 +117,7 @@ const ProductTabel = () => {
           </TableHead>
           <TableBody>
             {loading ? (
-              <tr>
-                <td>
-                  <CircularProgress />
-                </td>
-              </tr>
+              <ProductListSkeleton />
             ) : (
               <>
                 {products &&

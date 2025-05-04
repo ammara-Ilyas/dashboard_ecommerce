@@ -1,22 +1,23 @@
 "use client";
 import { useState } from "react";
-import { MenuItem, Select, TextField, Button } from "@mui/material";
+import {
+  MenuItem,
+  Select,
+  TextField,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 import { useCategory } from "@/contextApi/CategoriesContext";
 import { useRouter } from "next/navigation";
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { callPrivateApi } from "@/libs/callApis";
 const CategoryForm = () => {
   const router = useRouter();
-  const [subCategories, setSubCategories] = useState([]);
-  const {
-    categories,
-
-    subCategoryForm,
-    setSubCategoryForm,
-  } = useCategory();
-
-  // Function to generate a unique ID using Date.now()
-  const generateUniqueId = () =>
-    `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+  const [namegories, setnamegories] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const { categories, setSubCategoryForm, subCategoryForm } = useCategory();
+  console.log("categories in sub", categories);
 
   // Handle Input Changes
   const handleForm = (e) => {
@@ -33,77 +34,104 @@ const CategoryForm = () => {
     const { value } = e.target;
     setSubCategoryForm((prev) => ({
       ...prev,
-      parentCate: value,
+      category: value,
     }));
   };
 
   // Handle Submit: Add or Edit functionality
-  const handleSubmit = () => {
-    const { subCate, parentCate } = subCategoryForm;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { name, category, id } = subCategoryForm;
     console.log("sub form", subCategoryForm);
 
-    if (subCate && parentCate) {
-      const existingCategoryIndex = subCategories.findIndex(
-        (sub) => sub.name == parentCate
-      );
-
-      console.log("existing", existingCategoryIndex);
-      if (existingCategoryIndex !== -1) {
-        // Category exists, add the subcategory to its subcategories array
-        const updatedSubCategories = [...subCategories];
-        const existingCategory = updatedSubCategories[existingCategoryIndex];
-        console.log("existing", existingCategory);
-
-        if (!existingCategory.subcategories.includes(subCate)) {
-          existingCategory.subcategories.push(subCate);
-          alert(`Sub-category "${subCate}" added to "${parentCate}".`);
-        } else {
-          alert(
-            `Sub-category "${subCate}" already exists under "${parentCate}".`
-          );
+    if (id) {
+      const newFormData = new FormData();
+      newFormData.append("name", name);
+      newFormData.append("category_id", category);
+      try {
+        const res = await callPrivateApi(
+          `/subcategory/${id}`,
+          "POST",
+          newFormData
+        );
+        console.log("res in updating sub category", res);
+        if (res.status == 200) {
+          toast.success(res.message || "Sub category updated successfully");
         }
-
-        setSubCategories(updatedSubCategories);
-      } else {
-        // Category does not exist, add it as a new category with the subcategory
-        const selectedCategory = categories.find(
-          (cat) => cat.cate == parentCate
-        );
-
-        const newCategory = {
-          name: parentCate,
-          image: selectedCategory ? selectedCategory.img : null,
-          subcategories: [subCate],
-        };
-
-        setSubCategories((prev) => [...prev, newCategory]);
-        alert(
-          `New category "${parentCate}" with sub-category "${subCate}" added.`
-        );
+        router.push("/category/subCategories");
+      } catch (error) {
+        toast.error(error.message || "Something went wrong");
       }
-
-      // Reset form state
-      setSubCategoryForm({
-        id: null,
-        parentCate: "",
-        subCate: "",
-      });
-      router.push("/category/subCategories");
-    } else {
-      alert("Please fill out all fields.");
     }
+
+    const newFormData = new FormData();
+    newFormData.append("name", name);
+    newFormData.append("category_id", category);
+    try {
+      const res = await callPrivateApi("/subcategory", "POST", newFormData);
+      console.log("res in adding sub category", res);
+      if (res.status == 200) {
+        toast.success(res.message || "Sub category added successfully");
+      }
+      router.push("/category/subCategories");
+    } catch (error) {
+      toast.error(error.message || "Something went wrong");
+    }
+
+    // if (name && category) {
+    //   const existingCategoryIndex = namegories.findIndex(
+    //     (sub) => sub.name == category
+    //   );
+
+    // //   console.log("existing", existingCategoryIndex);
+    //   if (existingCategoryIndex !== -1) {
+    //     // Category exists, add the namegory to its namegories array
+    //     const updatednamegories = [...namegories];
+    //     const existingCategory = updatednamegories[existingCategoryIndex];
+    //     console.log("existing", existingCategory);
+
+    //     if (!existingCategory.namegories.includes(name)) {
+    //       existingCategory.subcategories.push(subCate);
+    //       alert(`Sub-category "${subCate}" added to "${category}".`);
+    //     } else {
+    //       alert(
+    //         `Sub-category "${subCate}" already exists under "${category}".`
+    //       );
+    //     }
+
+    //     setSubCategories(updatedSubCategories);
+    //   }
+    // Category does not exist, add it as a new category with the subcategory
+    // const selectedCategory = categories.find((cat) => cat.cate == category);
+
+    // const newCategory = {
+    //   name: category,
+    //   image: selectedCategory ? selectedCategory.img : null,
+    //   subcategories: [subCate],
+    // };
+
+    // setSubCategories((prev) => [...prev, newCategory]);
+    // alert(`New category "${category}" with sub-category "${subCate}" added.`);
+
+    // Reset form state
+    setSubCategoryForm({
+      id: null,
+      parentCate: "",
+      name: "",
+    });
+    // router.push("/category/namegories");
   };
 
   return (
     <div className="bg-white shadow w-[97%] mx-auto rounded-lg p-6">
-      <div className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         {/* Parent Category Dropdown */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Parent Category
           </label>
           <Select
-            value={subCategoryForm.parentCate || ""}
+            value={subCategoryForm.category || ""}
             onChange={handleParentCategoryChange}
             fullWidth
             displayEmpty
@@ -112,11 +140,12 @@ const CategoryForm = () => {
             <MenuItem value="" disabled>
               None
             </MenuItem>
-            {categories.map((item) => (
-              <MenuItem value={item.cate} key={item.id}>
-                {item.cate}
-              </MenuItem>
-            ))}
+            {categories &&
+              categories.map((item) => (
+                <MenuItem value={item._id} key={item.id}>
+                  {item.name}
+                </MenuItem>
+              ))}
           </Select>
         </div>
 
@@ -126,8 +155,8 @@ const CategoryForm = () => {
             label="Sub Category"
             variant="outlined"
             fullWidth
-            name="subCate"
-            value={subCategoryForm.subCate || ""}
+            name="name"
+            value={subCategoryForm.name || ""}
             onChange={handleForm}
             className="!border-gray-300 !shadow-sm"
           />
@@ -138,12 +167,18 @@ const CategoryForm = () => {
           variant="contained"
           fullWidth
           color="primary"
-          onClick={handleSubmit}
+          type="submit"
           className="!bg-blue-600 hover:!bg-blue-700 !text-white !py-2"
         >
-          {subCategoryForm.id ? "Update Sub-category" : "Add Sub-category"}
+          {loading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : subCategoryForm._id ? (
+            "Update Sub-category"
+          ) : (
+            "Add Sub-category"
+          )}
         </Button>
-      </div>
+      </form>
     </div>
   );
 };

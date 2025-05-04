@@ -1,7 +1,7 @@
 "use client";
 
-import { createContext, useState, useContext } from "react";
-
+import { createContext, useState, useContext, useEffect } from "react";
+import { fetchData } from "@/libs/fetchData";
 const ProductContext = createContext();
 
 const originalProducts = [
@@ -221,32 +221,31 @@ let productData = {
   size: "",
   rating: 0,
 };
-let productSizes = [
-  { id: 5, size: "XS" },
-  { id: 8, size: "S" },
-  { id: 9, size: "M" },
-  { id: 10, size: "XL" },
-  { id: 20, size: "XXl" },
-];
-let rams = [
-  { id: 55, ram: "4GB" },
-  { id: 50, ram: "2GB" },
-  { id: 60, ram: "6GB" },
-  { id: 85, ram: "8 GB" },
-];
-const weights = [
-  { id: 995, weight: "5KG" },
-  { id: 905, weight: "4KG" },
-  { id: 975, weight: "3KG" },
-  { id: 915, weight: "2KG" },
-];
+
 export const ProductProvider = ({ children }) => {
   const [location, setLocation] = useState(countries);
-  const [sizesList, setSizesList] = useState(productSizes);
-  const [weightsList, setWeightsList] = useState(weights);
-  const [ramList, setRamList] = useState(rams);
+  const [sizesList, setSizesList] = useState([]);
+  const [weightsList, setWeightsList] = useState([]);
+  const [ramList, setRamList] = useState([]);
   const [products, setProducts] = useState(originalProducts);
   const [formData, setFormData] = useState(productData);
+  useEffect(() => {
+    const getData = async () => {
+      const { responseSize, responseWeight, responseRam } = await fetchData();
+      console.log(
+        "responses in contextApi",
+        responseSize,
+        responseWeight,
+        responseRam
+      );
+
+      if (responseSize?.sizes) setSizesList(responseSize.sizes);
+      if (responseWeight?.weights) setWeightsList(responseWeight.weights);
+      if (responseRam?.rams) setRamList(responseRam.rams);
+    };
+
+    getData();
+  }, []);
 
   return (
     <ProductContext.Provider

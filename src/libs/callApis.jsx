@@ -1,4 +1,5 @@
-const HOSTNAME = "http://localhost:5000/api";
+// const HOSTNAME = "http://localhost:5000/api";
+const HOSTNAME = "http://127.0.0.1:5000/api"; // Instead of localhost
 
 // Function to make API calls using fetch
 const callPrivateApi = async (endpoint, method, payload) => {

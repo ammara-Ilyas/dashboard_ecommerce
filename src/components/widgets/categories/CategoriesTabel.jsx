@@ -10,12 +10,13 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { callPrivateApi, callPublicApi } from "@/libs/callApis";
 import { useRouter } from "next/navigation";
+import ProductTableSkeleton from "@/libs/ProductSkeleton";
 const CategoryList = () => {
-  const { setCategoryForm } = useCategory();
+  const { setCategoryForm, categories, setCategories, loading, setLoading } =
+    useCategory();
   // console.log("categories", categories);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [loader, setLoader] = useState(false);
+  // const [categories, setCategories] = useState([]);
+  // const [loading, setLoading] = useState(false);
   const router = useRouter();
   // Handle fetch all categories
   useEffect(() => {
@@ -26,31 +27,38 @@ const CategoryList = () => {
         console.log("res in Categorie list ", res);
 
         if (res.status === "error" || res.status === 400) {
-          toast.error(res.message || "Categories fetch failed");
+          // toast.error(res.message || "Categories fetch failed");
+          console.log();
+          res.message || "Categories fetch failed";
         } else {
-          toast.success(res.message || "Categories fetched successfully");
+          // toast.success(res.message || "Categories fetched successfully");
           setCategories(res.categories);
         }
       } catch (error) {
-        toast.error(error?.message || "Something went wrong");
+        // toast.error(error?.message || "Something went wrong");
+        console.log(error?.message || "Something went wrong");
       } finally {
         setLoading(false);
       }
     };
-
     fetchBanners();
-  }, [loader]);
+  }, []);
 
+  useEffect(() => {
+    console.log("categories in tabel ", categories);
+  }, [categories]);
   // Handle Delete Functionality
   const handleDelete = async (id) => {
     setLoading(true);
+
     try {
       const res = await callPrivateApi(`/category/${id}`, "DELETE");
       console.log("res in category delete ", res);
       if (res.status === "error" || res.status === 400) {
-        toast.error(res.message || "categorys fetch failed");
+        toast.error(res.message || "categorys delete failed");
       } else {
-        toast.success(res.message || "categorys fetched successfully");
+        toast.success(res.message || "categorys deleted successfully");
+        setCategories(categories.filter((item) => item._id !== id));
       }
     } catch (error) {
       toast.error(error?.message || "Something went wrong");
@@ -60,15 +68,14 @@ const CategoryList = () => {
   };
   // Handle Edit Functionality
   const handleEdit = (id) => {
-    const cate = categories.find((category) => category.id == id);
+    const cate = categories.find((category) => category._id == id);
     console.log("cate", cate);
     console.log("id", id);
-
     if (cate) {
       setCategoryForm({
-        id: cate.id, // Include the ID for updating
-        cate: cate.cate,
-        img: cate.img,
+        id: id,
+        name: cate.name,
+        img: cate.image,
         color: cate.color,
       });
       router.push("/category/uploadCategory");
@@ -90,11 +97,7 @@ const CategoryList = () => {
 
           <tbody>
             {loading ? (
-              <tr>
-                <td colSpan={4} className="text-center py-6">
-                  <CircularProgress />
-                </td>
-              </tr>
+              <ProductTableSkeleton />
             ) : (
               categories &&
               categories.map((category, index) => (
@@ -105,6 +108,7 @@ const CategoryList = () => {
                   } hover:bg-gray-100`}
                 >
                   <td className="py-3 px-6">
+                    {/* {console.log("category", category)} */}
                     <Image
                       src={"/images/dummy.png"}
                       alt={category.name}

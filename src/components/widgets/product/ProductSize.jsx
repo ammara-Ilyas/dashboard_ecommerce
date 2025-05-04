@@ -36,7 +36,7 @@ const ProductSize = () => {
       setLoading(true);
       try {
         const res = await callPublicApi("/size", "GET");
-        // console.log("res in sizes list ", res);
+        //console.log("res in sizes list ", res);
 
         if (res.status === "error" || res.status === 400) {
           toast.error(res.message || "sizes fetch failed");
@@ -64,7 +64,7 @@ const ProductSize = () => {
         const res = await callPrivateApi(`/size/${editId}`, "PUT", {
           size: size,
         });
-        // console.log("res in add size ", res);
+        //console.log("res in add size ", res);
         if (res.status === "error" || res.status === 400) {
           toast.error(res.message || "size updated failed");
         } else {
@@ -88,7 +88,7 @@ const ProductSize = () => {
     } else {
       try {
         const res = await callPrivateApi("/size", "POST", { size: size });
-        // console.log("res in add size ", res);
+        //console.log("res in add size ", res);
         if (res.status === "error" || res.status === 400) {
           toast.error(res.message || "size added failed");
         } else {
@@ -120,7 +120,7 @@ const ProductSize = () => {
     setSizesList(sizesList.filter((item) => item._id !== id));
     try {
       const res = await callPrivateApi(`/size/${id}`, "DELETE");
-      // console.log("res in size delete ", res);
+      //console.log("res in size delete ", res);
       if (res.status === "error" || res.status === 400) {
         toast.error(res.message || "size deleted failed");
       } else {

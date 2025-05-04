@@ -1,22 +1,20 @@
 "use client";
-import { TextField, Button, InputLabel } from "@mui/material";
+import { TextField, Button, InputLabel, CircularProgress } from "@mui/material";
 import { useCategory } from "@/contextApi/CategoriesContext";
 import { useRouter } from "next/navigation";
+import { callPrivateApi } from "@/libs/callApis";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useState } from "react";
 
 const Form = () => {
   const router = useRouter();
   const { categories, setCategories, setCategoryForm, categoryForm } =
     useCategory();
-
-  // Function to generate a unique ID using Date.now()
-  const generateUniqueId = () => {
-    return `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
-  };
-
+  const [loading, setLoading] = useState(false);
   // Handle Input Changes
   const handleForm = (e) => {
     const { name, value } = e.target;
-
     setCategoryForm((prev) => ({
       ...prev,
       [name]: value,
@@ -26,50 +24,89 @@ const Form = () => {
   // Handle File Upload
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
+    console.log("file", file.name);
     setCategoryForm((prev) => ({
       ...prev,
-      img: file, // Store file in `img`
+      image: file,
     }));
   };
 
   // Handle Submit: Add or Edit functionality
-  const handleSubmit = () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
     if (
-      (categoryForm.name != "") &
-      (categoryForm.color != "") &
-      (categoryForm.img != null)
+      categoryForm.name.trim() == "" &&
+      categoryForm.color.trim() == "" &&
+      categoryForm.image == null
     ) {
-      if (categoryForm.id) {
-        // Edit functionality: Update existing category
-        const updatedCategories = categories.map((cat) => {
-          cat.id === categoryForm.id ? categoryForm : cat;
-          console.log("vc", cat);
-        });
-        setCategories([updatedCategories]);
-        alert("Category updated successfully!");
-      } else {
-        const newCategory = { ...categoryForm, id: generateUniqueId() };
-        setCategories((prev) => [...prev, newCategory]);
-        alert("New category added successfully!");
-      }
-      router.push("/category/categories");
-    } else {
-      alert("add form");
+      toast.error("Please fill all fields");
     }
-    console.log("categories", categories);
+    console.log("category form", categoryForm);
+    console.log("id", categoryForm.id == null);
 
+    if (categoryForm.id !== null) {
+      const formData = new FormData();
+      formData.append("name", categoryForm.name);
+      formData.append("color", categoryForm.color);
+      formData.append("image", categoryForm.image);
+      ////Edit functionality
+      try {
+        const res = await callPrivateApi(
+          `/category/${categoryForm.id}`,
+          "PUT",
+          formData
+        );
+        console.log("res in category update", res);
+        setCategories((prev) =>
+          prev.map((cat) =>
+            cat._id === categoryForm.id
+              ? { ...cat, ...res.updatedCategory }
+              : cat
+          )
+        );
+        toast.success(res.message) || "Category updated successfully";
+        router.push("/category/categories");
+      } catch (error) {
+        toast.error(error.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      ///Add functionaity
+      const formData = new FormData();
+      formData.append("name", categoryForm.name);
+      formData.append("color", categoryForm.color);
+      formData.append("image", categoryForm.image);
+      try {
+        const res = await callPrivateApi("/category", "POST", formData);
+        console.log("res in category add", res);
+
+        // Add to context list after new category added
+        setCategories((prev) => [...prev, res.newCategory]);
+        if (res.Category) {
+          toast.success(res.message || "Category added successfully");
+        }
+        router.push("/category/categories");
+      } catch (error) {
+        toast.error(error.message || "Someting went wrong");
+      } finally {
+        setLoading(false);
+      }
+    }
+    // console.log("categories", categories);
     // Reset form state
     setCategoryForm({
       id: null,
-      cate: "",
+      name: "",
       color: "",
-      img: "",
+      image: "",
     });
   };
 
   return (
     <div className="bg-white shadow rounded-lg p-6 mx-auto w-[95%] mt-8">
-      <div className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         {/* Category Name */}
         <div className="flex flex-col">
           <InputLabel
@@ -81,8 +118,8 @@ const Form = () => {
           <TextField
             variant="outlined"
             fullWidth
-            name="cate"
-            value={categoryForm.cate}
+            name="name"
+            value={categoryForm.name}
             onChange={handleForm}
             className="!border-gray-300 !shadow-sm"
           />
@@ -123,12 +160,19 @@ const Form = () => {
           variant="contained"
           fullWidth
           color="primary"
-          onClick={handleSubmit}
+          type="submit"
           className="!bg-blue-600 hover:!bg-blue-700 !text-white !py-2"
         >
-          {categoryForm.id ? "Update Category" : "Add Category"}
+          {loading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : categoryForm.id ? (
+            "Update Category"
+          ) : (
+            "Add Category"
+          )}
         </Button>
-      </div>
+      </form>
+      <ToastContainer />
     </div>
   );
 };

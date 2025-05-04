@@ -33,7 +33,7 @@ export default function AddProductWeight() {
       setLoading(true);
       try {
         const res = await callPublicApi("/weight", "GET");
-        // console.log("res in WeightList list ", res);
+        console.log("res in WeightList list ", res);
 
         if (res.status === "error" || res.status === 400) {
           toast.error(res.message || "Weights fetch failed");

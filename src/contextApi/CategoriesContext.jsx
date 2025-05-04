@@ -1,106 +1,113 @@
 "use client";
-import { createContext, useState, useContext } from "react";
-const banner = [
-  {
-    id: 1,
-    url: "/assets/banner_01.webp",
-    alt: "Big Sale - 50% Off",
-  },
-  {
-    id: 2,
-    url: "/assets/banner_02.webp",
-    alt: "End of Season Sale - 50% Off",
-  },
-  {
-    id: 3,
-    url: "/assets/banner_01.webp",
-    alt: "Festive Sale",
-  },
-  {
-    id: 4,
-    url: "/assets/banner_02.webp",
-    alt: "Crazy Deals - ₹499",
-  },
-];
-const subCategoryData = [
-  {
-    image: "/images/fashion.png", // Use your own image path
-    name: "Fashion",
-    subcategories: ["Men", "Women"],
-  },
-  {
-    image: "/images/electronics.png", // Use your own image path
-    name: "Electronics",
-    subcategories: ["Mobiles", "Laptops", "Smart Watch Accessories", "Cameras"],
-  },
-];
-const categoryData = [
-  {
-    id: 1,
-    color: "blue",
-    cate: "Accessories",
-    img: "/images/footwear.png",
-  },
-  {
-    id: 2,
-    color: "red",
-    cate: "Groceries",
-    img: "/images/footwear.png",
-  },
-  {
-    id: 3,
-    color: "blue",
-    cate: "Fashion",
-    img: "/images/footwear.png",
-  },
-  {
-    id: 4,
-    color: "green",
-    cate: "Electronics",
-    img: "/images/footwear.png",
-  },
-];
-
-const cateform = {
-  id: 0,
-  cate: "",
-  color: "",
-  img: "",
-};
-const subCateform = {
-  id: 0,
-  parentCate: "",
-  subCate: [],
-};
+import { createContext, useContext, useEffect, useState } from "react";
+import { callPublicApi } from "@/libs/callApis";
 const CategoryContext = createContext();
-export const CategoryProvider = ({ children }) => {
-  const [categories, setCategories] = useState(categoryData);
-  const [subCategories, setSubCategories] = useState(subCategoryData);
-  const [categoryForm, setCategoryForm] = useState(cateform);
-  const [subCategoryForm, setSubCategoryForm] = useState(subCateform);
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const [bannerList, setBannerList] = useState(banner);
-  const [bannerFormData, setBannerFormData] = useState(null);
 
+export const CategoryProvider = ({ children }) => {
+  const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+  const [weightsList, setWeightsList] = useState([]);
+  const [ramList, setRamList] = useState([]);
+  const [sizeList, setSizeList] = useState([]);
+  // const [products, setProducts] = useState([]);
+  const [bannerList, setBannerList] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // Forms
+  const [categoryForm, setCategoryForm] = useState({
+    id: null,
+    name: "",
+    color: "",
+    image: "",
+  });
+  const [subCategoryForm, setSubCategoryForm] = useState({
+    id: null,
+    category: "",
+    name: "",
+  });
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
+
+  useEffect(() => {
+    const fetchAll = async () => {
+      setLoading(true);
+      try {
+        const [catRes, subCatRes, weightRes, ramRes, bannerRes, sizeRes] =
+          await Promise.all([
+            callPublicApi("/category", "GET"),
+            callPublicApi("/subcategory", "GET"),
+            callPublicApi("/weight", "GET"),
+            callPublicApi("/ram", "GET"),
+            callPublicApi("/banners", "GET"),
+            callPublicApi("/size", "GET"),
+          ]);
+
+        if (catRes?.categories) {
+          console.log("✅ Categories fetched:", catRes.categories);
+          setCategories(catRes.categories);
+        }
+
+        if (sizeRes?.size) {
+          console.log("✅ Categories fetched:", sizeRes.size);
+          setSizeList(sizeRes.size);
+        }
+
+        if (subCatRes?.SubCategories) {
+          console.log("✅ SubCategories fetched:", subCatRes.SubCategories);
+          setSubCategories(subCatRes.SubCategories);
+        }
+
+        if (weightRes?.weights) {
+          console.log("✅ Weights fetched:", weightRes.weights);
+          setWeightsList(weightRes.weights);
+        }
+
+        if (ramRes?.rams) {
+          console.log("✅ RAMs fetched:", ramRes.rams);
+          setRamList(ramRes.rams);
+        }
+
+        // if (productRes?.products) {
+        //   console.log("✅ Products fetched:", productRes.products);
+        //   setProducts(productRes.products);
+        // }
+
+        if (bannerRes?.banners) {
+          console.log("✅ Banners fetched:", bannerRes.banners);
+          setBannerList(bannerRes.banners);
+        }
+      } catch (err) {
+        console.log("❌ Fetch error:", err?.message || err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAll();
+  }, []);
 
   return (
     <CategoryContext.Provider
       value={{
         categories,
         setCategories,
-        categoryForm,
-        setCategoryForm,
         subCategories,
         setSubCategories,
+        weightsList,
+        ramList,
+        sizeList,
+        setRamList,
+        setWeightsList,
+        setSizeList, // products,
+        bannerList,
+        loading,
+        setLoading,
+        categoryForm,
+        setCategoryForm,
         subCategoryForm,
         setSubCategoryForm,
         isSidebarOpen,
         toggleSidebar,
-        bannerList,
-        setBannerList,
-        bannerFormData,
-        setBannerFormData,
       }}
     >
       {children}
@@ -110,10 +117,8 @@ export const CategoryProvider = ({ children }) => {
 
 export const useCategory = () => {
   const context = useContext(CategoryContext);
-  // console.log("Nav bar Provider");
-
   if (!context) {
-    throw new Error("useSidebar must be used within a SidebarProvider");
+    throw new Error("useCategory must be used within a CategoryProvider");
   }
   return context;
 };
