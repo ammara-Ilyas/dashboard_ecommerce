@@ -224,38 +224,29 @@ let productData = {
 
 export const ProductProvider = ({ children }) => {
   const [location, setLocation] = useState(countries);
-  const [sizesList, setSizesList] = useState([]);
-  const [weightsList, setWeightsList] = useState([]);
-  const [ramList, setRamList] = useState([]);
   const [products, setProducts] = useState(originalProducts);
   const [formData, setFormData] = useState(productData);
-  useEffect(() => {
-    const getData = async () => {
-      const { responseSize, responseWeight, responseRam } = await fetchData();
-      console.log(
-        "responses in contextApi",
-        responseSize,
-        responseWeight,
-        responseRam
-      );
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     const { responseSize, responseWeight, responseRam } = await fetchData();
+  //     console.log(
+  //       "responses in contextApi",
+  //       responseSize,
+  //       responseWeight,
+  //       responseRam
+  //     );
 
-      if (responseSize?.sizes) setSizesList(responseSize.sizes);
-      if (responseWeight?.weights) setWeightsList(responseWeight.weights);
-      if (responseRam?.rams) setRamList(responseRam.rams);
-    };
+  //     if (responseSize?.sizes) setSizesList(responseSize.sizes);
+  //     if (responseWeight?.weights) setWeightsList(responseWeight.weights);
+  //     if (responseRam?.rams) setRamList(responseRam.rams);
+  //   };
 
-    getData();
-  }, []);
+  //   getData();
+  // }, []);
 
   return (
     <ProductContext.Provider
       value={{
-        weightsList,
-        setWeightsList,
-        ramList,
-        setRamList,
-        sizesList,
-        setSizesList,
         location,
         setLocation,
         products,

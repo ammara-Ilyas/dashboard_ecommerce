@@ -18,9 +18,10 @@ import { Edit, Delete } from "@mui/icons-material";
 import { useProducts } from "@/contextApi/ProductContext";
 import { toast, ToastContainer } from "react-toastify";
 import { callPrivateApi, callPublicApi } from "@/libs/callApis";
+import { useCategory } from "@/contextApi/CategoriesContext";
 import "react-toastify/dist/ReactToastify.css";
 export default function AddProductWeight() {
-  const { weightsList, setWeightsList } = useProducts();
+  const { weightsList, setWeightsList } = useCategory();
   const [weight, setWeight] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [editId, setEditId] = useState(null);
@@ -191,8 +192,8 @@ export default function AddProductWeight() {
               </TableRow>
             ) : (
               weightsList &&
-              weightsList.map((weights) => (
-                <TableRow key={weights._id}>
+              weightsList.map((weights, i) => (
+                <TableRow key={weights._id || i}>
                   <TableCell>{weights.weight}</TableCell>
                   <TableCell>
                     <IconButton

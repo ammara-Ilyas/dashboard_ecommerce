@@ -48,8 +48,8 @@ export const CategoryProvider = ({ children }) => {
         }
 
         if (sizeRes?.size) {
-          console.log("✅ Categories fetched:", sizeRes.size);
-          setSizeList(sizeRes.size);
+          console.log("✅ Categories fetched:", sizeRes.sizes);
+          setSizeList(sizeRes.sizes);
         }
 
         if (subCatRes?.SubCategories) {
@@ -85,6 +85,16 @@ export const CategoryProvider = ({ children }) => {
 
     fetchAll();
   }, []);
+  useEffect(() => {
+    console.log(
+      "ram weight in context api",
+      ramList,
+      sizeList,
+      weightsList,
+      subCategories,
+      categories
+    );
+  }, [ramList, sizeList, weightsList]);
 
   return (
     <CategoryContext.Provider

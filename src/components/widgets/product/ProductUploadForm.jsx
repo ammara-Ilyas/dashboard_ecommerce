@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   MenuItem,
@@ -11,45 +11,50 @@ import {
 } from "@mui/material";
 import { CloudUpload as CloudUploadIcon } from "@mui/icons-material";
 import Image from "next/image";
+import { useCallback } from "react";
 import { useTheme } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useProducts } from "@/contextApi/ProductContext";
-
+import { useCategory } from "@/contextApi/CategoriesContext";
 function ProductUploadForm() {
   let {
-    formData,
-    setFormData,
     categories,
+    loading,
     subCategories,
     location,
     ramList,
     weightsList,
     sizeList,
-  } = useProducts();
-
+  } = useCategory();
+  let { formData, setFormData } = useProducts();
   const { isDarkMode } = useTheme();
+  useEffect(() => {
+    console.log(
+      "ram size an dweight in product ",
+      weightsList,
+      sizeList,
+      ramList,
+      categories,
+      subCategories
+    );
+  }, []);
+  // if (loading) return <p>Loading...</p>;
 
-  // Handle input changes for all fields
-  const handleFormData = (e) => {
+  // Use useCallback to memoize the event handler
+  const handleFormData = useCallback((e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-  };
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form Data Submitted:", formData);
     toast.success("Product uploaded successfully!", {
       position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      theme: isDarkMode ? "dark" : "light",
     });
   };
 
@@ -220,9 +225,9 @@ function ProductUploadForm() {
               className="mt-3"
             >
               {weightsList &&
-                weightsList.map((weight) => (
-                  <MenuItem value={weight.weight} key={weight._id}>
-                    {weight.weight}
+                weightsList.map((weightItem) => (
+                  <MenuItem value={weightItem.weight} key={weightItem._id}>
+                    {weightItem.weight}
                   </MenuItem>
                 ))}
             </Select>
@@ -241,9 +246,9 @@ function ProductUploadForm() {
               className="mt-3"
               displayEmpty
             >
-              {ramList.map((ram) => (
-                <MenuItem value={ram.ram} key={ram._id}>
-                  {ram.ram}
+              {ramList.map((ramItem) => (
+                <MenuItem value={ramItem.ram} key={ramItem._id}>
+                  {ramItem.ram}
                 </MenuItem>
               ))}
             </Select>
@@ -262,9 +267,9 @@ function ProductUploadForm() {
               className="mt-3"
             >
               {sizeList &&
-                sizeList.map((size) => (
-                  <MenuItem value={size.size} key={size._id}>
-                    {size.size}
+                sizeList.map((sizeItem) => (
+                  <MenuItem value={sizeItem.size} key={sizeItem._id}>
+                    {sizeItem.sizeItem}
                   </MenuItem>
                 ))}
             </Select>

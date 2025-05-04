@@ -16,11 +16,12 @@ import {
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
 import { useProducts } from "@/contextApi/ProductContext";
+import { useCategory } from "@/contextApi/CategoriesContext";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { callPrivateApi, callPublicApi } from "@/libs/callApis";
 const ProductSize = () => {
-  const { sizesList, setSizesList } = useProducts();
+  const { sizeList, setSizeList } = useCategory();
   const [size, setSize] = useState("");
   const [editId, setEditId] = useState(null);
   const [editMode, setEditMode] = useState(null);
@@ -36,13 +37,13 @@ const ProductSize = () => {
       setLoading(true);
       try {
         const res = await callPublicApi("/size", "GET");
-        //console.log("res in sizes list ", res);
+        console.log("res in sizes list ", res);
 
         if (res.status === "error" || res.status === 400) {
           toast.error(res.message || "sizes fetch failed");
         } else {
           toast.success(res.message || "sizes fetched successfully");
-          setSizesList(res.sizes);
+          setSizeList(res.sizes);
         }
       } catch (error) {
         toast.error(error?.message || "Something went wrong");
@@ -71,8 +72,8 @@ const ProductSize = () => {
           toast.success(res.message || "size updated successfully");
           setSize("");
         }
-        setSizesList(
-          sizesList.map((item) =>
+        setSizeList(
+          sizeList.map((item) =>
             item._id === editId ? { ...item, size: size } : item
           )
         );
@@ -94,7 +95,7 @@ const ProductSize = () => {
         } else {
           toast.success(res.message || "size added successfully");
           setSize("");
-          setSizesList([...sizesList, { size: size }]);
+          setSizeList([...sizeList, { size: size }]);
         }
       } catch (error) {
         toast.error(error?.message || "Something went wrong");
@@ -106,7 +107,7 @@ const ProductSize = () => {
   };
 
   const handleEdit = async (id) => {
-    const selectedSize = sizesList.find((item) => item._id === id);
+    const selectedSize = sizeList.find((item) => item._id === id);
     if (selectedSize) {
       setSize(selectedSize.size);
       setEditId(id);
@@ -117,7 +118,7 @@ const ProductSize = () => {
   };
 
   const handleDelete = async (id) => {
-    setSizesList(sizesList.filter((item) => item._id !== id));
+    setSizeList(sizeList.filter((item) => item._id !== id));
     try {
       const res = await callPrivateApi(`/size/${id}`, "DELETE");
       //console.log("res in size delete ", res);
@@ -185,9 +186,9 @@ const ProductSize = () => {
                 </TableCell>
               </TableRow>
             ) : (
-              sizesList &&
-              sizesList.map((size) => (
-                <TableRow key={size._id} className="hover:bg-gray-100">
+              sizeList &&
+              sizeList.map((size, i) => (
+                <TableRow key={size._id || i} className="hover:bg-gray-100">
                   <TableCell>{size.size}</TableCell>
                   <TableCell>
                     <IconButton

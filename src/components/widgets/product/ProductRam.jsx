@@ -18,9 +18,10 @@ import { Edit, Delete } from "@mui/icons-material";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useProducts } from "@/contextApi/ProductContext";
+import { useCategory } from "@/contextApi/CategoriesContext";
 import { callPrivateApi, callPublicApi } from "@/libs/callApis";
 export default function AddProductRAM() {
-  const { ramList, setRamList } = useProducts();
+  const { ramList, setRamList } = useCategory();
   const [ram, setRam] = useState("");
 
   const [editMode, setEditMode] = useState(false);
@@ -62,13 +63,15 @@ export default function AddProductRAM() {
     if (ram.trim === "") {
       toast.error("Please enter ram");
     }
+    console.log("edit id in ram", editId);
+
     if (editMode) {
       setRam(ram);
       try {
         const res = await callPrivateApi(`/ram/${editId}`, "PUT", {
           ram: ram,
         });
-        // console.log("res in add ram ", res);
+        console.log("res in update ram ", res);
         if (res.status === "error" || res.status === 400) {
           toast.error(res.message || "ram updated failed");
         } else {
@@ -93,7 +96,7 @@ export default function AddProductRAM() {
       // Add new RAM
       try {
         const res = await callPrivateApi("/ram", "POST", { ram: ram });
-        // console.log("res in add ram ", res);
+        console.log("res in add ram ", res);
         if (res.status === "error" || res.status === 400) {
           toast.error(res.message || "ram added failed");
         } else {
@@ -117,6 +120,8 @@ export default function AddProductRAM() {
       setRam(selectedRam.ram);
     }
     setEditMode(true);
+    console.log("id in edit", id);
+
     setEditId(id);
   };
 
@@ -190,19 +195,19 @@ export default function AddProductRAM() {
               </TableRow>
             ) : (
               ramList &&
-              ramList.map((ram) => (
-                <TableRow key={ram._id}>
-                  <TableCell>{ram.ram}</TableCell>
+              ramList.map((ramItem, i) => (
+                <TableRow key={ramItem._id || i}>
+                  <TableCell>{ramItem.ram}</TableCell>
                   <TableCell>
                     <IconButton
                       color="primary"
-                      onClick={() => handleEdit(ram._id)}
+                      onClick={() => handleEdit(ramItem._id)}
                     >
                       <Edit />
                     </IconButton>
                     <IconButton
                       color="secondary"
-                      onClick={() => handleDelete(ram._id)}
+                      onClick={() => handleDelete(ramItem._id)}
                     >
                       <Delete />
                     </IconButton>
