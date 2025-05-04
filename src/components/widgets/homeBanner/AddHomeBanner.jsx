@@ -6,28 +6,20 @@ import { useCategory } from "@/contextApi/CategoriesContext";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { callPrivateApi } from "@/libs/callApis";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Initialize toast notifications
 // toast.configure();
 
 const MediaAndPublish = () => {
-  const { setBannerList, bannerList } = useCategory();
+  const { setBannerList, bannerList, bannerForm, setBannerForm } =
+    useCategory();
 
   const router = useRouter();
-  const [bannerForm, setBannerForm] = useState({
-    name: "",
-    image: "",
-  });
+
   const [selectedImage, setSelectedImage] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
-
-  useEffect(() => {
-    if (bannerForm) {
-      setSelectedImage(bannerForm.url);
-    }
-  }, [bannerForm]);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -37,39 +29,69 @@ const MediaAndPublish = () => {
         toast.info("Replacing the existing image.");
       }
       console.log("file", file);
-
       setSelectedImage(URL.createObjectURL(file));
+      setBannerForm((prev) => ({ ...prev, image: file }));
+
+      console.log("url", URL.createObjectURL(file));
     }
   };
   const handlePublish = async (e) => {
     e.preventDefault();
     setIsUploading(true);
-
-    try {
-      const formData = new FormData();
-      formData.append("name", bannerForm.name);
-
-      if (!bannerForm.image) {
-        formData.append("image", bannerForm.image);
-      }
-
-      const method = isEditMode ? "PUT" : "POST";
-      const endpoint = isEditMode ? `/banner/${bannerId}` : "/banner";
-
-      const res = await callPrivateApi(endpoint, method, formData);
-
-      if (res.status === "error" || res.status === 400) {
-        toast.error(res.message || "Action failed");
-      } else {
-        toast.success(
-          res.message || (isEditMode ? "Banner updated" : "Banner created")
+    console.log("form data banner", bannerForm);
+    const formData = new FormData();
+    formData.append("name", bannerForm.name);
+    if (selectedImage) {
+      formData.append("image", bannerForm.image);
+    }
+    if (bannerForm.id !== null) {
+      try {
+        const res = await callPrivateApi(
+          `/banner/${bannerForm.id}`,
+          "PUT",
+          formData
         );
-        router.push("/your-target-route");
+        console.log("res in update banner", res);
+
+        if (res.status === "error" || res.status === 400) {
+          toast.error(res.message || "Action failed");
+        } else {
+          toast.success(res.message);
+          // router.push("/your-target-route");
+        }
+        setBannerForm({
+          name: "",
+          image: "",
+        });
+        setSelectedImage(null);
+        router.push("/homeBanner/banners");
+      } catch (err) {
+        toast.error(err.message || "Something went wrong");
+      } finally {
+        setIsUploading(false);
       }
-    } catch (err) {
-      toast.error(err.message || "Something went wrong");
-    } finally {
-      setIsUploading(false);
+    } else {
+      try {
+        const res = await callPrivateApi("/banner", "POST", formData);
+        console.log("res in add banner", res);
+
+        if (res.status === "error" || res.status === 400) {
+          toast.error(res.message || "Action failed");
+        } else {
+          toast.success(res.message);
+          // router.push("/your-target-route");
+        }
+        setBannerForm({
+          name: "",
+          image: "",
+        });
+        setSelectedImage(null);
+        router.push("/homeBanner/banners");
+      } catch (err) {
+        toast.error(err.message || "Something went wrong");
+      } finally {
+        setIsUploading(false);
+      }
     }
   };
 
@@ -114,14 +136,15 @@ const MediaAndPublish = () => {
           className="w-full p-2 mb-4 border rounded"
         />
         {isUploading ? (
-          <CircularProgress className="mb-4" />
+          <div className="flex justify-center items-center mb-4">
+            <CircularProgress className="border-2" />
+          </div>
         ) : (
           <Button
             variant="contained"
             color="primary"
             type="submit"
             fullWidth
-            onClick={handlePublish}
             className="bg-blue-600 text-white hover:bg-blue-700"
             startIcon={<CloudUpload />}
           >
@@ -129,6 +152,7 @@ const MediaAndPublish = () => {
           </Button>
         )}
       </form>
+      <ToastContainer />
     </div>
   );
 };

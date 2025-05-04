@@ -4,6 +4,7 @@ import { IconButton } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { useCategory } from "@/contextApi/CategoriesContext";
+import ProductTableSkeleton from "@/libs/ProductSkeleton";
 import bg from "@/assets/banner_01.webp";
 import { CircleLoader } from "react-spinners";
 import { callPrivateApi, callPublicApi } from "@/libs/callApis";
@@ -12,7 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const HomeBannerTabel = () => {
-  const { setBannerFormData } = useCategory();
+  const { setBannerForm } = useCategory();
   const router = useRouter();
   const [loader, setLoader] = useState(false);
   const [bannerList, setBannerList] = useState([]);
@@ -38,36 +39,39 @@ const HomeBannerTabel = () => {
     };
 
     fetchBanners();
-  }, [loading]);
+  }, []);
 
   console.log("banner", bannerList);
 
   const handleEdit = (id) => {
-    const bannerToEdit = bannerList.find((item) => item.id === id);
+    const bannerToEdit = bannerList.find((item) => item._id === id);
+    console.log("banner to edit", bannerToEdit);
+
     if (bannerToEdit) {
-      setBannerFormData(bannerToEdit);
+      setBannerForm({
+        id: id,
+        name: bannerToEdit.name,
+        image: bannerToEdit.image,
+      });
       router.push(`/homeBanner/upload`);
     }
   };
 
   const handleDelete = async (id) => {
-    setBannerList(bannerList.filter((item) => item.id !== id));
     setLoading(true);
     try {
-      const res = await callPrivateApi(`/banners/${id}`, "DELETE");
+      const res = await callPrivateApi(`/banner/${id}`, "DELETE");
       console.log("res in banner delete ", res);
       if (res.status === "error" || res.status === 400) {
-        toast.error(res.message || "Banners fetch failed");
+        toast.error(res.message || "Banners delete failed");
       } else {
-        toast.success(res.message || "Banners fetched successfully");
-        setBannerList(res.banners);
+        toast.success(res.message || "Banners deleted successfully");
+        setBannerList(bannerList.filter((item) => item._id !== id));
       }
     } catch (error) {
       toast.error(error?.message || "Something went wrong");
     } finally {
       setLoading(false);
-      // to call useEffect
-      setLoader(() => !loader);
     }
   };
 
@@ -77,7 +81,7 @@ const HomeBannerTabel = () => {
         <h2 className="text-lg font-semibold mb-4">Image and Action</h2>
         {loading ? (
           <>
-            <CircleLoader />
+            <ProductTableSkeleton />
           </>
         ) : (
           <table className="w-full border-collapse border border-gray-300">

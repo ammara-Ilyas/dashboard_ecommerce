@@ -25,6 +25,11 @@ export const CategoryProvider = ({ children }) => {
     category: "",
     name: "",
   });
+  const [bannerForm, setBannerForm] = useState({
+    id: null,
+    name: "",
+    image: "",
+  });
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
 
@@ -116,6 +121,8 @@ export const CategoryProvider = ({ children }) => {
         setCategoryForm,
         subCategoryForm,
         setSubCategoryForm,
+        bannerForm,
+        setBannerForm,
         isSidebarOpen,
         toggleSidebar,
       }}
