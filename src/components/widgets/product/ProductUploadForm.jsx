@@ -18,16 +18,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { useProducts } from "@/contextApi/ProductContext";
 import { useCategory } from "@/contextApi/CategoriesContext";
 function ProductUploadForm() {
-  let {
-    categories,
-    loading,
-    subCategories,
-    location,
-    ramList,
-    weightsList,
-    sizeList,
-  } = useCategory();
+  let { categories, loading, location, ramList, weightsList, sizeList } =
+    useCategory();
   let { formData, setFormData } = useProducts();
+  const [subCategories, setSubCategories] = useState([]);
   const { isDarkMode } = useTheme();
   useEffect(() => {
     console.log(
@@ -35,11 +29,17 @@ function ProductUploadForm() {
       weightsList,
       sizeList,
       ramList,
-      categories,
-      subCategories
+      categories
     );
   }, []);
   // if (loading) return <p>Loading...</p>;
+  useEffect(() => {
+    const selectedCategory = categories.find(
+      (category) => category.name === formData.category
+    );
+    console.log("Subcategories found:", selectedCategory.subCategory);
+    setSubCategories(selectedCategory ? selectedCategory.subCategory : []);
+  }, [formData.category, categories]);
 
   // Use useCallback to memoize the event handler
   const handleFormData = useCallback((e) => {

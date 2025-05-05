@@ -44,38 +44,46 @@ const CategoryForm = () => {
     const { name, category, id } = subCategoryForm;
     console.log("sub form", subCategoryForm);
 
-    if (id) {
-      const newFormData = new FormData();
-      newFormData.append("name", name);
-      newFormData.append("category_id", category);
-      try {
-        const res = await callPrivateApi(
-          `/subcategory/${id}`,
-          "POST",
-          newFormData
-        );
-        console.log("res in updating sub category", res);
-        if (res.status == 200) {
-          toast.success(res.message || "Sub category updated successfully");
-        }
-        router.push("/category/subCategories");
-      } catch (error) {
-        toast.error(error.message || "Something went wrong");
-      }
-    }
+    // if (id) {
+    //   const newFormData = new FormData();
+    //   newFormData.append("name", name);
+    //   newFormData.append("category_id", category);
+    //   try {
+    //     const res = await callPrivateApi(
+    //       `/subcategory/${id}`,
+    //       "POST",
+    //       newFormData
+    //     );
+    //     console.log("res in updating sub category", res);
+    //     if (res.status == 200) {
+    //       toast.success(res.message || "Sub category updated successfully");
+    //     }
+    //     router.push("/category/subCategories");
+    //   } catch (error) {
+    //     toast.error(error.message || "Something went wrong");
+    //   }
+    // }
 
-    const newFormData = new FormData();
-    newFormData.append("name", name);
-    newFormData.append("category_id", category);
+    const payload = {
+      category_name: category,
+      newSubCategories: [name],
+    };
     try {
-      const res = await callPrivateApi("/subcategory", "POST", newFormData);
+      const res = await callPrivateApi("/subcategory", "POST", payload);
       console.log("res in adding sub category", res);
       if (res.status == 200) {
         toast.success(res.message || "Sub category added successfully");
       }
+      setSubCategoryForm({
+        id: null,
+        category: "",
+        name: "",
+      });
       router.push("/category/subCategories");
     } catch (error) {
       toast.error(error.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
 
     // if (name && category) {
@@ -114,11 +122,11 @@ const CategoryForm = () => {
     // alert(`New category "${category}" with sub-category "${subCate}" added.`);
 
     // Reset form state
-    setSubCategoryForm({
-      id: null,
-      parentCate: "",
-      name: "",
-    });
+    // setSubCategoryForm({
+    //   id: null,
+    //   parentCate: "",
+    //   name: "",
+    // });
     // router.push("/category/namegories");
   };
 
@@ -142,7 +150,7 @@ const CategoryForm = () => {
             </MenuItem>
             {categories &&
               categories.map((item) => (
-                <MenuItem value={item._id} key={item.id}>
+                <MenuItem value={item.name} key={item._id}>
                   {item.name}
                 </MenuItem>
               ))}

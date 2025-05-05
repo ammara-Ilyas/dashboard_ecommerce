@@ -37,10 +37,10 @@ export const CategoryProvider = ({ children }) => {
     const fetchAll = async () => {
       setLoading(true);
       try {
-        const [catRes, subCatRes, weightRes, ramRes, bannerRes, sizeRes] =
+        const [catRes, weightRes, ramRes, bannerRes, sizeRes] =
           await Promise.all([
             callPublicApi("/category", "GET"),
-            callPublicApi("/subcategory", "GET"),
+            // callPublicApi("/subcategory", "GET"),
             callPublicApi("/weight", "GET"),
             callPublicApi("/ram", "GET"),
             callPublicApi("/banners", "GET"),
@@ -57,10 +57,10 @@ export const CategoryProvider = ({ children }) => {
           setSizeList(sizeRes.sizes);
         }
 
-        if (subCatRes?.SubCategories) {
-          console.log("✅ SubCategories fetched:", subCatRes.SubCategories);
-          setSubCategories(subCatRes.SubCategories);
-        }
+        // if (subCatRes?.SubCategories) {
+        //   console.log("✅ SubCategories fetched:", subCatRes.SubCategories);
+        //   setSubCategories(subCatRes.SubCategories);
+        // }
 
         if (weightRes?.weights) {
           console.log("✅ Weights fetched:", weightRes.weights);
@@ -92,11 +92,11 @@ export const CategoryProvider = ({ children }) => {
   }, []);
   useEffect(() => {
     console.log(
-      "ram weight in context api",
+      "ram weight in context api ",
       ramList,
       sizeList,
       weightsList,
-      subCategories,
+      // subCategories,
       categories
     );
   }, [ramList, sizeList, weightsList]);

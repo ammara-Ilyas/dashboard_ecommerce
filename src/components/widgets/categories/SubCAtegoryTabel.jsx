@@ -37,29 +37,28 @@ const SubCategory = () => {
   } = useCategory();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchBanners = async () => {
       setLoading(true);
       try {
-        const res = await callPublicApi("/subcategory", "GET");
-        console.log("res in sub category list ", res);
+        const res = await callPublicApi("/category", "GET");
+        console.log("res in Categorie list ", res);
 
         if (res.status === "error" || res.status === 400) {
-          // toast.error(res.message || "sub categories fetch failed");
-          console.log(res.message);
+          // toast.error(res.message || "Categories fetch failed");
+          console.log();
+          res.message || "Categories fetch failed";
         } else {
-          // toast.success(res.message || "sub categories fetched successfully");
-          console.log(res.message || "sub categories fetched successfully");
-          setSubCategories(res.SubCategories);
+          // toast.success(res.message || "Categories fetched successfully");
+          setCategories(res.categories);
         }
       } catch (error) {
         // toast.error(error?.message || "Something went wrong");
-        console.log(error.message || "Something went wrong");
+        console.log(error?.message || "Something went wrong");
       } finally {
         setLoading(false);
       }
     };
-
-    fetchData();
+    fetchBanners();
   }, []);
 
   // Handle Deletion of a Subcategory
@@ -72,17 +71,36 @@ const SubCategory = () => {
     });
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (name, id) => {
+    ///category name and sub category id
     setLoading(true);
+    console.log("form in sub delete", name, id);
+
+    // const newFormData = new FormData();
+    // newFormData.append("category_name", name);
+
     try {
-      const res = await callPrivateApi(`/subcategory/${id}`, "DELETE");
+      const res = await callPrivateApi(
+        `/subcategory/${id}/category/${name}`,
+        "DELETE"
+      );
       console.log("res in Sub Category delete ", res);
-      if (res.status === "error" || res.status === 400) {
-        toast.error(res.message || "Sub Category deleted failed");
-      } else {
+      if (res.status == 200) {
         toast.success(res.message || "Sub Category deleted successfully");
-        setSubCategories(subCategories.filter((item) => item._id !== id));
       }
+      setCategories((prevCategories) =>
+        prevCategories.map((category) =>
+          category.name === name
+            ? {
+                ...category,
+                subCategory: category.subCategory.filter(
+                  (sub) => sub._id !== id
+                ),
+              }
+            : category
+        )
+      );
+      console.log("categories after res", categories);
     } catch (error) {
       toast.error(error?.message || "Something went wrong");
     } finally {
@@ -114,45 +132,56 @@ const SubCategory = () => {
           {loading ? (
             <ProductTableSkeleton />
           ) : (
-            subCategories &&
-            subCategories.map((subCategory) => (
-              <TableRow key={subCategory._id} className="even:bg-gray-100">
-                {/* Category Image */}
-                <TableCell>
-                  <div className="flex items-center justify-center">
-                    <Image
-                      src={"/images/dummy.png"}
-                      alt={`${subCategory.name} image`}
-                      width={50}
-                      height={50}
-                      className="rounded"
-                    />
-                  </div>
-                </TableCell>
+            categories &&
+            categories
+              .filter(
+                (category) =>
+                  category.subCategory && category.subCategory.length > 0
+              )
+              .map((category) => (
+                <TableRow key={category._id} className="even:bg-gray-100">
+                  {/* Category Image */}
+                  <TableCell>
+                    <div className="flex items-center justify-center">
+                      <Image
+                        src={"/images/dummy.png"}
+                        alt={`${category.name} image`}
+                        width={50}
+                        height={50}
+                        className="rounded"
+                      />
+                    </div>
+                  </TableCell>
 
-                {/* subCategory Name */}
-                <TableCell className="text-gray-800 font-medium">
-                  {subCategory.name}
-                </TableCell>
+                  {/* Category Name */}
+                  <TableCell className="text-gray-800 font-semibold">
+                    {category.name}
+                  </TableCell>
 
-                {/* Subcategories */}
-                <TableCell>
-                  <div className="flex flex-wrap gap-2">
-                    <Chip
-                      label={subCategory.name}
-                      color="primary"
-                      className="!bg-blue-100 !text-blue-600 !font-semibold"
-                      onDelete={() => handleDelete(subCategory._id)}
-                      deleteIcon={
-                        <IconButton size="small font-sm border-2 border-red-500 text-black">
-                          <CloseIcon fontSize="small text-sm absolute top-0 right-0" />
-                        </IconButton>
-                      }
-                    />
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))
+                  {/* Subcategories */}
+                  <TableCell>
+                    <div className="flex flex-wrap gap-2">
+                      {category.subCategory.map((item, i) => (
+                        <Chip
+                          key={i}
+                          label={item.name}
+                          color="primary"
+                          className="!bg-blue-100 !text-black !font-medium"
+                          onDelete={() => handleDelete(category.name, item._id)}
+                          deleteIcon={
+                            <IconButton
+                              size="small"
+                              className="text-sm border-2 font-normal border-red-500 text-black"
+                            >
+                              <CloseIcon fontSize="small" />
+                            </IconButton>
+                          }
+                        />
+                      ))}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
           )}
         </TableBody>
       </Table>
