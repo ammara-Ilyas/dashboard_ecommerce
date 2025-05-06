@@ -23,7 +23,7 @@ import { AiFillEye, AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { set } from "date-fns";
 
 const ProductTabel = () => {
-  const { setFormData, FormData } = useProducts();
+  const { setFormData, formData } = useProducts();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loader, setLoader] = useState(false);
@@ -51,14 +51,24 @@ const ProductTabel = () => {
     };
 
     fetchData();
-  }, [loader]);
+  }, []);
 
-  const handleEdit = (id) => {
-    console.log("form in edit", FormData);
+  const handleEdit = (id, product) => {
+    console.log("form in edit", formData, " and product ", product);
     let editProduct = products.find((item) => item.id !== id);
+    console.log("edit product".editProduct);
     if (editProduct) {
-      setFormData(editProduct);
-      router.push(`/product/upload`);
+      let updatedFormData = {};
+
+      for (const [key, value] of Object.entries(editProduct)) {
+        console.log(key, ": ", value);
+        if (key == "id") {
+          updatedFormData["id"] = id; // ✅ convert _id → id
+        } else {
+          updatedFormData[key] = value;
+        }
+      }
+      router.push("");
     }
   };
 
@@ -172,13 +182,13 @@ const ProductTabel = () => {
                       <TableCell>
                         <div className="flex space-x-2 text-[15px] ">
                           <IconButton
-                            onClick={() => handlePreview(product._id)}
+                            onClick={() => handlePreview(product._id, product)}
                             className="bg-purple-500 text-white hover:bg-purple-700 p-2 rounded"
                           >
                             <AiFillEye className="text-[15px]" />
                           </IconButton>
                           <IconButton
-                            onClick={() => handleEdit(product._id, product)}
+                            onClick={() => handleEdit(product._id)}
                             className="bg-green-500 text-white hover:bg-green-700 p-2 rounded"
                           >
                             <AiFillEdit className="text-[15px]" />

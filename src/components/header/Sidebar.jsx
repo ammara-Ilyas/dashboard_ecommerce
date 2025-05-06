@@ -116,7 +116,6 @@ const Sidebar = () => {
               </ul>
             </div>
           </li>
-
           {/* Products Dropdown */}
           <li>
             <button
@@ -207,7 +206,6 @@ const Sidebar = () => {
               </ul>
             </div>
           </li>
-
           {/* Orders */}
           <li>
             <Link
@@ -217,6 +215,18 @@ const Sidebar = () => {
               <span className="flex items-center space-x-2">
                 <AssignmentTurnedInIcon className="text-xl" />
                 <span>Orders</span>
+              </span>
+            </Link>
+          </li>{" "}
+          {/* reviews */}
+          <li>
+            <Link
+              href="/review"
+              className="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-700"
+            >
+              <span className="flex items-center space-x-2">
+                <AssignmentTurnedInIcon className="text-xl" />
+                <span>Reviews</span>
               </span>
             </Link>
           </li>

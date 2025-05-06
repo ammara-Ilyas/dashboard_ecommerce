@@ -8,20 +8,26 @@ import {
   Select,
   InputLabel,
   FormControl,
+  CircularProgress,
 } from "@mui/material";
-import { CloudUpload as CloudUploadIcon } from "@mui/icons-material";
+import { CloudUpload as CloudUploadIcon, Spa } from "@mui/icons-material";
 import Image from "next/image";
 import { useCallback } from "react";
 import { useTheme } from "@mui/material";
+import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useProducts } from "@/contextApi/ProductContext";
 import { useCategory } from "@/contextApi/CategoriesContext";
+import { callPrivateApi } from "@/libs/callApis";
 function ProductUploadForm() {
-  let { categories, loading, location, ramList, weightsList, sizeList } =
-    useCategory();
-  let { formData, setFormData } = useProducts();
+  let { categories, ramList, weightsList, sizeList } = useCategory();
+  let { formData, setFormData, setProducts, products, productData } =
+    useProducts();
+  const router = useRouter();
   const [subCategories, setSubCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   const { isDarkMode } = useTheme();
   useEffect(() => {
     console.log(
@@ -35,9 +41,9 @@ function ProductUploadForm() {
   // if (loading) return <p>Loading...</p>;
   useEffect(() => {
     const selectedCategory = categories.find(
-      (category) => category.name === formData.category
+      (category) => category._id === formData.category
     );
-    console.log("Subcategories found:", selectedCategory.subCategory);
+    console.log("Subcategories found:", selectedCategory);
     setSubCategories(selectedCategory ? selectedCategory.subCategory : []);
   }, [formData.category, categories]);
 
@@ -50,23 +56,94 @@ function ProductUploadForm() {
     }));
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", formData);
-    toast.success("Product uploaded successfully!", {
-      position: "top-right",
-    });
-  };
+    // Step 1: Validate all required fields
+    for (const [key, value] of Object.entries(formData)) {
+      const isEmpty = value === "" || value === null || value === undefined;
+      if (["subCategory", "weight", "ram", "size", "id"].includes(key))
+        continue;
 
-  const [image, setImage] = useState(null);
+      if (isEmpty) {
+        toast.error(`Please fill the "${key}" field.`, {
+          position: "bottom-left",
+        });
+        return; // Stop form submission
+      }
+    }
+    ///validation for image
+    if (images.length === 0) {
+      toast.error("Please upload at least one image.", {
+        position: "bottom-left",
+      });
+      return;
+    }
+    const data = new FormData();
+    for (const [key, value] of Object.entries(formData)) {
+      if (["id"].includes(key)) continue;
+      data.append(key, value);
+    }
+    images.forEach((file, index) => {
+      data.append("images", file);
+    });
+    console.log("Form Data Submitted:", data);
+    setLoading(true);
+
+    if (formData.id) {
+      try {
+        const res = await callPrivateApi(
+          `/product/${formData._id}`,
+          "PUT",
+          data
+        );
+        console.log("res in update product ", res);
+        if (res.status === 200 || res?.data?.status === 200) {
+          toast.success(res.message || "Product updated successfully");
+          setProducts((prev) =>
+            prev.map((item) =>
+              item._id === res.product._id ? res.product : item
+            )
+          );
+          setFormData(productData);
+          router.push("/product/products");
+        } else {
+          toast.error(res.message || "Failed to update product");
+        }
+      } catch (error) {
+        toast.error(error?.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+
+      setIsEditMode(false);
+    } else {
+      try {
+        const res = await callPrivateApi("/product", "POST", data);
+        console.log("res in add product ", res);
+        if (res.status === 200 || res?.data?.status === 200) {
+          toast.success(res.message || "Product added successfully");
+          setProducts((prev) => [...prev, res.product]);
+          setFormData(productData);
+          router.push("/product/products");
+        } else {
+          toast.error(res.message || "Failed to add product");
+        }
+      } catch (error) {
+        toast.error(error?.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+  const [images, setImages] = useState(null);
+  const [imagePreviews, setImagePreviews] = useState([]); // to store preview URLs
 
   // Handle file input and preview
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file); // Temporary preview URL
-      setImage(imageUrl);
-    }
+    const selectedFiles = Array.from(e.target.files);
+    const previewUrls = selectedFiles.map((file) => URL.createObjectURL(file));
+    setImages(selectedFiles);
+    setImagePreviews(previewUrls);
   };
   return (
     <div
@@ -90,8 +167,8 @@ function ProductUploadForm() {
                 Product name
               </InputLabel>
               <TextField
-                name="name"
-                value={formData.name}
+                name="product"
+                value={formData.product}
                 onChange={handleFormData}
                 fullWidth
               />
@@ -132,7 +209,7 @@ function ProductUploadForm() {
             >
               {categories &&
                 categories.map((cate, i) => (
-                  <MenuItem value={cate.name} key={cate._id}>
+                  <MenuItem value={cate._id} key={cate._id}>
                     {cate.name}
                   </MenuItem>
                 ))}
@@ -151,12 +228,15 @@ function ProductUploadForm() {
               onChange={handleFormData}
               className="mt-3"
             >
-              {subCategories &&
+              {subCategories.length !== 0 ? (
                 subCategories.map((cate, i) => (
                   <MenuItem value={cate.name} key={cate._id}>
                     {cate.name}
                   </MenuItem>
-                ))}
+                ))
+              ) : (
+                <MenuItem value="">None</MenuItem>
+              )}
             </Select>
           </FormControl>
         </div>
@@ -170,9 +250,9 @@ function ProductUploadForm() {
               Product Price
             </InputLabel>
             <TextField
-              name="price"
+              name="newPrice"
               type="number"
-              value={formData.price}
+              value={formData.newPrice}
               onChange={handleFormData}
               fullWidth
             />
@@ -226,7 +306,7 @@ function ProductUploadForm() {
             >
               {weightsList &&
                 weightsList.map((weightItem) => (
-                  <MenuItem value={weightItem.weight} key={weightItem._id}>
+                  <MenuItem value={weightItem._id} key={weightItem._id}>
                     {weightItem.weight}
                   </MenuItem>
                 ))}
@@ -247,7 +327,7 @@ function ProductUploadForm() {
               displayEmpty
             >
               {ramList.map((ramItem) => (
-                <MenuItem value={ramItem.ram} key={ramItem._id}>
+                <MenuItem value={ramItem._id} key={ramItem._id}>
                   {ramItem.ram}
                 </MenuItem>
               ))}
@@ -268,8 +348,8 @@ function ProductUploadForm() {
             >
               {sizeList &&
                 sizeList.map((sizeItem) => (
-                  <MenuItem value={sizeItem.size} key={sizeItem._id}>
-                    {sizeItem.sizeItem}
+                  <MenuItem value={sizeItem._id} key={sizeItem._id}>
+                    {sizeItem.size}
                   </MenuItem>
                 ))}
             </Select>
@@ -310,29 +390,7 @@ function ProductUploadForm() {
             <Rating value={formData.rating} onChange={handleFormData} />
           </div>
         </div>
-        <div className="grid grid-cols-1 ">
-          <FormControl fullWidth>
-            <InputLabel
-              shrink
-              className="uppercase text-black text-[16px] font-semibold"
-            >
-              Location
-            </InputLabel>{" "}
-            <Select
-              name="location"
-              value={formData.location}
-              onChange={handleFormData}
-              className="mt-3"
-            >
-              {location &&
-                location.map((loc, i) => (
-                  <MenuItem value={loc} key={i}>
-                    {loc}
-                  </MenuItem>
-                ))}
-            </Select>
-          </FormControl>
-        </div>
+
         {/* Media 
         <div className="space-y-4">
           <div>
@@ -352,15 +410,19 @@ function ProductUploadForm() {
             htmlFor="file-upload"
             className="flex flex-col items-center justify-center w-48 h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 transition-all"
           >
-            {/* Show Image Preview or Default Upload State */}
-            {image ? (
-              <Image
-                src={image}
-                alt="Uploaded"
-                width={full}
-                height={full}
-                className="w-full h-full object-cover rounded-lg"
-              />
+            {imagePreviews.length > 0 ? (
+              <div className="grid grid-cols-2 gap-2 p-1">
+                {imagePreviews.map((src, idx) => (
+                  <Image
+                    key={idx}
+                    src={src}
+                    alt={`Preview ${idx}`}
+                    width={50}
+                    height={50}
+                    className="w-20 h-20 object-cover rounded"
+                  />
+                ))}
+              </div>
             ) : (
               <div className="flex flex-col items-center gap-2">
                 <CloudUploadIcon className="text-gray-400" fontSize="large" />
@@ -369,13 +431,12 @@ function ProductUploadForm() {
                 </p>
               </div>
             )}
-
-            {/* Hidden File Input */}
             <input
               id="file-upload"
               type="file"
               name="media"
               accept="image/*"
+              multiple
               onChange={handleFileChange}
               className="hidden"
             />
@@ -383,13 +444,20 @@ function ProductUploadForm() {
         </div>
         {/* Submit Button */}
         <div className="text-center">
-          <Button
-            type="submit"
-            variant="contained"
-            className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
-          >
-            Publish and View
-          </Button>
+          {" "}
+          {loading ? (
+            <div className="">
+              <CircularProgress />
+            </div>
+          ) : (
+            <Button
+              type="submit"
+              variant="contained"
+              className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+            >
+              <span>{isEditMode ? "Update" : "Publish and View"}</span>
+            </Button>
+          )}
         </div>
       </form>
       <ToastContainer />

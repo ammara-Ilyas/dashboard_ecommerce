@@ -52,8 +52,8 @@ export const CategoryProvider = ({ children }) => {
           setCategories(catRes.categories);
         }
 
-        if (sizeRes?.size) {
-          console.log("✅ Categories fetched:", sizeRes.sizes);
+        if (sizeRes?.sizes) {
+          console.log("✅ size fetched:", sizeRes.sizes);
           setSizeList(sizeRes.sizes);
         }
 

@@ -39,11 +39,13 @@ const ProductView = ({ id }) => {
             Product Gallery
           </span>
           <div className="relative">
-            <Image
-              src="https://via.placeholder.com/400x300"
+            {/* <Image
+              src="/images/dummy.png"
               alt={product.name}
+              width={50}
+              height={50}
               className="rounded-lg object-cover w-full"
-            />
+            /> */}
             <Chip
               label="15%"
               color="primary"
@@ -52,7 +54,7 @@ const ProductView = ({ id }) => {
           </div>
           {/* Thumbnail Gallery */}
           <Box className="mt-2 flex gap-2  w-[80%]">
-            <Image
+            {/* <Image
               src={product.img}
               alt="Thumbnail 1"
               className="rounded-lg w-16 h-16 object-cover border border-gray-300 cursor-pointer"
@@ -61,7 +63,7 @@ const ProductView = ({ id }) => {
               src={product.img}
               alt="Thumbnail 2"
               className="rounded-lg w-16 h-16 object-cover border border-gray-300 cursor-pointer"
-            />
+            /> */}
           </Box>
         </Box>
 

@@ -206,18 +206,18 @@ const countries = [
 ];
 
 let productData = {
-  name: "",
+  id: null,
+  product: "",
   description: "",
   category: "",
   subCategory: "",
-  price: 0,
+  newPrice: 0,
   oldPrice: 0,
-  weight: 0,
-  ram: 0,
+  weight: "",
+  ram: "",
   brand: "",
   stock: 0,
   discount: 0,
-  location: "",
   size: "",
   rating: 0,
 };
@@ -254,6 +254,7 @@ export const ProductProvider = ({ children }) => {
         originalProducts,
         formData,
         setFormData,
+        productData,
       }}
     >
       {children}

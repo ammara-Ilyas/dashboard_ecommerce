@@ -1,12 +1,9 @@
 // const HOSTNAME = "http://localhost:5000/api";
 const HOSTNAME = "http://127.0.0.1:5000/api"; // Instead of localhost
-
+import { token } from "./Token";
 // Function to make API calls using fetch
 const callPrivateApi = async (endpoint, method, payload) => {
   console.log("data in api call", endpoint, method, payload);
-
-  const token = localStorage.getItem("token"); // Ensure this is the correct path to token
-  console.log("token in api call", token);
 
   const headers = {
     Accept: "application/json",
