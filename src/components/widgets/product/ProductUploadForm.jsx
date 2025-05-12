@@ -9,6 +9,8 @@ import {
   InputLabel,
   FormControl,
   CircularProgress,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import { CloudUpload as CloudUploadIcon, Spa } from "@mui/icons-material";
 import Image from "next/image";
@@ -27,22 +29,31 @@ function ProductUploadForm() {
   const router = useRouter();
   const [subCategories, setSubCategories] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [rating, setRating] = useState(0);
   const [isEditMode, setIsEditMode] = useState(false);
   const { isDarkMode } = useTheme();
-  useEffect(() => {
-    console.log(
-      "ram size an dweight in product ",
-      weightsList,
-      sizeList,
-      ramList,
-      categories
-    );
-  }, []);
+  // useEffect(() => {
+  //   // Sync rating from formData when it changes
+  //   if (formData.rating !== undefined && formData.rating !== rating) {
+  //     setRating(formData.rating);
+  //   }
+
+  //   // Sync formData when rating changes
+  //   if (formData.rating !== rating) {
+  //     setFormData((prevData) => ({
+  //       ...prevData,
+  //       rating: rating,
+  //     }));
+  //   }
+  // }, [rating]);
+
   // if (loading) return <p>Loading...</p>;
   useEffect(() => {
     const selectedCategory = categories.find(
-      (category) => category._id === formData.category
+      (category) => category.name === formData.category
     );
+    console.log("categories", categories);
+
     console.log("Subcategories found:", selectedCategory);
     setSubCategories(selectedCategory ? selectedCategory.subCategory : []);
   }, [formData.category, categories]);
@@ -50,10 +61,14 @@ function ProductUploadForm() {
   // Use useCallback to memoize the event handler
   const handleFormData = useCallback((e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    if (name === "rating") {
+      setRating(value); // Update rating directly when the user changes it
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   }, []);
 
   const handleSubmit = async (e) => {
@@ -86,7 +101,7 @@ function ProductUploadForm() {
     images.forEach((file, index) => {
       data.append("images", file);
     });
-    console.log("Form Data Submitted:", data);
+    console.log("Form Data Submitted:", formData);
     setLoading(true);
 
     if (formData.id) {
@@ -99,13 +114,13 @@ function ProductUploadForm() {
         console.log("res in update product ", res);
         if (res.status === 200 || res?.data?.status === 200) {
           toast.success(res.message || "Product updated successfully");
+          router.push("/product/products");
           setProducts((prev) =>
             prev.map((item) =>
               item._id === res.product._id ? res.product : item
             )
           );
           setFormData(productData);
-          router.push("/product/products");
         } else {
           toast.error(res.message || "Failed to update product");
         }
@@ -122,9 +137,9 @@ function ProductUploadForm() {
         console.log("res in add product ", res);
         if (res.status === 200 || res?.data?.status === 200) {
           toast.success(res.message || "Product added successfully");
+          router.push("/product/products");
           setProducts((prev) => [...prev, res.product]);
           setFormData(productData);
-          router.push("/product/products");
         } else {
           toast.error(res.message || "Failed to add product");
         }
@@ -209,7 +224,7 @@ function ProductUploadForm() {
             >
               {categories &&
                 categories.map((cate, i) => (
-                  <MenuItem value={cate._id} key={cate._id}>
+                  <MenuItem value={cate.name} key={cate._id}>
                     {cate.name}
                   </MenuItem>
                 ))}
@@ -306,7 +321,7 @@ function ProductUploadForm() {
             >
               {weightsList &&
                 weightsList.map((weightItem) => (
-                  <MenuItem value={weightItem._id} key={weightItem._id}>
+                  <MenuItem value={weightItem.weight} key={weightItem._id}>
                     {weightItem.weight}
                   </MenuItem>
                 ))}
@@ -327,7 +342,7 @@ function ProductUploadForm() {
               displayEmpty
             >
               {ramList.map((ramItem) => (
-                <MenuItem value={ramItem._id} key={ramItem._id}>
+                <MenuItem value={ramItem.ram} key={ramItem._id}>
                   {ramItem.ram}
                 </MenuItem>
               ))}
@@ -348,7 +363,7 @@ function ProductUploadForm() {
             >
               {sizeList &&
                 sizeList.map((sizeItem) => (
-                  <MenuItem value={sizeItem._id} key={sizeItem._id}>
+                  <MenuItem value={sizeItem.name} key={sizeItem._id}>
                     {sizeItem.size}
                   </MenuItem>
                 ))}
@@ -387,22 +402,62 @@ function ProductUploadForm() {
           </div>
           <div className="flex items-center gap-4">
             <h3 className="font-semibold">Rating:</h3>
-            <Rating value={formData.rating} onChange={handleFormData} />
-          </div>
-        </div>
-
-        {/* Media 
-        <div className="space-y-4">
-          <div>
-            <h3 className="font-semibold">Media</h3>
-            <input
-              type="file"
-              name="media"
-              onChange={handleFormData}
-              className="block w-full mt-2 text-gray-500 dark:text-gray-300"
+            <Rating
+              value={rating}
+              onChange={(event, newValue) => {
+                setRating(newValue);
+              }}
             />
           </div>
-        </div> */}
+        </div>
+        <div className="grid grid-cols-3 gap-6">
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={formData.isFeatured}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    isFeatured: e.target.checked,
+                  }))
+                }
+                name="isFeatured"
+              />
+            }
+            label="Featured Product"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={formData.istopSeller}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    istopSeller: e.target.checked,
+                  }))
+                }
+                name="istopSeller"
+              />
+            }
+            label="Top Seller"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={formData.isNewArrival}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    isNewArrival: e.target.checked,
+                  }))
+                }
+                name="isNewArrival"
+              />
+            }
+            label="New Arrival"
+          />
+        </div>
+
         <div className="space-y-4">
           <h3 className="font-semibold text-gray-700">Media</h3>
 

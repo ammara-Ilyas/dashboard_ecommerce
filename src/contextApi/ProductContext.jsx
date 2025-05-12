@@ -182,29 +182,6 @@ const originalProducts = [
   },
 ];
 
-const countries = [
-  "Afghanistan",
-  "Albania",
-  "Algeria",
-  "Andorra",
-  "Angola",
-  "Argentina",
-  "Armenia",
-  "Australia",
-  "Austria",
-  "Azerbaijan",
-  "Bahamas",
-  "Bahrain",
-  "Bangladesh",
-  "Barbados",
-  "Belarus",
-  "Belgium",
-  "Belize",
-  "Benin",
-  "Bhutan",
-  "Bolivia",
-];
-
 let productData = {
   id: null,
   product: "",
@@ -220,10 +197,12 @@ let productData = {
   discount: 0,
   size: "",
   rating: 0,
+  isFeatured: false,
+  isTopSeller: false,
+  isNewArrival: false,
 };
 
 export const ProductProvider = ({ children }) => {
-  const [location, setLocation] = useState(countries);
   const [products, setProducts] = useState(originalProducts);
   const [formData, setFormData] = useState(productData);
   // useEffect(() => {
@@ -247,8 +226,6 @@ export const ProductProvider = ({ children }) => {
   return (
     <ProductContext.Provider
       value={{
-        location,
-        setLocation,
         products,
         setProducts,
         originalProducts,
