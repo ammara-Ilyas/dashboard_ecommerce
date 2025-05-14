@@ -9,7 +9,13 @@ import logo from "@/assets/image/logo.png";
 import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useUser } from "@/contextApi/UserContext";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+
 export default function Signup() {
+  const { setEmail } = useUser();
   const router = useRouter();
   const [signupForm, setSignupForm] = useState({
     name: "",
@@ -18,6 +24,8 @@ export default function Signup() {
     password: "",
     confirmPassword: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -51,24 +59,19 @@ export default function Signup() {
     try {
       const res = await callPublicApi("/auth/signup", "POST", signupForm);
       console.log("res in signup ", res);
+      toast.success(res.message || "Otp has sent to your email");
+      // Reset form
+      setEmail(signupForm.email);
+      setSignupForm({
+        name: "",
+        email: "",
+        phone: "",
+        password: "",
+        confirmPassword: "",
+      });
 
-      if (res.status === "error" || res.status === 400) {
-        toast.error(res.message || "Signup failed");
-      } else {
-        toast.success(res.message || "Signup successfully");
-
-        // Reset form
-        setSignupForm({
-          name: "",
-          email: "",
-          phone: "",
-          password: "",
-          confirmPassword: "",
-        });
-
-        // Optional: navigate to login
-        router.push("/auth/login");
-      }
+      // Optional: navigate to login
+      router.push("/auth/otp");
     } catch (error) {
       toast.error(error?.message || "Something went wrong");
     } finally {
@@ -150,21 +153,45 @@ export default function Signup() {
               fullWidth
               label="Enter your Password"
               name="password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={signupForm.password}
               onChange={handleChange}
               variant="outlined"
               className="bg-white w-[80%] mx-auto"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <TextField
               fullWidth
               label="Confirm your Password"
               name="confirmPassword"
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               value={signupForm.confirmPassword}
               onChange={handleChange}
               variant="outlined"
               className="bg-white w-[80%] mx-auto"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowConfirmPassword((prev) => !prev)}
+                      edge="end"
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
 
             {error && <div className="text-red-500 text-sm">{error}</div>}

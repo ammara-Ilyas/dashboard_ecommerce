@@ -1,9 +1,10 @@
 import React from "react";
-import Login from "@/components/widgets/auth/Login";
 import bg from "@/assets/image/bg_signup.webp";
+import OtpForm from "@/components/widgets/auth/OtpForm";
+import user from "@/libs/Token";
 export const metadata = {
-  title: "Login",
-  description: "Login page of ecommerce dashboard",
+  title: "Otp",
+  description: "Otp page of ecommerce dashboard",
 };
 const Page = () => {
   return (
@@ -17,7 +18,7 @@ const Page = () => {
           backgroundRepeat: "no-repeat",
         }}
       >
-        <Login />
+        <OtpForm email="ismarailyas@gmail.com" />
       </div>
     </>
   );

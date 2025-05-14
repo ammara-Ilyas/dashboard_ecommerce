@@ -1,5 +1,9 @@
 import React from "react";
 import Singup from "@/components/widgets/auth/Singup";
+export const metadata = {
+  title: "Signup",
+  description: "signup page of ecommerce dashboard",
+};
 const Page = () => {
   return (
     <div

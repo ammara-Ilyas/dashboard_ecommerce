@@ -8,9 +8,11 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { CircularProgress } from "@mui/material";
+import { callPrivateApi, callPublicApi } from "@/libs/callApis";
 const ChangePassword = () => {
   const { user, setUser } = useUser();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     oldPassword: "",
     newPassword: "",
@@ -39,8 +41,10 @@ const ChangePassword = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start loading spinner
+    console.log("form data", formData);
 
     if (
       !formData.oldPassword ||
@@ -48,27 +52,34 @@ const ChangePassword = () => {
       !formData.confirmPassword
     ) {
       toast.error("Please fill in all password fields.");
+      setLoading(false);
       return;
     }
 
     if (formData.newPassword !== formData.confirmPassword) {
       toast.error("New password and confirm password do not match.");
+      setLoading(false);
       return;
     }
+    const data = {
+      currentPassword: formData.oldPassword,
+      newPassword: formData.newPassword,
+    };
+    try {
+      const res = await callPrivateApi("/auth/change-password", "POST", data);
+      console.log("res in Change ", res);
 
-    if (user?.password === formData.oldPassword) {
-      setUser((prevUser) => ({
-        ...prevUser,
-        password: formData.newPassword,
-      }));
-      toast.success("Password updated successfully!");
+      toast.success(res.message || "Password changed successfully");
       setFormData({
         oldPassword: "",
         newPassword: "",
         confirmPassword: "",
       });
-    } else {
-      toast.error("Current password is incorrect.");
+    } catch (error) {
+      console.log("error", error);
+      toast.error(error?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -170,7 +181,7 @@ const ChangePassword = () => {
             type="submit"
             className="bg-blue-600 w-[20%] hover:bg-blue-700 mt-4"
           >
-            Save
+            {loading ? <CircularProgress /> : "Save"}
           </Button>
         </div>
       </form>

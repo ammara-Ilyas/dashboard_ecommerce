@@ -11,6 +11,7 @@ import HomeIcon from "@mui/icons-material/Home";
 const Sidebar = () => {
   const { isSidebarOpen } = useCategory();
   const [openMenu, setOpenMenu] = useState(null);
+  const handleLogout = () => {};
 
   const toggleMenu = (menu) => {
     setOpenMenu((prev) => (prev === menu ? null : menu));
@@ -235,7 +236,10 @@ const Sidebar = () => {
 
       {/* Logout Button */}
       <div className="p-4">
-        <button className="w-full bg-blue-500 text-white p-2 rounded-lg flex items-center justify-center hover:bg-blue-600">
+        <button
+          onClick={handleLogout}
+          className="w-full bg-blue-500 text-white p-2 rounded-lg flex items-center justify-center hover:bg-blue-600"
+        >
           <MdLogout className="mr-2 text-xl" />
           Logout
         </button>

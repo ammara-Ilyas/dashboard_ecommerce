@@ -4,6 +4,7 @@ import { TextField, Button } from "@mui/material";
 import Image from "next/image";
 import { useUser } from "@/contextApi/UserContext";
 import { ToastContainer, toast } from "react-toastify";
+import Head from "next/head";
 import "react-toastify/dist/ReactToastify.css";
 const AccountForm = () => {
   const { user, setUser } = useUser();
@@ -58,6 +59,11 @@ const AccountForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <Head>
+        <title>Profile</title>
+        <meta name="description" content="Ecommerce Profile Page" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className="flex  flex-row gap-10 ">
         <div className="flex mt-10 w-[25%] justify-center ">
           {/* Circular Upload Container */}

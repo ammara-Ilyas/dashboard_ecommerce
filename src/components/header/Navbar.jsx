@@ -1,8 +1,10 @@
 "use client";
 import { useUser } from "@/contextApi/UserContext";
 import { RiMenuUnfold4Line } from "react-icons/ri";
+import { MdPerson, MdSecurity, MdLogout } from "react-icons/md";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { useCategory } from "@/contextApi/CategoriesContext";
+import Link from "next/link";
 import Avatar from "@mui/material/Avatar";
 import { blue } from "@mui/material/colors"; // Import a valid color
 import { LuMenu } from "react-icons/lu";
@@ -10,12 +12,23 @@ import Image from "next/image";
 // import logo from "../assests/image/logo.png";
 import logo from "@/assets/image/logo.png";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 const Navbar = () => {
   const { isSidebarOpen, toggleSidebar } = useCategory();
   const { user, togglePanel } = useUser();
+  const [isOpen, setIsOpen] = useState(false);
   // console.log("Nav bar");
   const pathname = usePathname();
   console.log("pathname", pathname);
+  const account = [
+    { name: "My Account", link: "/auth/account", icon: <MdPerson size={20} /> },
+    {
+      name: "Reset Password",
+      link: "/auth/reset-password",
+      icon: <MdSecurity size={20} />,
+    },
+    { name: "Logout", link: "/auth/logout", icon: <MdLogout size={20} /> },
+  ];
 
   return (
     <div className={`relative`}>
@@ -36,7 +49,7 @@ const Navbar = () => {
             {isSidebarOpen ? <RiMenuUnfold4Line /> : <LuMenu />}
           </button>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 mr-5">
           <div
             className="p-2 text-xl bg-gray-200 rounded-full hover:text-blue-600"
             onClick={togglePanel}
@@ -44,17 +57,39 @@ const Navbar = () => {
           >
             <IoIosNotificationsOutline />
           </div>
-          {user.img ? (
-            <Avatar alt={user.name} src={user.img} />
-          ) : (
-            <Avatar sx={{ bgcolor: blue[800] }}>
-              {Array.from(user.name)[0]}
-            </Avatar>
-          )}
-
-          <div>
-            <p className="text-sm font-semibold">{user.name}</p>
-            <p className="text-xs text-gray-500">{user.email}</p>
+          <div className="relative flex flex-row gap-2 items-center justify-center">
+            {" "}
+            {user.img ? (
+              <Avatar alt={user.name} src={user.img} />
+            ) : (
+              <Avatar sx={{ bgcolor: blue[800] }}>
+                {Array.from(user.name)[0]}
+              </Avatar>
+            )}
+            <div
+              onClick={() => setIsOpen((prev) => !prev)}
+              className="cursor-pointer"
+            >
+              <p className="text-sm font-semibold">{user.name}</p>
+              <p className="text-xs text-gray-500">{user.email}</p>
+            </div>
+            {isOpen ? (
+              <ul className="absolute flex flex-col gap-2 w-[190px] bg-white z-50 py-3 border rounded-md shadow-md top-10 left-12">
+                {account.map((item, i) => (
+                  <li
+                    key={i}
+                    className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 cursor-pointer transition-all"
+                  >
+                    <span className="text-gray-700">{item.icon}</span>
+                    <Link href={item.link} className="text-sm text-gray-800">
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       </header>

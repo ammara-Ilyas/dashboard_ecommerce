@@ -7,7 +7,7 @@ const callPrivateApi = async (endpoint, method, payload) => {
 
   const headers = {
     Accept: "application/json",
-    token: `${token}`,
+    Authorization: `Bearer ${token}`, // ✅ Correct way
   };
 
   let body = null;

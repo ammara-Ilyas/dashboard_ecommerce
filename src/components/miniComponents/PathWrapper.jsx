@@ -13,7 +13,9 @@ const PathnameWrapper = ({ children }) => {
   const token = localStorage.getItem("token");
   const checkAccess = () => {
     const isAuthPage =
-      pathname === "/auth/login" || pathname === "/auth/register";
+      pathname === "/auth/login" ||
+      pathname === "/auth/register" ||
+      pathname === "/auth/otp";
 
     if (!token && !isAuthPage) {
       router.push("/auth/login");

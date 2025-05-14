@@ -86,6 +86,7 @@ export const UserProvider = ({ children }) => {
     img: "",
     phone: 789654123,
   });
+  const [email, setEmail] = useState("ammarailyas361@gmail.com");
   const togglePanel = () => setIsOpen((prev) => !prev);
   console.log("provider");
 
@@ -97,6 +98,8 @@ export const UserProvider = ({ children }) => {
         togglePanel,
         isOpen,
         setIsOpen,
+        setEmail,
+        email,
         notifications,
       }}
     >
