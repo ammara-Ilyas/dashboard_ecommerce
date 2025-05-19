@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   Button,
   TextField,
@@ -20,6 +20,7 @@ import { useCategory } from "@/contextApi/CategoriesContext";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { callPrivateApi, callPublicApi } from "@/libs/callApis";
+import ProductPagination from "@/components/miniComponents/Pagination";
 const ProductSize = () => {
   const { sizeList, setSizeList } = useCategory();
   const [size, setSize] = useState("");
@@ -28,7 +29,21 @@ const ProductSize = () => {
   const [loading, setLoading] = useState(false);
   const [loader, setLoader] = useState(false);
   const messagesEndRef = useRef(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  // Handle Pagination
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
 
+  // Calculate Paginated Items
+  const currentItems = useMemo(() => {
+    if (!sizeList || sizeList.length === 0) return [];
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    return sizeList.slice(indexOfFirstItem, indexOfLastItem);
+  }, [sizeList, currentPage]);
+  console.log("current items", currentItems);
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [editId]);
@@ -186,8 +201,8 @@ const ProductSize = () => {
                 </TableCell>
               </TableRow>
             ) : (
-              sizeList &&
-              sizeList.map((size, i) => (
+              currentItems &&
+              currentItems.map((size, i) => (
                 <TableRow key={size._id || i} className="hover:bg-gray-100">
                   <TableCell>{size.size}</TableCell>
                   <TableCell>
@@ -208,7 +223,17 @@ const ProductSize = () => {
               ))
             )}
           </TableBody>
-        </Table>
+        </Table>{" "}
+        <div className="border-2 flex items-center justify-end">
+          {" "}
+          <ProductPagination
+            products={sizeList}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            filteredProducts={sizeList}
+            handlePageChange={handlePageChange}
+          />
+        </div>
       </TableContainer>
       <ToastContainer />
     </div>

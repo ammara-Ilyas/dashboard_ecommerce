@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   TextField,
   Button,
@@ -20,6 +20,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { callPrivateApi, callPublicApi } from "@/libs/callApis";
 import { useCategory } from "@/contextApi/CategoriesContext";
 import "react-toastify/dist/ReactToastify.css";
+import ProductPagination from "@/components/miniComponents/Pagination";
 export default function AddProductWeight() {
   const { weightsList, setWeightsList } = useCategory();
   const [weight, setWeight] = useState("");
@@ -28,7 +29,21 @@ export default function AddProductWeight() {
   const [loading, setLoading] = useState(false);
   const [loader, setLoader] = useState(false);
   const messagesEndRef = useRef(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  // Handle Pagination
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
 
+  // Calculate Paginated Items
+  const currentItems = useMemo(() => {
+    if (!weightsList || weightsList.length === 0) return [];
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    return weightsList.slice(indexOfFirstItem, indexOfLastItem);
+  }, [weightsList, currentPage]);
+  console.log("current items", currentItems);
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -191,8 +206,8 @@ export default function AddProductWeight() {
                 </TableCell>
               </TableRow>
             ) : (
-              weightsList &&
-              weightsList.map((weights, i) => (
+              currentItems &&
+              currentItems.map((weights, i) => (
                 <TableRow key={weights._id || i}>
                   <TableCell>{weights.weight}</TableCell>
                   <TableCell>
@@ -214,6 +229,16 @@ export default function AddProductWeight() {
             )}
           </TableBody>
         </Table>
+        <div className="border-2 flex items-center justify-end">
+          {" "}
+          <ProductPagination
+            products={weightsList}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            filteredProducts={weightsList}
+            handlePageChange={handlePageChange}
+          />
+        </div>
       </TableContainer>
       <ToastContainer />
     </div>

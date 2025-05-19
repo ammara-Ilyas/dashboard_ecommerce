@@ -11,8 +11,11 @@ import HomeIcon from "@mui/icons-material/Home";
 const Sidebar = () => {
   const { isSidebarOpen } = useCategory();
   const [openMenu, setOpenMenu] = useState(null);
-  const handleLogout = () => {};
-
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    router.push("/");
+  };
   const toggleMenu = (menu) => {
     setOpenMenu((prev) => (prev === menu ? null : menu));
     console.log("Clicked");

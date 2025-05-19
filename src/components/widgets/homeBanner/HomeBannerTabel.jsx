@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { IconButton } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
@@ -11,6 +11,7 @@ import { callPrivateApi, callPublicApi } from "@/libs/callApis";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ProductPagination from "@/components/miniComponents/Pagination";
 
 const HomeBannerTabel = () => {
   const { setBannerForm } = useCategory();
@@ -18,6 +19,21 @@ const HomeBannerTabel = () => {
   const [loader, setLoader] = useState(false);
   const [bannerList, setBannerList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  // Handle Pagination
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
+
+  // Calculate Paginated Items
+  const currentItems = useMemo(() => {
+    if (!bannerList || bannerList.length === 0) return [];
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    return bannerList.slice(indexOfFirstItem, indexOfLastItem);
+  }, [bannerList, currentPage]);
+  console.log("current items", currentItems);
   useEffect(() => {
     const fetchBanners = async () => {
       setLoading(true);
@@ -99,7 +115,7 @@ const HomeBannerTabel = () => {
               </tr>
             </thead>
             <tbody>
-              {bannerList.map((banner) => (
+              {currentItems.map((banner) => (
                 <tr className="border-b hover:bg-gray-100" key={banner._id}>
                   <td className="py-2 px-4">{banner.name}</td>
                   <td className="py-2 px-4">
@@ -130,6 +146,16 @@ const HomeBannerTabel = () => {
             </tbody>
           </table>
         )}
+        <div>
+          {" "}
+          <ProductPagination
+            products={bannerList}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            filteredProducts={bannerList}
+            handlePageChange={handlePageChange}
+          />
+        </div>
       </div>
       <ToastContainer />
     </div>

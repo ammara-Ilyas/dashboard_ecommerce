@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import {
   Table,
@@ -16,10 +17,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import { AiFillEye, AiFillEdit, AiFillDelete } from "react-icons/ai";
 
 import { useCategory } from "@/contextApi/CategoriesContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { callPrivateApi, callPublicApi } from "@/libs/callApis";
+import ProductPagination from "@/components/miniComponents/Pagination";
 import ProductTableSkeleton from "@/libs/ProductSkeleton";
 import { Category } from "@mui/icons-material";
 const SubCategory = () => {
@@ -35,7 +37,21 @@ const SubCategory = () => {
     setSubCategoryForm,
     subCategoryForm,
   } = useCategory();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  // Handle Pagination
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
 
+  // Calculate Paginated Items
+  const currentItems = useMemo(() => {
+    if (!subCategories || subCategories.length === 0) return [];
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    return subCategories.slice(indexOfFirstItem, indexOfLastItem);
+  }, [subCategories, currentPage]);
+  console.log("current items", currentItems);
   useEffect(() => {
     const fetchBanners = async () => {
       setLoading(true);
@@ -132,8 +148,8 @@ const SubCategory = () => {
           {loading ? (
             <ProductTableSkeleton />
           ) : (
-            categories &&
-            categories
+            currentItems &&
+            currentItems
               .filter(
                 (category) =>
                   category.subCategory && category.subCategory.length > 0
@@ -185,6 +201,16 @@ const SubCategory = () => {
           )}
         </TableBody>
       </Table>
+      <div>
+        {" "}
+        <ProductPagination
+          products={subCategories}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          filteredProducts={subCategories}
+          handlePageChange={handlePageChange}
+        />
+      </div>
       <ToastContainer />
     </div>
   );

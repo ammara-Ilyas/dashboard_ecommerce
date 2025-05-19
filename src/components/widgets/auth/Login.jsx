@@ -54,7 +54,7 @@ export default function Login() {
         });
 
         localStorage.setItem("token", res.token);
-        localStorage.setItem("user", res.user);
+        localStorage.setItem("user", JSON.stringify(res.user));
         router.push("/"); // Navigate after success
       }
     } catch (error) {

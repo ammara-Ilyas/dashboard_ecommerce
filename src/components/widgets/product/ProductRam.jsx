@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import {
   TextField,
   Button,
@@ -20,6 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useProducts } from "@/contextApi/ProductContext";
 import { useCategory } from "@/contextApi/CategoriesContext";
 import { callPrivateApi, callPublicApi } from "@/libs/callApis";
+import ProductPagination from "@/components/miniComponents/Pagination";
 export default function AddProductRAM() {
   const { ramList, setRamList } = useCategory();
   const [ram, setRam] = useState("");
@@ -29,7 +30,21 @@ export default function AddProductRAM() {
   const [loading, setLoading] = useState(false);
   const [loader, setLoader] = useState(false);
   const messagesEndRef = useRef(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  // Handle Pagination
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
 
+  // Calculate Paginated Items
+  const currentItems = useMemo(() => {
+    if (!ramList || ramList.length === 0) return [];
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    return ramList.slice(indexOfFirstItem, indexOfLastItem);
+  }, [ramList, currentPage]);
+  console.log("current items", currentItems);
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [editId]);
@@ -194,8 +209,8 @@ export default function AddProductRAM() {
                 </TableCell>
               </TableRow>
             ) : (
-              ramList &&
-              ramList.map((ramItem, i) => (
+              currentItems &&
+              currentItems.map((ramItem, i) => (
                 <TableRow key={ramItem._id || i}>
                   <TableCell>{ramItem.ram}</TableCell>
                   <TableCell>
@@ -216,7 +231,17 @@ export default function AddProductRAM() {
               ))
             )}
           </TableBody>
-        </Table>
+        </Table>{" "}
+        <div className="border-2 flex items-center justify-end">
+          {" "}
+          <ProductPagination
+            products={ramList}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            filteredProducts={ramList}
+            handlePageChange={handlePageChange}
+          />
+        </div>
       </TableContainer>
       <ToastContainer />
     </div>

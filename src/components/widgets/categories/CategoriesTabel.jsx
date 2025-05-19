@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Button, CircularProgress, IconButton } from "@mui/material";
 import Image from "next/image";
 import EditIcon from "@mui/icons-material/Edit";
@@ -11,12 +11,25 @@ import "react-toastify/dist/ReactToastify.css";
 import { callPrivateApi, callPublicApi } from "@/libs/callApis";
 import { useRouter } from "next/navigation";
 import ProductTableSkeleton from "@/libs/ProductSkeleton";
+import ProductPagination from "@/components/miniComponents/Pagination";
 const CategoryList = () => {
   const { setCategoryForm, categories, setCategories, loading, setLoading } =
     useCategory();
-  // console.log("categories", categories);
-  // const [categories, setCategories] = useState([]);
-  // const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  // Handle Pagination
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
+
+  // Calculate Paginated Items
+  const currentItems = useMemo(() => {
+    if (!categories || categories.length === 0) return [];
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    return categories.slice(indexOfFirstItem, indexOfLastItem);
+  }, [categories, currentPage]);
+  console.log("current items", currentItems);
   const router = useRouter();
   // Handle fetch all categories
   useEffect(() => {
@@ -99,8 +112,8 @@ const CategoryList = () => {
             {loading ? (
               <ProductTableSkeleton />
             ) : (
-              categories &&
-              categories.map((category, index) => (
+              currentItems &&
+              currentItems.map((category, index) => (
                 <tr
                   key={category._id}
                   className={`${
@@ -147,6 +160,16 @@ const CategoryList = () => {
             )}
           </tbody>
         </table>
+        <div className="border-2 border-emerald-600 flex items-center justify-end">
+          {" "}
+          <ProductPagination
+            products={categories}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            filteredProducts={categories}
+            handlePageChange={handlePageChange}
+          />
+        </div>
       </div>
       <ToastContainer />
     </div>

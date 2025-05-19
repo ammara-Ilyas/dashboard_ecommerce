@@ -11,11 +11,12 @@ import { LuMenu } from "react-icons/lu";
 import Image from "next/image";
 // import logo from "../assests/image/logo.png";
 import logo from "@/assets/image/logo.png";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 const Navbar = () => {
+  const router = useRouter();
   const { isSidebarOpen, toggleSidebar } = useCategory();
-  const { user, togglePanel } = useUser();
+  const { togglePanel } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   // console.log("Nav bar");
   const pathname = usePathname();
@@ -27,8 +28,13 @@ const Navbar = () => {
       link: "/auth/reset-password",
       icon: <MdSecurity size={20} />,
     },
-    { name: "Logout", link: "/auth/logout", icon: <MdLogout size={20} /> },
   ];
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    router.push("/");
+  };
+  const user = JSON.parse(localStorage.getItem("user"));
 
   return (
     <div className={`relative`}>
@@ -86,6 +92,12 @@ const Navbar = () => {
                     </Link>
                   </li>
                 ))}
+                <li
+                  className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 cursor-pointer transition-all"
+                  onClick={handleLogout}
+                >
+                  <MdLogout size={20} className="text-gray-700" /> Logout
+                </li>
               </ul>
             ) : (
               <></>

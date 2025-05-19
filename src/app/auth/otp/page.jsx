@@ -18,7 +18,7 @@ const Page = () => {
           backgroundRepeat: "no-repeat",
         }}
       >
-        <OtpForm email="ismarailyas@gmail.com" />
+        <OtpForm />
       </div>
     </>
   );

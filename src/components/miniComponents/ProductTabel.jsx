@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import ProductFilter from "./ProductFilter";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -18,9 +18,11 @@ import {
   Paper,
   IconButton,
   CircularProgress,
+  Pagination,
 } from "@mui/material";
 import { AiFillEye, AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { set } from "date-fns";
+import ProductPagination from "./Pagination";
 
 const ProductTabel = () => {
   const { setFormData, formData } = useProducts();
@@ -29,7 +31,21 @@ const ProductTabel = () => {
   const [loader, setLoader] = useState(false);
 
   const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+  // Handle Pagination
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
 
+  // Calculate Paginated Items
+  const currentItems = useMemo(() => {
+    if (!products || products.length === 0) return [];
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    return products.slice(indexOfFirstItem, indexOfLastItem);
+  }, [products, currentPage]);
+  console.log("current items", currentItems);
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -130,8 +146,8 @@ const ProductTabel = () => {
               <ProductListSkeleton />
             ) : (
               <>
-                {products &&
-                  products.map((product, index) => (
+                {currentItems &&
+                  currentItems.map((product, index) => (
                     <TableRow key={product._id} className="">
                       <TableCell>
                         <div className="flex gap-3 items-center">
@@ -207,6 +223,16 @@ const ProductTabel = () => {
             )}
           </TableBody>
         </Table>
+        <div className="border-2 flex items-center justify-end">
+          {" "}
+          <ProductPagination
+            products={products}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            filteredProducts={products}
+            handlePageChange={handlePageChange}
+          />
+        </div>
       </TableContainer>
       <ToastContainer />
     </div>
