@@ -37,7 +37,6 @@ const ProductFilter = () => {
   const handleSearchQuery = (e) => {
     const value = e.target.value;
     // setSearchQuery(value);
-    console.log("val", value);
 
     // Filter products based on search query
 

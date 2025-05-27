@@ -45,7 +45,6 @@ const AccountForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setUser(formData);
-    console.log("User data updated:", formData);
     toast.success("Account update successfully!", {
       position: "top-right",
       autoClose: 3000,

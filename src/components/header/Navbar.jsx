@@ -19,9 +19,9 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [user, setUser] = useState({}); // <-- user state
 
-  // console.log("Nav bar");
+  // g("Nav bar");
   const pathname = usePathname();
-  // console.log("pathname", pathname);
+  // g("pathname", pathname);
   const account = [
     { name: "My Account", link: "/auth/account", icon: <MdPerson size={20} /> },
     {
@@ -40,7 +40,7 @@ const Navbar = () => {
   const getUserFromLocalStorage = () => {
     if (typeof window !== "undefined") {
       const storedUser = localStorage.getItem("user");
-      console.log("stored user", storedUser);
+      g("stored user", storedUser);
       return storedUser ? JSON.parse(storedUser) : null;
     }
     return null;
@@ -48,13 +48,13 @@ const Navbar = () => {
 
   useEffect(() => {
     const parsedUser = getUserFromLocalStorage();
-    console.log("parse user", parsedUser);
+    g("parse user", parsedUser);
 
     setUser(parsedUser);
-    console.log("Retrieved user:", parsedUser);
+    g("Retrieved user:", parsedUser);
   }, []);
 
-  console.log("user", user);
+  g("user", user);
 
   return (
     <div className={`relative`}>

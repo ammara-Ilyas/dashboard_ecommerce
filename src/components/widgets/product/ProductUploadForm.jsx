@@ -54,11 +54,6 @@ function ProductUploadForm() {
     const selectedCategory = categories.find(
       (category) => category._id === formData.category
     );
-
-    console.log("categories form", formData.category);
-    console.log("categories", categories);
-
-    console.log("Subcategories found:", selectedCategory);
     setSubCategories(selectedCategory ? selectedCategory.subCategory : []);
   }, [formData.category, categories]);
 
@@ -108,7 +103,6 @@ function ProductUploadForm() {
     images.forEach((file, index) => {
       data.append("images", file);
     });
-    console.log("Form Data Submitted:", formData);
     setLoading(true);
 
     if (formData.id) {
@@ -119,7 +113,6 @@ function ProductUploadForm() {
           data,
           token
         );
-        console.log("res in update product ", res);
         if (res.status === 200 || res?.data?.status === 200) {
           toast.success(res.message || "Product updated successfully");
           router.push("/product/products");
@@ -142,7 +135,6 @@ function ProductUploadForm() {
     } else {
       try {
         const res = await callPrivateApi("/product", "POST", data, token);
-        console.log("res in add product ", res);
         if (res.status === 200 || res?.data?.status === 200) {
           toast.success(res.message || "Product added successfully");
           router.push("/product/products");

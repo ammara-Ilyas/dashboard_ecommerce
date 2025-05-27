@@ -9,7 +9,6 @@ export default async function Page({ params }) {
   console.log(params);
   let { id } = await params;
   const res = await callPrivateApi(`/product/${id}`, "GET");
-  console.log("res in view", res);
 
   return (
     <div>

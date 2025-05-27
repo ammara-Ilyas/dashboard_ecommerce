@@ -31,7 +31,6 @@ const AddReviewForm = ({ review, setIsEdit, setIsReviewsUpdate }) => {
         data,
         token
       );
-      console.log("res in api", response);
 
       if (response.status == 200) {
         toast.success(response.message || "Review update successfully");

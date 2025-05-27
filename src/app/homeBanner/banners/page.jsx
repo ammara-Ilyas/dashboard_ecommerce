@@ -11,7 +11,6 @@ import { useRouter } from "next/navigation";
 const Page = () => {
   const router = useRouter();
   const handleButton = () => {
-    console.log("clicked");
     router.push("/homeBanner/upload");
   };
   return (

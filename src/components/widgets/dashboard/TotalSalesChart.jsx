@@ -69,7 +69,6 @@ const TotalSalesChart = () => {
       },
     },
   };
-  console.log("total Stats");
 
   return (
     <Card className="shadow-lg w-[98%] mx-auto">

@@ -31,7 +31,6 @@ const Form = () => {
   // Handle File Upload
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
-    console.log("file", file.name);
     setCategoryForm((prev) => ({
       ...prev,
       image: file,
@@ -49,8 +48,6 @@ const Form = () => {
     ) {
       toast.error("Please fill all fields");
     }
-    console.log("category form", categoryForm);
-    console.log("id", categoryForm.id == null);
 
     if (categoryForm.id !== null) {
       const formData = new FormData();
@@ -65,7 +62,6 @@ const Form = () => {
           formData,
           token
         );
-        console.log("res in category update", res);
         setCategories((prev) =>
           prev.map((cat) =>
             cat._id === categoryForm.id
@@ -88,7 +84,6 @@ const Form = () => {
       formData.append("image", categoryForm.image);
       try {
         const res = await callPrivateApi("/category", "POST", formData, token);
-        console.log("res in category add", res);
 
         // Add to context list after new category added
         setCategories((prev) => [...prev, res.newCategory]);
@@ -102,7 +97,6 @@ const Form = () => {
         setLoading(false);
       }
     }
-    // console.log("categories", categories);
     // Reset form state
     setCategoryForm({
       id: null,

@@ -40,7 +40,6 @@ export default function Login() {
     }
     try {
       const res = await callPublicApi("/auth/login", "POST", loginForm);
-      console.log("res in login ", res);
 
       if (res.status === "error") {
         toast.error(res.message || "Login failed");
@@ -58,7 +57,6 @@ export default function Login() {
         router.push("/"); // Navigate after success
       }
     } catch (error) {
-      console.log("error", error);
       toast.error(error?.message || "Something went wrong");
     } finally {
       setLoading(false);

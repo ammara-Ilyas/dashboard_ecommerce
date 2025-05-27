@@ -8,7 +8,6 @@ export const NestedList = ({ title, list, icon }) => {
   // Handle dropdown toggle
   const toggleMenu = (menu) => {
     setOpenMenu((prev) => (prev === menu ? null : menu));
-    console.log("Clicked");
   };
 
   <div>

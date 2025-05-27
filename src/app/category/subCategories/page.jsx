@@ -5,7 +5,7 @@ import SubCategoryTable from "@/components/widgets/categories/SubCategoryTable";
 const Page = () => {
   const router = useRouter();
   const handleButton = () => {
-    // console.log("clicked");
+    // g("clicked");
     router.push("/category/uploadSubCategory");
   };
 

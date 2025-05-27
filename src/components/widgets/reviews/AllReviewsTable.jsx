@@ -37,18 +37,16 @@ const AllReviewsTable = () => {
   const fetchAllReviews = async () => {
     try {
       const response = await callPublicApi("/reviews");
-      console.log("res in reviews tabel", response);
 
       setReviews(response.reviews);
     } catch (error) {
-      console.error("Error fetching reviews:", error);
+      toast.error("Error fetching reviews:" || error);
     } finally {
       setLoading(false);
     }
   };
 
   const handleEdit = (reviewId) => {
-    console.log("Edit review:", reviewId);
     setIsEdit(true);
     setEditReview(reviews.find((item) => item._id == reviewId));
   };
@@ -66,13 +64,11 @@ const AllReviewsTable = () => {
         undefined,
         token
       );
-      console.log("res in review delete", res);
       if (res.status == 200) {
         setReviews((prev) => prev.filter((review) => review._id !== reviewId));
         toast.success(res.message || "Review delete successfully");
       }
     } catch (error) {
-      console.error("Error deleting review:", error);
       toast.error("Error deleting review:", error);
     }
   };

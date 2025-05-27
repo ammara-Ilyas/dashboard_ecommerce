@@ -58,25 +58,21 @@ const SubCategoryTabel = () => {
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     return subCategories.slice(indexOfFirstItem, indexOfLastItem);
   }, [subCategories, currentPage]);
-  console.log("current items", currentItems);
   useEffect(() => {
     const fetchsubCategories = async () => {
       setLoading(true);
       try {
         const res = await callPublicApi("/category", "GET");
-        console.log("res in Categorie list ", res);
 
         if (res.status === "error" || res.status === 400) {
           // toast.error(res.message || "Categories fetch failed");
-          console.log();
           res.message || "Categories fetch failed";
         } else {
           // toast.success(res.message || "Categories fetched successfully");
           setCategories(res.categories);
         }
       } catch (error) {
-        // toast.error(error?.message || "Something went wrong");
-        console.log(error?.message || "Something went wrong");
+        toast.error(error?.message || "Something went wrong");
       } finally {
         setLoading(false);
       }
@@ -85,7 +81,6 @@ const SubCategoryTabel = () => {
   }, [subCategories, setSubCategories]);
 
   // Handle Deletion of a Subcategory
-  console.log("sub categories", subCategories);
   const handleEdit = (id, value) => {
     subCategoryForm({
       id: id,
@@ -97,7 +92,6 @@ const SubCategoryTabel = () => {
   const handleDelete = async (name, id) => {
     ///category name and sub category id
     setLoading(true);
-    console.log("form in sub delete", name, id);
     try {
       const res = await callPrivateApi(
         `/subcategory/${id}/category/${name}`,
@@ -105,7 +99,6 @@ const SubCategoryTabel = () => {
         undefined,
         token
       );
-      console.log("res in Sub Category delete ", res);
       if (res.status == 200) {
         toast.success(res.message || "Sub Category deleted successfully");
       }
@@ -121,7 +114,6 @@ const SubCategoryTabel = () => {
             : category
         )
       );
-      console.log("categories after res", categories);
     } catch (error) {
       toast.error(error?.message || "Something went wrong");
     } finally {

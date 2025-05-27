@@ -58,7 +58,6 @@ export default function Signup() {
 
     try {
       const res = await callPublicApi("/auth/signup", "POST", signupForm);
-      console.log("res in signup ", res);
       toast.success(res.message || "Otp has sent to your email");
       // Reset form
       setEmail(signupForm.email);

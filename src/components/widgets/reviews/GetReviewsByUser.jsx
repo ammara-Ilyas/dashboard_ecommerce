@@ -10,7 +10,7 @@ const UserReviews = ({ userId }) => {
       const response = await callPrivateApi(`/reviews/user/${userId}`);
       setReviews(response.data); // Adjust based on your API response
     } catch (error) {
-      console.error("Failed to fetch user reviews:", error);
+      toast.error("Failed to fetch user reviews:" || error);
     } finally {
       setLoading(false);
     }

@@ -17,7 +17,6 @@ const CategoryForm = () => {
   const [namegories, setnamegories] = useState([]);
   const [loading, setLoading] = useState(false);
   const { categories, setSubCategoryForm, subCategoryForm } = useCategory();
-  console.log("categories in sub", categories);
 
   // Handle Input Changes
   const handleForm = (e) => {
@@ -42,7 +41,6 @@ const CategoryForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { name, category, id } = subCategoryForm;
-    console.log("sub form", subCategoryForm);
 
     // if (id) {
     //   const newFormData = new FormData();
@@ -54,7 +52,6 @@ const CategoryForm = () => {
     //       "POST",
     //       newFormData
     //     );
-    //     console.log("res in updating sub category", res);
     //     if (res.status == 200) {
     //       toast.success(res.message || "Sub category updated successfully");
     //     }
@@ -70,7 +67,6 @@ const CategoryForm = () => {
     };
     try {
       const res = await callPrivateApi("/subcategory", "POST", payload);
-      console.log("res in adding sub category", res);
       if (res.status == 200) {
         toast.success(res.message || "Sub category added successfully");
       }

@@ -34,17 +34,14 @@ const MediaAndPublish = () => {
       if (selectedImage) {
         toast.info("Replacing the existing image.");
       }
-      console.log("file", file);
       setSelectedImage(URL.createObjectURL(file));
       setBannerForm((prev) => ({ ...prev, image: file }));
 
-      console.log("url", URL.createObjectURL(file));
     }
   };
   const handlePublish = async (e) => {
     e.preventDefault();
     setIsUploading(true);
-    console.log("form data banner", bannerForm);
     const formData = new FormData();
     formData.append("name", bannerForm.name);
     if (selectedImage) {
@@ -58,7 +55,6 @@ const MediaAndPublish = () => {
           formData,
           token
         );
-        console.log("res in update banner", res);
 
         if (res.status === "error" || res.status === 400) {
           toast.error(res.message || "Action failed");
@@ -80,7 +76,6 @@ const MediaAndPublish = () => {
     } else {
       try {
         const res = await callPrivateApi("/banner", "POST", formData, token);
-        console.log("res in add banner", res);
 
         if (res.status === "error" || res.status === 400) {
           toast.error(res.message || "Action failed");

@@ -14,7 +14,7 @@ const GetReviewByProduct = ({ userId, productId }) => {
         const data = await res.json();
         setReviews(data);
       } catch (error) {
-        console.error("Error fetching reviews:", error);
+        toast.error("Error fetching reviews:" || error);
       } finally {
         setLoading(false);
       }

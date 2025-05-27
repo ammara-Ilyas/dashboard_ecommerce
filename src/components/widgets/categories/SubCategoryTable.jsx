@@ -58,17 +58,14 @@ const SubCategoryTable = () => {
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     return subCategories.slice(indexOfFirstItem, indexOfLastItem);
   }, [subCategories, currentPage]);
-  console.log("current items", currentItems);
   useEffect(() => {
     const fetchsubCategories = async () => {
       setLoading(true);
       try {
         const res = await callPublicApi("/category", "GET");
-        console.log("res in Categorie list ", res);
 
         if (res.status === "error" || res.status === 400) {
           // toast.error(res.message || "Categories fetch failed");
-          console.log();
           res.message || "Categories fetch failed";
         } else {
           // toast.success(res.message || "Categories fetched successfully");
@@ -76,7 +73,6 @@ const SubCategoryTable = () => {
         }
       } catch (error) {
         // toast.error(error?.message || "Something went wrong");
-        console.log(error?.message || "Something went wrong");
       } finally {
         setLoading(false);
       }
@@ -85,7 +81,6 @@ const SubCategoryTable = () => {
   }, [subCategories, setSubCategories]);
 
   // Handle Deletion of a Subcategory
-  console.log("sub categories", subCategories);
   const handleEdit = (id, value) => {
     subCategoryForm({
       id: id,

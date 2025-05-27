@@ -88,7 +88,6 @@ export const UserProvider = ({ children }) => {
   });
   const [email, setEmail] = useState("ammarailyas361@gmail.com");
   const togglePanel = () => setIsOpen((prev) => !prev);
-  console.log("provider");
 
   return (
     <UserContext.Provider

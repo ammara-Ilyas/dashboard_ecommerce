@@ -205,23 +205,6 @@ let productData = {
 export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState(originalProducts);
   const [formData, setFormData] = useState(productData);
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     const { responseSize, responseWeight, responseRam } = await fetchData();
-  //     console.log(
-  //       "responses in contextApi",
-  //       responseSize,
-  //       responseWeight,
-  //       responseRam
-  //     );
-
-  //     if (responseSize?.sizes) setSizesList(responseSize.sizes);
-  //     if (responseWeight?.weights) setWeightsList(responseWeight.weights);
-  //     if (responseRam?.rams) setRamList(responseRam.rams);
-  //   };
-
-  //   getData();
-  // }, []);
 
   return (
     <ProductContext.Provider

@@ -3,7 +3,6 @@
 import { useCategory } from "@/contextApi/CategoriesContext";
 const Wrapper = ({ children }) => {
   const { isSidebarOpen } = useCategory();
-  console.log("isopen", isSidebarOpen);
 
   return (
     <div className="relative overflow-hidden w-full  ">

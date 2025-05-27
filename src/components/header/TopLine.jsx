@@ -4,8 +4,6 @@ import { useRouter } from "next/navigation";
 const TopLine = () => {
   const router = useRouter();
   const [lineStyle, setLineStyle] = useState("w-1/2");
-  console.log("path", router.pathname);
-  console.log("top line");
 
   useEffect(() => {
     switch (router.pathname) {

@@ -12,8 +12,6 @@ import { useProducts } from "@/contextApi/ProductContext";
 import Image from "next/image";
 import CustomReview from "@/components/miniComponents/CustomReview";
 const ProductView = ({ id }) => {
-  console.log("id in view", id);
-
   const { products } = useProducts();
   const [product, setProduct] = useState({});
   useEffect(() => {

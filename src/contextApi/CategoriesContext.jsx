@@ -48,41 +48,26 @@ export const CategoryProvider = ({ children }) => {
           ]);
 
         if (catRes?.categories) {
-          console.log("✅ Categories fetched:", catRes.categories);
           setCategories(catRes.categories);
         }
 
         if (sizeRes?.sizes) {
-          console.log("✅ size fetched:", sizeRes.sizes);
           setSizeList(sizeRes.sizes);
         }
-
-        // if (subCatRes?.SubCategories) {
-        //   console.log("✅ SubCategories fetched:", subCatRes.SubCategories);
-        //   setSubCategories(subCatRes.SubCategories);
-        // }
-
         if (weightRes?.weights) {
-          console.log("✅ Weights fetched:", weightRes.weights);
           setWeightsList(weightRes.weights);
         }
 
         if (ramRes?.rams) {
-          console.log("✅ RAMs fetched:", ramRes.rams);
           setRamList(ramRes.rams);
         }
 
-        // if (productRes?.products) {
-        //   console.log("✅ Products fetched:", productRes.products);
-        //   setProducts(productRes.products);
-        // }
-
         if (bannerRes?.banners) {
-          console.log("✅ Banners fetched:", bannerRes.banners);
           setBannerList(bannerRes.banners);
         }
       } catch (err) {
-        console.log("❌ Fetch error:", err?.message || err);
+        toast.error();
+        "❌ Fetch error:" || err?.message || err;
       } finally {
         setLoading(false);
       }
@@ -90,16 +75,9 @@ export const CategoryProvider = ({ children }) => {
 
     fetchAll();
   }, []);
-  useEffect(() => {
-    console.log(
-      "ram weight in context api ",
-      ramList,
-      sizeList,
-      weightsList,
-      // subCategories,
-      categories
-    );
-  }, [ramList, sizeList, weightsList, categories]);
+  // useEffect(() => {
+
+  // }, [ramList, sizeList, weightsList, categories]);
 
   return (
     <CategoryContext.Provider

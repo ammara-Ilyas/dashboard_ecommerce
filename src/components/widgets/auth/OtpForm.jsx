@@ -41,10 +41,8 @@ export default function OtpForm() {
       const res = await callPublicApi("/auth/resend-otp", "POST", {
         email: email,
       });
-      console.log("res in resend", res);
       toast.success(res.message);
     } catch (error) {
-      console.log(error?.message);
       toast.error(error?.message || "Internal Server error");
     }
   };
@@ -57,7 +55,6 @@ export default function OtpForm() {
       toast.error("Please enter a 6-digit OTP.");
       return;
     }
-    console.log("email", email, fullOtp);
 
     setLoading(true);
     try {

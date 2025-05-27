@@ -18,7 +18,6 @@ const Sidebar = () => {
   };
   const toggleMenu = (menu) => {
     setOpenMenu((prev) => (prev === menu ? null : menu));
-    console.log("Clicked");
   };
   let cateList = {
     name: [
