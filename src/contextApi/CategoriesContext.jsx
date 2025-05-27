@@ -99,7 +99,7 @@ export const CategoryProvider = ({ children }) => {
       // subCategories,
       categories
     );
-  }, [ramList, sizeList, weightsList]);
+  }, [ramList, sizeList, weightsList, categories]);
 
   return (
     <CategoryContext.Provider

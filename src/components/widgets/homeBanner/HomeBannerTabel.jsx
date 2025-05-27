@@ -5,42 +5,52 @@ import { Edit, Delete } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { useCategory } from "@/contextApi/CategoriesContext";
 import ProductTableSkeleton from "@/libs/ProductSkeleton";
-import bg from "@/assets/banner_01.webp";
-import { CircleLoader } from "react-spinners";
 import { callPrivateApi, callPublicApi } from "@/libs/callApis";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProductPagination from "@/components/miniComponents/Pagination";
+import { getToken } from "@/libs/Token";
 
 const HomeBannerTabel = () => {
   const { setBannerForm } = useCategory();
   const router = useRouter();
-  const [loader, setLoader] = useState(false);
-  const [bannerList, setBannerList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [bannerList, setBannerList] = useState([]);
+  const [search, setSearch] = useState("");
+  const [selectedIds, setSelectedIds] = useState(new Set());
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  // Handle Pagination
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const t = getToken();
+    setToken(t);
+  }, []);
+  // Handle Pagination Page Change
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
 
-  // Calculate Paginated Items
+  // Filtered and Paginated Items memoized
   const currentItems = useMemo(() => {
     if (!bannerList || bannerList.length === 0) return [];
+    // Filter by search on banner name (not product, since banner object has name)
+    const filtered = bannerList.filter((item) =>
+      item.name.toLowerCase().includes(search.toLowerCase())
+    );
+
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    return bannerList.slice(indexOfFirstItem, indexOfLastItem);
-  }, [bannerList, currentPage]);
-  console.log("current items", currentItems);
+    return filtered.slice(indexOfFirstItem, indexOfLastItem);
+  }, [bannerList, search, currentPage]);
+
+  // Fetch banners on mount
   useEffect(() => {
     const fetchBanners = async () => {
       setLoading(true);
       try {
         const res = await callPublicApi("/banners", "GET");
-        console.log("res in banner list ", res);
-
         if (res.status === "error" || res.status === 400) {
           toast.error(res.message || "Banners fetch failed");
         } else {
@@ -57,12 +67,8 @@ const HomeBannerTabel = () => {
     fetchBanners();
   }, []);
 
-  console.log("banner", bannerList);
-
   const handleEdit = (id) => {
     const bannerToEdit = bannerList.find((item) => item._id === id);
-    console.log("banner to edit", bannerToEdit);
-
     if (bannerToEdit) {
       setBannerForm({
         id: id,
@@ -76,13 +82,22 @@ const HomeBannerTabel = () => {
   const handleDelete = async (id) => {
     setLoading(true);
     try {
-      const res = await callPrivateApi(`/banner/${id}`, "DELETE");
-      console.log("res in banner delete ", res);
+      const res = await callPrivateApi(
+        `/banner/${id}`,
+        "DELETE",
+        undefined,
+        token
+      );
       if (res.status === "error" || res.status === 400) {
-        toast.error(res.message || "Banners delete failed");
+        toast.error(res.message || "Banner delete failed");
       } else {
-        toast.success(res.message || "Banners deleted successfully");
-        setBannerList(bannerList.filter((item) => item._id !== id));
+        toast.success(res.message || "Banner deleted successfully");
+        setBannerList((prev) => prev.filter((item) => item._id !== id));
+        setSelectedIds((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(id);
+          return newSet;
+        });
       }
     } catch (error) {
       toast.error(error?.message || "Something went wrong");
@@ -91,14 +106,111 @@ const HomeBannerTabel = () => {
     }
   };
 
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+    setCurrentPage(1); // Reset to first page when search changes
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedIds.size === 0) return;
+
+    setLoading(true);
+    try {
+      const idsArray = Array.from(selectedIds);
+      const res = await callPrivateApi(
+        "/bannerList/delete-multiple",
+        "POST",
+        {
+          ids: idsArray,
+        },
+        token
+      );
+
+      if (res.status === "error" || res.status === 400) {
+        toast.error(res.message || "Bulk delete failed");
+      } else {
+        toast.success(res.message || "Banners deleted successfully");
+        setBannerList((prev) =>
+          prev.filter((item) => !selectedIds.has(item._id))
+        );
+        setSelectedIds(new Set()); // Clear selections
+      }
+    } catch (error) {
+      toast.error(error?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCheckboxChange = (id) => {
+    setSelectedIds((prev) => {
+      const newSelected = new Set(prev);
+      if (newSelected.has(id)) {
+        newSelected.delete(id);
+      } else {
+        newSelected.add(id);
+      }
+      return newSelected;
+    });
+  };
+
+  const handleSelectAll = () => {
+    // Check if all currentItems are selected
+    const allSelected = currentItems.every((item) => selectedIds.has(item._id));
+    if (allSelected) {
+      // Deselect all currentItems
+      setSelectedIds((prev) => {
+        const newSelected = new Set(prev);
+        currentItems.forEach((item) => newSelected.delete(item._id));
+        return newSelected;
+      });
+    } else {
+      // Select all currentItems
+      setSelectedIds((prev) => {
+        const newSelected = new Set(prev);
+        currentItems.forEach((item) => newSelected.add(item._id));
+        return newSelected;
+      });
+    }
+  };
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen flex flex-col items-center">
-      <div className="bg-white shadow-md rounded-lg p-6 w-full ">
+      <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-6xl">
+        <div className="flex items-center justify-between my-3 mx-8">
+          <div className="flex items-center gap-4">
+            {selectedIds.size > 0 && (
+              <button
+                className="bg-red-600 text-white px-4 py-2 rounded"
+                onClick={handleBulkDelete}
+              >
+                Delete ({selectedIds.size})
+              </button>
+            )}
+            <input
+              type="text"
+              name="search"
+              value={search}
+              onChange={handleSearch}
+              placeholder="Search Banner Name"
+              className="border p-2 w-[280px] rounded-md shadow-sm"
+            />
+          </div>
+          <div>
+            <button
+              className="bg-blue-600 text-white px-4 py-2 rounded"
+              onClick={handleSelectAll}
+            >
+              {currentItems.length > 0 &&
+              currentItems.every((item) => selectedIds.has(item._id))
+                ? "Deselect All"
+                : "Select All"}
+            </button>
+          </div>
+        </div>
         <h2 className="text-lg font-semibold mb-4">Image and Action</h2>
         {loading ? (
-          <>
-            <ProductTableSkeleton />
-          </>
+          <ProductTableSkeleton />
         ) : (
           <table className="w-full border-collapse border border-gray-300">
             <thead>
@@ -115,44 +227,60 @@ const HomeBannerTabel = () => {
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((banner) => (
-                <tr className="border-b hover:bg-gray-100" key={banner._id}>
-                  <td className="py-2 px-4">{banner.name}</td>
-                  <td className="py-2 px-4">
-                    <Image
-                      src={`${banner.image}`}
-                      alt={banner.name}
-                      className="h-24 rounded-lg object-cover"
-                      height={100}
-                      width={300}
-                    />
-                  </td>
-                  <td className="py-2 px-4 flex items-center gap-2">
-                    <IconButton
-                      onClick={() => handleEdit(banner._id)}
-                      className="text-green-500"
-                    >
-                      <Edit />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => handleDelete(banner._id)}
-                      className="text-red-500"
-                    >
-                      <Delete />
-                    </IconButton>
+              {currentItems.length === 0 ? (
+                <tr>
+                  <td colSpan={3} className="text-center py-4">
+                    No banners found.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                currentItems.map((banner) => (
+                  <tr className="border-b hover:bg-gray-100" key={banner._id}>
+                    <td className="py-2 px-4 flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={selectedIds.has(banner._id)}
+                        onChange={() => handleCheckboxChange(banner._id)}
+                        className="w-4 h-4 p-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      {banner.name}
+                    </td>
+                    <td className="py-2 px-4">
+                      <Image
+                        src={banner.image}
+                        alt={banner.name}
+                        className="h-24 rounded-lg object-cover"
+                        height={100}
+                        width={300}
+                      />
+                    </td>
+                    <td className="py-2 px-4 flex items-center gap-2">
+                      <IconButton
+                        onClick={() => handleEdit(banner._id)}
+                        className="text-green-500"
+                      >
+                        <Edit />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => handleDelete(banner._id)}
+                        className="text-red-500"
+                      >
+                        <Delete />
+                      </IconButton>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         )}
-        <div>
-          {" "}
+        <div className="mt-4">
           <ProductPagination
-            products={bannerList}
+            products={bannerList.filter((item) =>
+              item.name.toLowerCase().includes(search.toLowerCase())
+            )}
             itemsPerPage={itemsPerPage}
             currentPage={currentPage}
-            filteredProducts={bannerList}
             handlePageChange={handlePageChange}
           />
         </div>

@@ -9,18 +9,19 @@ import Avatar from "@mui/material/Avatar";
 import { blue } from "@mui/material/colors"; // Import a valid color
 import { LuMenu } from "react-icons/lu";
 import Image from "next/image";
-// import logo from "../assests/image/logo.png";
 import logo from "@/assets/image/logo.png";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 const Navbar = () => {
   const router = useRouter();
   const { isSidebarOpen, toggleSidebar } = useCategory();
   const { togglePanel } = useUser();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
+  const [user, setUser] = useState({}); // <-- user state
+
   // console.log("Nav bar");
   const pathname = usePathname();
-  console.log("pathname", pathname);
+  // console.log("pathname", pathname);
   const account = [
     { name: "My Account", link: "/auth/account", icon: <MdPerson size={20} /> },
     {
@@ -32,9 +33,28 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    setUser(null);
     router.push("/");
   };
-  const user = JSON.parse(localStorage.getItem("user"));
+
+  const getUserFromLocalStorage = () => {
+    if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem("user");
+      console.log("stored user", storedUser);
+      return storedUser ? JSON.parse(storedUser) : null;
+    }
+    return null;
+  };
+
+  useEffect(() => {
+    const parsedUser = getUserFromLocalStorage();
+    console.log("parse user", parsedUser);
+
+    setUser(parsedUser);
+    console.log("Retrieved user:", parsedUser);
+  }, []);
+
+  console.log("user", user);
 
   return (
     <div className={`relative`}>
@@ -56,30 +76,49 @@ const Navbar = () => {
           </button>
         </div>
         <div className="flex items-center space-x-4 mr-5">
-          <div
+          {/* <div
             className="p-2 text-xl bg-gray-200 rounded-full hover:text-blue-600"
             onClick={togglePanel}
             aria-label="Notifications"
           >
             <IoIosNotificationsOutline />
-          </div>
+          </div> */}
+
           <div className="relative flex flex-row gap-2 items-center justify-center">
-            {" "}
-            {user.img ? (
-              <Avatar alt={user.name} src={user.img} />
+            {user ? (
+              <>
+                {user.img ? (
+                  <Avatar alt={user.name} src={user.img} />
+                ) : (
+                  <Avatar sx={{ bgcolor: blue[800] }}>
+                    {user.name?.charAt(0) || "U"}
+                  </Avatar>
+                )}
+
+                <div
+                  onClick={() => setIsOpen((prev) => !prev)}
+                  className="cursor-pointer"
+                >
+                  <p className="text-sm font-semibold">{user.name}</p>
+                  <p className="text-xs text-gray-500">{user.email}</p>
+                </div>
+              </>
             ) : (
-              <Avatar sx={{ bgcolor: blue[800] }}>
-                {Array.from(user.name)[0]}
-              </Avatar>
+              <>
+                <Avatar sx={{ bgcolor: blue[800] }}>L</Avatar>
+                <div>
+                  <Link
+                    href="/auth/login"
+                    className="text-sm font-semibold text-gray-400"
+                  >
+                    Login
+                  </Link>
+                  <p className="text-xs text-gray-300">Loading...</p>
+                </div>
+              </>
             )}
-            <div
-              onClick={() => setIsOpen((prev) => !prev)}
-              className="cursor-pointer"
-            >
-              <p className="text-sm font-semibold">{user.name}</p>
-              <p className="text-xs text-gray-500">{user.email}</p>
-            </div>
-            {isOpen ? (
+
+            {isOpen && user && (
               <ul className="absolute flex flex-col gap-2 w-[190px] bg-white z-50 py-3 border rounded-md shadow-md top-10 left-12">
                 {account.map((item, i) => (
                   <li
@@ -99,8 +138,6 @@ const Navbar = () => {
                   <MdLogout size={20} className="text-gray-700" /> Logout
                 </li>
               </ul>
-            ) : (
-              <></>
             )}
           </div>
         </div>

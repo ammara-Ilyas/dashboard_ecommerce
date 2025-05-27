@@ -5,11 +5,17 @@ import Rating from "@mui/material/Rating";
 import { callPrivateApi } from "@/libs/callApis";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getToken } from "@/libs/Token";
 const AddReviewForm = ({ review, setIsEdit, setIsReviewsUpdate }) => {
   const [comment, setComment] = useState(review.comment);
   const [rating, setRating] = useState(review.rating);
   const [loading, setLoading] = useState(false);
+  const [token, setToken] = useState(null);
 
+  useEffect(() => {
+    const t = getToken();
+    setToken(t);
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -22,7 +28,8 @@ const AddReviewForm = ({ review, setIsEdit, setIsReviewsUpdate }) => {
       const response = await callPrivateApi(
         `/review/${review._id}`,
         "PUT",
-        data
+        data,
+        token
       );
       console.log("res in api", response);
 

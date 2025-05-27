@@ -20,6 +20,7 @@ import ProductTableSkeleton from "@/libs/ProductSkeleton";
 import AddReviewForm from "./AddReviewForm";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getToken } from "@/libs/Token";
 
 const AllReviewsTable = () => {
   const [reviews, setReviews] = useState([]);
@@ -27,7 +28,12 @@ const AllReviewsTable = () => {
   const [isEdit, setIsEdit] = useState(true);
   const [isReviewsUpdate, setIsReviewsUpdate] = useState(false);
   const [editReview, setEditReview] = useState({});
+  const [token, setToken] = useState(null);
 
+  useEffect(() => {
+    const t = getToken();
+    setToken(t);
+  }, []);
   const fetchAllReviews = async () => {
     try {
       const response = await callPublicApi("/reviews");
@@ -54,7 +60,12 @@ const AllReviewsTable = () => {
     if (!confirm) return;
 
     try {
-      const res = await callPrivateApi.delete(`/review/${reviewId}`);
+      const res = await callPrivateApi(
+        `/review/${reviewId}`,
+        "DELETE",
+        undefined,
+        token
+      );
       console.log("res in review delete", res);
       if (res.status == 200) {
         setReviews((prev) => prev.filter((review) => review._id !== reviewId));
@@ -68,7 +79,7 @@ const AllReviewsTable = () => {
 
   useEffect(() => {
     fetchAllReviews();
-  }, [isReviewsUpdate]);
+  }, [isReviewsUpdate, setIsReviewsUpdate]);
 
   return (
     <div className="p-6 mx-6">

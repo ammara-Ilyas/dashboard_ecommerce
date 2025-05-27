@@ -8,9 +8,9 @@ const ProductPagination = ({
   handlePageChange,
 }) => {
   return (
-    <div className=" flex justify-end py-1">
+    <div className=" flex justify-end ">
       {products?.length > itemsPerPage && (
-        <div className="flex justify-center mt-6">
+        <div className="flex justify-center ">
           <Pagination
             count={Math.ceil(filteredProducts?.length / itemsPerPage)}
             page={currentPage}

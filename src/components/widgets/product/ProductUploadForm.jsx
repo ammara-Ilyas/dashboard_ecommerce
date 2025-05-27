@@ -22,6 +22,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useProducts } from "@/contextApi/ProductContext";
 import { useCategory } from "@/contextApi/CategoriesContext";
 import { callPrivateApi } from "@/libs/callApis";
+import { getToken } from "@/libs/Token";
 function ProductUploadForm() {
   let { categories, ramList, weightsList, sizeList } = useCategory();
   let { formData, setFormData, setProducts, products, productData } =
@@ -32,26 +33,29 @@ function ProductUploadForm() {
   const [rating, setRating] = useState(0);
   const [isEditMode, setIsEditMode] = useState(false);
   const { isDarkMode } = useTheme();
-  // useEffect(() => {
-  //   // Sync rating from formData when it changes
-  //   if (formData.rating !== undefined && formData.rating !== rating) {
-  //     setRating(formData.rating);
-  //   }
+  const [token, setToken] = useState(null);
 
-  //   // Sync formData when rating changes
-  //   if (formData.rating !== rating) {
-  //     setFormData((prevData) => ({
-  //       ...prevData,
-  //       rating: rating,
-  //     }));
-  //   }
-  // }, [rating]);
+  useEffect(() => {
+    const t = getToken();
+    setToken(t);
+  }, []);
+  useEffect(() => {
+    setRating(formData.rating || 0);
+  }, [formData.rating]);
 
-  // if (loading) return <p>Loading...</p>;
+  useEffect(() => {
+    setFormData((prevData) => ({
+      ...prevData,
+      rating,
+    }));
+  }, [rating, setFormData]);
+
   useEffect(() => {
     const selectedCategory = categories.find(
-      (category) => category.name === formData.category
+      (category) => category._id === formData.category
     );
+
+    console.log("categories form", formData.category);
     console.log("categories", categories);
 
     console.log("Subcategories found:", selectedCategory);
@@ -59,17 +63,20 @@ function ProductUploadForm() {
   }, [formData.category, categories]);
 
   // Use useCallback to memoize the event handler
-  const handleFormData = useCallback((e) => {
-    const { name, value } = e.target;
-    if (name === "rating") {
-      setRating(value); // Update rating directly when the user changes it
-    } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    }
-  }, []);
+  const handleFormData = useCallback(
+    (e) => {
+      const { name, value } = e.target;
+      if (name === "rating") {
+        setRating(value); // Update rating directly when the user changes it
+      } else {
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
+      }
+    },
+    [setFormData]
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -109,7 +116,8 @@ function ProductUploadForm() {
         const res = await callPrivateApi(
           `/product/${formData._id}`,
           "PUT",
-          data
+          data,
+          token
         );
         console.log("res in update product ", res);
         if (res.status === 200 || res?.data?.status === 200) {
@@ -133,7 +141,7 @@ function ProductUploadForm() {
       setIsEditMode(false);
     } else {
       try {
-        const res = await callPrivateApi("/product", "POST", data);
+        const res = await callPrivateApi("/product", "POST", data, token);
         console.log("res in add product ", res);
         if (res.status === 200 || res?.data?.status === 200) {
           toast.success(res.message || "Product added successfully");
@@ -224,7 +232,7 @@ function ProductUploadForm() {
             >
               {categories &&
                 categories.map((cate, i) => (
-                  <MenuItem value={cate.name} key={cate._id}>
+                  <MenuItem value={cate._id} key={cate._id}>
                     {cate.name}
                   </MenuItem>
                 ))}
@@ -321,7 +329,7 @@ function ProductUploadForm() {
             >
               {weightsList &&
                 weightsList.map((weightItem) => (
-                  <MenuItem value={weightItem.weight} key={weightItem._id}>
+                  <MenuItem value={weightItem._id} key={weightItem._id}>
                     {weightItem.weight}
                   </MenuItem>
                 ))}
@@ -342,7 +350,7 @@ function ProductUploadForm() {
               displayEmpty
             >
               {ramList.map((ramItem) => (
-                <MenuItem value={ramItem.ram} key={ramItem._id}>
+                <MenuItem value={ramItem._id} key={ramItem._id}>
                   {ramItem.ram}
                 </MenuItem>
               ))}
@@ -363,7 +371,7 @@ function ProductUploadForm() {
             >
               {sizeList &&
                 sizeList.map((sizeItem) => (
-                  <MenuItem value={sizeItem.name} key={sizeItem._id}>
+                  <MenuItem value={sizeItem._id} key={sizeItem._id}>
                     {sizeItem.size}
                   </MenuItem>
                 ))}

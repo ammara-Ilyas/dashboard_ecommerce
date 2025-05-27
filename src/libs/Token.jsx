@@ -1,6 +1,6 @@
-"use client";
-
-export const token = localStorage.getItem("token"); // Ensure this is the correct path to token
-console.log("token in api call", token);
-
-// console.log("user", user);
+export const getToken = () => {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("token");
+  }
+  return null; // Or throw error / handle fallback
+};

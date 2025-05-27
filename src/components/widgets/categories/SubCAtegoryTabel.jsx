@@ -24,6 +24,7 @@ import { callPrivateApi, callPublicApi } from "@/libs/callApis";
 import ProductPagination from "@/components/miniComponents/Pagination";
 import ProductTableSkeleton from "@/libs/ProductSkeleton";
 import { Category } from "@mui/icons-material";
+import { getToken } from "@/libs/Token";
 const SubCategory = () => {
   // const [loading, setLoading] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -37,6 +38,12 @@ const SubCategory = () => {
     setSubCategoryForm,
     subCategoryForm,
   } = useCategory();
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const t = getToken();
+    setToken(t);
+  }, []);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   // Handle Pagination
@@ -53,7 +60,7 @@ const SubCategory = () => {
   }, [subCategories, currentPage]);
   console.log("current items", currentItems);
   useEffect(() => {
-    const fetchBanners = async () => {
+    const fetchsubCategories = async () => {
       setLoading(true);
       try {
         const res = await callPublicApi("/category", "GET");
@@ -74,8 +81,8 @@ const SubCategory = () => {
         setLoading(false);
       }
     };
-    fetchBanners();
-  }, []);
+    fetchsubCategories();
+  }, [subCategories, setSubCategories]);
 
   // Handle Deletion of a Subcategory
   console.log("sub categories", subCategories);
@@ -91,14 +98,12 @@ const SubCategory = () => {
     ///category name and sub category id
     setLoading(true);
     console.log("form in sub delete", name, id);
-
-    // const newFormData = new FormData();
-    // newFormData.append("category_name", name);
-
     try {
       const res = await callPrivateApi(
         `/subcategory/${id}/category/${name}`,
-        "DELETE"
+        "DELETE",
+        undefined,
+        token
       );
       console.log("res in Sub Category delete ", res);
       if (res.status == 200) {
@@ -122,7 +127,7 @@ const SubCategory = () => {
     } finally {
       setLoading(false);
       // to call useEffect
-      setLoader(() => !loader);
+      // setLoader(() => !loader);
     }
   };
 

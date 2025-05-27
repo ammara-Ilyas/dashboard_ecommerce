@@ -1,9 +1,10 @@
 // const HOSTNAME = "http://localhost:5000/api";
 const HOSTNAME = "http://127.0.0.1:5000/api"; // Instead of localhost
-import { token } from "./Token";
-// Function to make API calls using fetch
-const callPrivateApi = async (endpoint, method, payload) => {
+// Utility to get token dynamically (adjust to your app's storage)
+
+const callPrivateApi = async (endpoint, method, payload, token) => {
   console.log("data in api call", endpoint, method, payload);
+  console.log("token in apis", token);
 
   const headers = {
     Accept: "application/json",
@@ -11,6 +12,7 @@ const callPrivateApi = async (endpoint, method, payload) => {
   };
 
   let body = null;
+  console.log("headers", headers);
 
   if (!(payload instanceof FormData)) {
     headers["Content-Type"] = "application/json";

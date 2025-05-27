@@ -4,13 +4,22 @@ import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Navbar from "../header/Navbar";
 import Sidebar from "../header/Sidebar";
-
+// import { getToken } from "@/libs/Token";
+const getToken = () => {
+  // For example, from localStorage:
+  return localStorage.getItem("token");
+};
 const PathnameWrapper = ({ children }) => {
   const [showLayout, setShowLayout] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const t = getToken();
+    setToken(t);
+  }, []);
   const checkAccess = () => {
     const isAuthPage =
       pathname === "/auth/login" ||

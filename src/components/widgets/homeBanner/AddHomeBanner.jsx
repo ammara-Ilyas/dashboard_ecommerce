@@ -8,6 +8,7 @@ import Image from "next/image";
 import { callPrivateApi } from "@/libs/callApis";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getToken } from "@/libs/Token";
 
 // Initialize toast notifications
 // toast.configure();
@@ -15,7 +16,12 @@ import "react-toastify/dist/ReactToastify.css";
 const MediaAndPublish = () => {
   const { setBannerList, bannerList, bannerForm, setBannerForm } =
     useCategory();
+  const [token, setToken] = useState(null);
 
+  useEffect(() => {
+    const t = getToken();
+    setToken(t);
+  }, []);
   const router = useRouter();
 
   const [selectedImage, setSelectedImage] = useState(null);
@@ -49,7 +55,8 @@ const MediaAndPublish = () => {
         const res = await callPrivateApi(
           `/banner/${bannerForm.id}`,
           "PUT",
-          formData
+          formData,
+          token
         );
         console.log("res in update banner", res);
 
@@ -72,7 +79,7 @@ const MediaAndPublish = () => {
       }
     } else {
       try {
-        const res = await callPrivateApi("/banner", "POST", formData);
+        const res = await callPrivateApi("/banner", "POST", formData, token);
         console.log("res in add banner", res);
 
         if (res.status === "error" || res.status === 400) {

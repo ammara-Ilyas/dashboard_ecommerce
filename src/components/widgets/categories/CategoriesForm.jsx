@@ -6,11 +6,18 @@ import { callPrivateApi } from "@/libs/callApis";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
+import { getToken } from "@/libs/Token";
 
 const Form = () => {
   const router = useRouter();
   const { categories, setCategories, setCategoryForm, categoryForm } =
     useCategory();
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const t = getToken();
+    setToken(t);
+  }, []);
   const [loading, setLoading] = useState(false);
   // Handle Input Changes
   const handleForm = (e) => {
@@ -55,7 +62,8 @@ const Form = () => {
         const res = await callPrivateApi(
           `/category/${categoryForm.id}`,
           "PUT",
-          formData
+          formData,
+          token
         );
         console.log("res in category update", res);
         setCategories((prev) =>
@@ -79,7 +87,7 @@ const Form = () => {
       formData.append("color", categoryForm.color);
       formData.append("image", categoryForm.image);
       try {
-        const res = await callPrivateApi("/category", "POST", formData);
+        const res = await callPrivateApi("/category", "POST", formData, token);
         console.log("res in category add", res);
 
         // Add to context list after new category added
