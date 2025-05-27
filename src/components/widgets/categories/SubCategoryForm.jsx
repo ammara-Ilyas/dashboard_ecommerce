@@ -85,49 +85,6 @@ const CategoryForm = () => {
     } finally {
       setLoading(false);
     }
-
-    // if (name && category) {
-    //   const existingCategoryIndex = namegories.findIndex(
-    //     (sub) => sub.name == category
-    //   );
-
-    // //   console.log("existing", existingCategoryIndex);
-    //   if (existingCategoryIndex !== -1) {
-    //     // Category exists, add the namegory to its namegories array
-    //     const updatednamegories = [...namegories];
-    //     const existingCategory = updatednamegories[existingCategoryIndex];
-    //     console.log("existing", existingCategory);
-
-    //     if (!existingCategory.namegories.includes(name)) {
-    //       existingCategory.subcategories.push(subCate);
-    //       alert(`Sub-category "${subCate}" added to "${category}".`);
-    //     } else {
-    //       alert(
-    //         `Sub-category "${subCate}" already exists under "${category}".`
-    //       );
-    //     }
-
-    //     setSubCategories(updatedSubCategories);
-    //   }
-    // Category does not exist, add it as a new category with the subcategory
-    // const selectedCategory = categories.find((cat) => cat.cate == category);
-
-    // const newCategory = {
-    //   name: category,
-    //   image: selectedCategory ? selectedCategory.img : null,
-    //   subcategories: [subCate],
-    // };
-
-    // setSubCategories((prev) => [...prev, newCategory]);
-    // alert(`New category "${category}" with sub-category "${subCate}" added.`);
-
-    // Reset form state
-    // setSubCategoryForm({
-    //   id: null,
-    //   parentCate: "",
-    //   name: "",
-    // });
-    // router.push("/category/namegories");
   };
 
   return (
