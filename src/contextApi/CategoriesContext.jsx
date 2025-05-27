@@ -30,7 +30,7 @@ export const CategoryProvider = ({ children }) => {
     name: "",
     image: "",
   });
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [isSidebarOpen, setSidebarOpen] = useState(true);
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
 
   useEffect(() => {

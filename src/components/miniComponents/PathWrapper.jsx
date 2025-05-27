@@ -20,6 +20,8 @@ const PathnameWrapper = ({ children }) => {
     const t = getToken();
     setToken(t);
   }, []);
+  console.log("token", token);
+
   const checkAccess = () => {
     const isAuthPage =
       pathname === "/auth/login" ||

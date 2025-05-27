@@ -16,7 +16,7 @@ const Navbar = () => {
   const router = useRouter();
   const { isSidebarOpen, toggleSidebar } = useCategory();
   const { togglePanel } = useUser();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState({}); // <-- user state
 
   // g("Nav bar");
@@ -40,7 +40,6 @@ const Navbar = () => {
   const getUserFromLocalStorage = () => {
     if (typeof window !== "undefined") {
       const storedUser = localStorage.getItem("user");
-      g("stored user", storedUser);
       return storedUser ? JSON.parse(storedUser) : null;
     }
     return null;
@@ -48,13 +47,9 @@ const Navbar = () => {
 
   useEffect(() => {
     const parsedUser = getUserFromLocalStorage();
-    g("parse user", parsedUser);
 
     setUser(parsedUser);
-    g("Retrieved user:", parsedUser);
   }, []);
-
-  g("user", user);
 
   return (
     <div className={`relative`}>
