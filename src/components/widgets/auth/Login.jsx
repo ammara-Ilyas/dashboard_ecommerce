@@ -46,15 +46,14 @@ export default function Login() {
       } else {
         toast.success(res.message || "Login successfully");
 
+        localStorage.setItem("token", res.token);
+        localStorage.setItem("user", JSON.stringify(res.user));
+        router.push("/"); // Navigate after success
         // Reset form
         setLoginForm({
           email: "",
           password: "",
         });
-
-        localStorage.setItem("token", res.token);
-        localStorage.setItem("user", JSON.stringify(res.user));
-        router.push("/"); // Navigate after success
       }
     } catch (error) {
       toast.error(error?.message || "Something went wrong");

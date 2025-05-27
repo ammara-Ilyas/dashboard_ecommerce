@@ -61,6 +61,9 @@ export default function Signup() {
       toast.success(res.message || "Otp has sent to your email");
       // Reset form
       setEmail(signupForm.email);
+
+      // Optional: navigate to login
+      router.push("/auth/otp");
       setSignupForm({
         name: "",
         email: "",
@@ -68,9 +71,6 @@ export default function Signup() {
         password: "",
         confirmPassword: "",
       });
-
-      // Optional: navigate to login
-      router.push("/auth/otp");
     } catch (error) {
       toast.error(error?.message || "Something went wrong");
     } finally {
