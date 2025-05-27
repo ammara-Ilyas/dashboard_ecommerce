@@ -25,7 +25,7 @@ import ProductPagination from "@/components/miniComponents/Pagination";
 import ProductTableSkeleton from "@/libs/ProductSkeleton";
 import { Category } from "@mui/icons-material";
 import { getToken } from "@/libs/Token";
-const SubCategory = () => {
+const SubCategoryTable = () => {
   // const [loading, setLoading] = useState(false);
   const [loader, setLoader] = useState(false);
   const {
@@ -221,4 +221,4 @@ const SubCategory = () => {
   );
 };
 
-export default SubCategory;
+export default SubCategoryTable;
