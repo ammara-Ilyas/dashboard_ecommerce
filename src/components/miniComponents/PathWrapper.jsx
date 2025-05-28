@@ -14,15 +14,16 @@ const PathnameWrapper = ({ children }) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const [token, setToken] = useState(null);
-
+  const [token, setToken] = useState(undefined);
   useEffect(() => {
     const t = getToken();
     setToken(t);
   }, []);
-  console.log("token", token);
+  console.log("token in pathwrapper", token);
 
   const checkAccess = () => {
+    if (token === undefined) return;
+
     const isAuthPage =
       pathname === "/auth/login" ||
       pathname === "/auth/register" ||
@@ -37,10 +38,13 @@ const PathnameWrapper = ({ children }) => {
 
   useEffect(() => {
     checkAccess();
+  }, [pathname, token, router]);
 
-    // Listen for custom event
+  // Listen for custom event
+  useEffect(() => {
     const handleTokenChange = () => {
-      checkAccess();
+      const updatedToken = getToken();
+      setToken(updatedToken);
     };
 
     window.addEventListener("tokenChanged", handleTokenChange);

@@ -25,7 +25,7 @@ import { getToken } from "@/libs/Token";
 const AllReviewsTable = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isEdit, setIsEdit] = useState(true);
+  const [isEdit, setIsEdit] = useState(false);
   const [isReviewsUpdate, setIsReviewsUpdate] = useState(false);
   const [editReview, setEditReview] = useState({});
   const [token, setToken] = useState(null);
@@ -36,7 +36,8 @@ const AllReviewsTable = () => {
   }, []);
   const fetchAllReviews = async () => {
     try {
-      const response = await callPublicApi("/reviews");
+      const response = await callPublicApi("/reviews", "GET");
+      console.log("res ", response);
 
       setReviews(response.reviews);
     } catch (error) {
@@ -64,10 +65,8 @@ const AllReviewsTable = () => {
         undefined,
         token
       );
-      if (res.status == 200) {
-        setReviews((prev) => prev.filter((review) => review._id !== reviewId));
-        toast.success(res.message || "Review delete successfully");
-      }
+      setReviews((prev) => prev.filter((review) => review._id !== reviewId));
+      toast.success(res.message || "Review delete successfully");
     } catch (error) {
       toast.error("Error deleting review:", error);
     }
@@ -75,7 +74,7 @@ const AllReviewsTable = () => {
 
   useEffect(() => {
     fetchAllReviews();
-  }, [isReviewsUpdate, setIsReviewsUpdate]);
+  }, [isReviewsUpdate]);
 
   return (
     <div className="p-6 mx-6">
@@ -137,15 +136,6 @@ const AllReviewsTable = () => {
                     <TableRow key={review._id}>
                       <TableCell>
                         <div className="flex gap-2 items-center">
-                          <Image
-                            src={
-                              review.product.images[0] || "/images/dummy.png"
-                            }
-                            alt={review.product.product || "N/A"}
-                            width={50}
-                            height={50}
-                            className="w-[50px]"
-                          />
                           <div className="font-semibold">
                             {review.product?.product || "N/A"}
                           </div>
