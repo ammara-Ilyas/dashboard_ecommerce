@@ -76,7 +76,7 @@ const ProductView = ({ id }) => {
             className="font-semibold text-gray-800 dark:text-gray-100 capitalize
              mb-4"
           >
-            {product.description}
+            {product?.description}
           </Typography>
 
           {/* Product Specifications */}
@@ -93,7 +93,7 @@ const ProductView = ({ id }) => {
                 >
                   :
                 </span>
-                {product.brand}
+                {product?.brand}
               </span>
             </div>
 
@@ -109,7 +109,7 @@ const ProductView = ({ id }) => {
                 >
                   :
                 </span>
-                {product.category}
+                {product?.category}
               </span>
             </div>
 
@@ -124,7 +124,7 @@ const ProductView = ({ id }) => {
                 >
                   :
                 </span>
-                {product.ram}
+                {product?.ram}
               </span>
             </div>
 
@@ -140,7 +140,7 @@ const ProductView = ({ id }) => {
                 >
                   :
                 </span>
-                {product.review}(4) Review
+                {product?.review}(4) Review
               </span>
             </div>
 
@@ -155,7 +155,7 @@ const ProductView = ({ id }) => {
                 >
                   :
                 </span>
-                {product.published}
+                {product?.published}
               </span>
             </div>
           </div>
@@ -175,7 +175,7 @@ const ProductView = ({ id }) => {
       </div>
       <div className="my-6">
         <h2 className="text-xl text-black py-2 px-4    ">Custom Reviews</h2>
-        <CustomReview reviews={product.reviews} />
+        <CustomReview reviews={product?.reviews} />
       </div>
     </div>
   );

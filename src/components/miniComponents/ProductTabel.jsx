@@ -42,9 +42,9 @@ const ProductTabel = () => {
       try {
         const res = await callPublicApi("/products", "GET");
         if (res.status === "error" || res.status === 400) {
-          toast.error(res.message || "Failed to fetch products");
+          // toast.error(res.message || "Failed to fetch products");
         } else {
-          toast.success(res.message || "Products fetched successfully");
+          // toast.success(res.message || "Products fetched successfully");
           setProducts(res.products);
         }
       } catch (error) {
