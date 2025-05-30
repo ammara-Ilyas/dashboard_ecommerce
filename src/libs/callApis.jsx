@@ -1,11 +1,7 @@
-// const HOSTNAME = "http://localhost:5000/api";
-const HOSTNAME = "http://127.0.0.1:5000/api"; // Instead of localhost
+const HOSTNAME = "https://ecommerce-apis-hl5w.onrender.com/api";
 // Utility to get token dynamically (adjust to your app's storage)
 
 const callPrivateApi = async (endpoint, method, payload, token) => {
-  // console.log("data in api call", endpoint, method, payload);
-  // console.log("token in apis", token);
-
   const headers = {
     Accept: "application/json",
     Authorization: `Bearer ${token}`, // ✅ Correct way
