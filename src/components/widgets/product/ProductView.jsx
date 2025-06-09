@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Chip } from "@mui/material";
+import { format } from "date-fns";
 import {
   FaTags,
   FaBoxOpen,
@@ -11,12 +12,15 @@ import {
 import { useProducts } from "@/contextApi/ProductContext";
 import Image from "next/image";
 import CustomReview from "@/components/miniComponents/CustomReview";
-const ProductView = ({ id }) => {
-  const { products } = useProducts();
-  const [product, setProduct] = useState({});
+const ProductView = ({ product }) => {
+  const [formattedDate, setFormattedDate] = useState("");
+
   useEffect(() => {
-    setProduct(products.find((item) => item.id == id));
-  }, [id, products]);
+    if (product?.createdAt) {
+      const date = format(new Date(product.createdAt), "yyyy-MM-dd");
+      setFormattedDate(date);
+    }
+  }, [product?.createdAt]);
 
   return (
     <div
@@ -36,33 +40,38 @@ const ProductView = ({ id }) => {
           <span className="text-gray-600 text-sm mb-8 italic ">
             Product Gallery
           </span>
-          <div className="relative">
-            {/* <Image
-              src="/images/dummy.png"
-              alt={product.name}
-              width={50}
-              height={50}
-              className="rounded-lg object-cover w-full"
-            /> */}
-            <Chip
-              label="15%"
-              color="primary"
-              className="absolute top-2 left-2 text-white"
-            />
-          </div>
-          {/* Thumbnail Gallery */}
-          <Box className="mt-2 flex gap-2  w-[80%]">
-            {/* <Image
-              src={product.img}
-              alt="Thumbnail 1"
-              className="rounded-lg w-16 h-16 object-cover border border-gray-300 cursor-pointer"
-            />
-            <Image
-              src={product.img}
-              alt="Thumbnail 2"
-              className="rounded-lg w-16 h-16 object-cover border border-gray-300 cursor-pointer"
-            /> */}
-          </Box>
+          {product?.images && (
+            <>
+              <div className="relative">
+                <Image
+                  src={product?.images[0]}
+                  alt={product.product}
+                  width={50}
+                  height={50}
+                  className="rounded-lg object-cover w-full"
+                />
+                <Chip
+                  label="15%"
+                  color="primary"
+                  className="absolute top-2 left-2 text-white"
+                />
+              </div>
+              <Box className="mt-2 flex gap-2 relative  w-[80%]">
+                <Image
+                  src={product?.images[1]}
+                  alt="Thumbnail 1"
+                  fill
+                  className="rounded-lg w-16 h-16 object-cover border border-gray-300 cursor-pointer"
+                />
+                <Image
+                  src={product?.images[1]}
+                  alt="Thumbnail 2"
+                  fill
+                  className="rounded-lg w-16 h-16 object-cover border border-gray-300 cursor-pointer"
+                />
+              </Box>
+            </>
+          )}
         </Box>
 
         {/* Product Details */}
@@ -76,7 +85,7 @@ const ProductView = ({ id }) => {
             className="font-semibold text-gray-800 dark:text-gray-100 capitalize
              mb-4"
           >
-            {product?.description}
+            {product?.product}
           </Typography>
 
           {/* Product Specifications */}
@@ -90,9 +99,7 @@ const ProductView = ({ id }) => {
                 <span
                   className="mr-3 text-[18px]
                 "
-                >
-                  :
-                </span>
+                ></span>
                 {product?.brand}
               </span>
             </div>
@@ -109,7 +116,7 @@ const ProductView = ({ id }) => {
                 >
                   :
                 </span>
-                {product?.category}
+                {product?.category?.name}
               </span>
             </div>
 
@@ -124,7 +131,33 @@ const ProductView = ({ id }) => {
                 >
                   :
                 </span>
-                {product?.ram}
+                {product?.ram?.ram}
+              </span>
+            </div>
+            <div className="flex items-center text-gray-700 dark:text-gray-400">
+              <FaMemory className="mr-3 text-lg text-gray-700" />
+              <span className="font-medium w-28">Weight</span>
+              <span>
+                <span
+                  className="mr-3 text-[18px]
+                "
+                >
+                  :
+                </span>
+                {product?.weight?.weight}
+              </span>
+            </div>
+            <div className="flex items-center text-gray-700 dark:text-gray-400">
+              <FaMemory className="mr-3 text-lg text-gray-700" />
+              <span className="font-medium w-28">Size</span>
+              <span>
+                <span
+                  className="mr-3 text-[18px]
+                "
+                >
+                  :
+                </span>
+                {product?.size?.size}
               </span>
             </div>
 
@@ -155,7 +188,7 @@ const ProductView = ({ id }) => {
                 >
                   :
                 </span>
-                {product?.published}
+                {formattedDate}
               </span>
             </div>
           </div>
