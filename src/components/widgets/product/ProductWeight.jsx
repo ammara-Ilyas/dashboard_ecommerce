@@ -59,7 +59,7 @@ export default function AddProductWeight() {
       }
     };
     fetchData();
-  }, [weightsList, setWeightsList]);
+  }, [setWeightsList]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

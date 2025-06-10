@@ -76,7 +76,7 @@ export default function AddProductRAM() {
       }
     };
     fetchData();
-  }, [ramList, setRamList]);
+  }, [setRamList]);
 
   const handleAddOrEditRam = async () => {
     if (ram.trim() === "") {
