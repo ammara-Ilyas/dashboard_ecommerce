@@ -11,6 +11,9 @@ export const CategoryProvider = ({ children }) => {
   const [sizeList, setSizeList] = useState([]);
   // const [products, setProducts] = useState([]);
   const [bannerList, setBannerList] = useState([]);
+  const [orderList, setorderList] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(false);
 
   // Forms
@@ -37,15 +40,26 @@ export const CategoryProvider = ({ children }) => {
     const fetchAll = async () => {
       setLoading(true);
       try {
-        const [catRes, weightRes, ramRes, bannerRes, sizeRes] =
-          await Promise.all([
-            callPublicApi("/category", "GET"),
-            // callPublicApi("/subcategory", "GET"),
-            callPublicApi("/weight", "GET"),
-            callPublicApi("/ram", "GET"),
-            callPublicApi("/banners", "GET"),
-            callPublicApi("/size", "GET"),
-          ]);
+        const [
+          catRes,
+          weightRes,
+          ramRes,
+          bannerRes,
+          sizeRes,
+          orderRes,
+          userRes,
+          reviewRes,
+        ] = await Promise.all([
+          callPublicApi("/category", "GET"),
+          // callPublicApi("/subcategory", "GET"),
+          callPublicApi("/weight", "GET"),
+          callPublicApi("/ram", "GET"),
+          callPublicApi("/banners", "GET"),
+          callPublicApi("/size", "GET"),
+          callPublicApi("/orders", "GET"),
+          callPublicApi("/auth/users", "GET"),
+          callPublicApi("/reviews", "GET"),
+        ]);
 
         if (catRes?.categories) {
           setCategories(catRes.categories);
@@ -64,6 +78,15 @@ export const CategoryProvider = ({ children }) => {
 
         if (bannerRes?.banners) {
           setBannerList(bannerRes.banners);
+        }
+        if (orderRes?.orders) {
+          setorderList(orderRes.orders);
+        }
+        if (userRes?.users) {
+          setUsers(userRes.users);
+        }
+        if (reviewRes?.reviews) {
+          setReviews(reviewRes.reviews);
         }
       } catch (err) {
         toast.error();
@@ -102,6 +125,12 @@ export const CategoryProvider = ({ children }) => {
         bannerForm,
         setBannerForm,
         isSidebarOpen,
+        orderList,
+        setorderList,
+        setReviews,
+        setUsers,
+        users,
+        reviews,
         toggleSidebar,
       }}
     >

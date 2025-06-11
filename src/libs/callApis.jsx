@@ -1,5 +1,5 @@
-const HOSTNAME = "https://ecommerce-apis-hl5w.onrender.com/api";
-// Utility to get token dynamically (adjust to your app's storage)
+// const HOSTNAME = "https://ecommerce-apis-hl5w.onrender.com/api";
+const HOSTNAME = "http://localhost:5000/api";
 
 const callPrivateApi = async (endpoint, method, payload, token) => {
   const headers = {

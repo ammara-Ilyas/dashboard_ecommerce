@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { format } from "date-fns";
 import {
   Table,
@@ -20,9 +20,10 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import { getToken } from "@/libs/Token";
 import ProductListSkeleton from "@/libs/ProductSkeleton";
+import { useCategory } from "@/contextApi/CategoriesContext";
 
 const OrderTable = () => {
-  const [orders, setOrders] = useState([]);
+  const { orderList, setorderList } = useCategory();
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -34,7 +35,8 @@ const OrderTable = () => {
     try {
       const res = await callPublicApi("/orders", "GET");
       console.log("res order", res);
-      setOrders(res.orders);
+      // setorderList(res.orders);
+      setorderList(res.orders);
     } catch (error) {
       console.error(error.message || "Internal Server Error");
     } finally {
@@ -43,7 +45,7 @@ const OrderTable = () => {
   };
   useEffect(() => {
     fetchAllOrders();
-  }, []);
+  }, [setorderList]);
   const handleDelete = async (id) => {
     console.log("id", id);
 
@@ -56,7 +58,7 @@ const OrderTable = () => {
       );
       console.log("res", res);
       toast.success(res.message);
-      setOrders(orders.filter((order) => order._id !== id));
+      setorderList(orderList.filter((order) => order._id !== id));
     } catch (error) {
       toast.error(error.message || "Internal Server Error");
     }
@@ -95,8 +97,8 @@ const OrderTable = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders &&
-                orders.map((order, index) => (
+              {orderList &&
+                orderList.map((order, index) => (
                   <TableRow
                     key={index}
                     className="hover:bg-gray-100 transition duration-150 border-b-gray-400"
