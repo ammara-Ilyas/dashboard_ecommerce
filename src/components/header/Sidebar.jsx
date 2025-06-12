@@ -8,7 +8,9 @@ import { FaProductHunt } from "react-icons/fa6";
 import { BiSolidCategory } from "react-icons/bi";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import HomeIcon from "@mui/icons-material/Home";
+import { useRouter } from "next/navigation";
 const Sidebar = () => {
+  const router = useRouter;
   const { isSidebarOpen } = useCategory();
   const [openMenu, setOpenMenu] = useState(null);
   const handleLogout = () => {
