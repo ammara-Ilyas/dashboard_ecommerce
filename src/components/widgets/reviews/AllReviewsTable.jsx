@@ -37,7 +37,7 @@ const AllReviewsTable = () => {
   const fetchAllReviews = async () => {
     try {
       const response = await callPublicApi("/reviews", "GET");
-      console.log("res ", response);
+      // console.log("res ", response);
 
       setReviews(response.reviews);
     } catch (error) {

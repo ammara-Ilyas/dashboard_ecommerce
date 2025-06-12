@@ -52,9 +52,9 @@ const HomeBannerTabel = () => {
       try {
         const res = await callPublicApi("/banners", "GET");
         if (res.status === "error" || res.status === 400) {
-          toast.error(res.message || "Banners fetch failed");
+          // toast.error(res.message || "Banners fetch failed");
         } else {
-          toast.success(res.message || "Banners fetched successfully");
+          // toast.success(res.message || "Banners fetched successfully");
           setBannerList(res.banners);
         }
       } catch (error) {
