@@ -297,6 +297,7 @@ const ProductTabel = () => {
               products={filteredProducts}
               itemsPerPage={itemsPerPage}
               currentPage={currentPage}
+              filteredProducts={filteredProducts}
               handlePageChange={(e, value) => setCurrentPage(value)}
             />
           </div>

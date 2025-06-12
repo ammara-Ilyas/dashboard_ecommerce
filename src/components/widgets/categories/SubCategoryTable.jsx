@@ -27,7 +27,6 @@ import { Category } from "@mui/icons-material";
 import { getToken } from "@/libs/Token";
 const SubCategoryTable = () => {
   // const [loading, setLoading] = useState(false);
-  const [loader, setLoader] = useState(false);
   const {
     categories,
     setCategories,
@@ -43,6 +42,7 @@ const SubCategoryTable = () => {
   useEffect(() => {
     const t = getToken();
     setToken(t);
+    console.log("categories", categories);
   }, []);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -53,11 +53,11 @@ const SubCategoryTable = () => {
 
   // Calculate Paginated Items
   const currentItems = useMemo(() => {
-    if (!subCategories || subCategories.length === 0) return [];
+    if (!categories || categories.length === 0) return [];
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    return subCategories.slice(indexOfFirstItem, indexOfLastItem);
-  }, [subCategories, currentPage]);
+    return categories.slice(indexOfFirstItem, indexOfLastItem);
+  }, [categories, currentPage]);
   useEffect(() => {
     const fetchsubCategories = async () => {
       setLoading(true);

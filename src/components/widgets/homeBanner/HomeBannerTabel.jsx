@@ -281,6 +281,9 @@ const HomeBannerTabel = () => {
             )}
             itemsPerPage={itemsPerPage}
             currentPage={currentPage}
+            filteredProducts={bannerList.filter((item) =>
+              item.name.toLowerCase().includes(search.toLowerCase())
+            )}
             handlePageChange={handlePageChange}
           />
         </div>

@@ -113,18 +113,14 @@ function ProductUploadForm() {
           data,
           token
         );
-        if (res.status === 200 || res?.data?.status === 200) {
-          toast.success(res.message || "Product updated successfully");
-          router.push("/product/products");
-          setProducts((prev) =>
-            prev.map((item) =>
-              item._id === res.product._id ? res.product : item
-            )
-          );
-          setFormData(productData);
-        } else {
-          toast.error(res.message || "Failed to update product");
-        }
+        toast.success(res.message || "Product updated successfully");
+        router.push("/product/products");
+        setProducts((prev) =>
+          prev.map((item) =>
+            item._id === res.product._id ? res.product : item
+          )
+        );
+        setFormData(productData);
       } catch (error) {
         toast.error(error?.message || "Something went wrong");
       } finally {
@@ -135,14 +131,10 @@ function ProductUploadForm() {
     } else {
       try {
         const res = await callPrivateApi("/product", "POST", data, token);
-        if (res.status === 200 || res?.data?.status === 200) {
-          toast.success(res.message || "Product added successfully");
-          router.push("/product/products");
-          setProducts((prev) => [...prev, res.product]);
-          setFormData(productData);
-        } else {
-          toast.error(res.message || "Failed to add product");
-        }
+        toast.success(res.message || "Product added successfully");
+        router.push("/product/products");
+        setProducts((prev) => [...prev, res.product]);
+        setFormData(productData);
       } catch (error) {
         toast.error(error?.message || "Something went wrong");
       } finally {

@@ -250,13 +250,13 @@ const CategoryList = () => {
                       type="checkbox"
                       checked={selectedIds.has(category._id)}
                       onChange={() => handleCheckboxChange(category._id)}
-                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="w-4 h-4 relative rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
                     <Image
                       src={category.image}
                       alt={category.name}
-                      className="rounded-full"
-                      width={40}
+                      className="rounded-md"
+                      width={70}
                       height={40}
                     />
                   </td>
@@ -287,7 +287,7 @@ const CategoryList = () => {
             )}
           </tbody>
         </table>
-        <div className="border-2 border-emerald-600 flex items-center justify-end mt-4">
+        <div className=" flex items-center justify-end mt-4">
           <ProductPagination
             products={filteredCategories}
             itemsPerPage={itemsPerPage}

@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 // import avatar from "public/image/avatar.jpg";
 const UserContext = createContext();
 
@@ -80,14 +80,17 @@ export const UserProvider = ({ children }) => {
   ];
   const [isOpen, setIsOpen] = useState(false);
 
-  const [user, setUser] = useState({
-    name: "Ammara Ilyas",
-    email: "Ammarailyas535@gmail.com",
-    img: "",
-    phone: 789654123,
-  });
+  const [user, setUser] = useState({});
   const [email, setEmail] = useState("ammarailyas361@gmail.com");
   const togglePanel = () => setIsOpen((prev) => !prev);
+
+  useEffect(() => {
+    const u = JSON.parse(localStorage.getItem("user"));
+    if (u) {
+      setUser(u);
+      setEmail(u.email);
+    }
+  }, [setUser]);
 
   return (
     <UserContext.Provider

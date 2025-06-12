@@ -15,8 +15,8 @@ const Sidebar = () => {
   const [openMenu, setOpenMenu] = useState(null);
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
     router.push("/");
+    localStorage.removeItem("user");
   };
   const toggleMenu = (menu) => {
     setOpenMenu((prev) => (prev === menu ? null : menu));

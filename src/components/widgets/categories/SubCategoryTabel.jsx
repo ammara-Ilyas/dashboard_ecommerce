@@ -39,6 +39,7 @@ const SubCategoryTabel = () => {
     subCategoryForm,
   } = useCategory();
   const [token, setToken] = useState(null);
+  console.log("categories in sub categories", categories);
 
   useEffect(() => {
     const t = getToken();
@@ -53,11 +54,11 @@ const SubCategoryTabel = () => {
 
   // Calculate Paginated Items
   const currentItems = useMemo(() => {
-    if (!subCategories || subCategories.length === 0) return [];
+    if (!categories || categories.length === 0) return [];
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    return subCategories.slice(indexOfFirstItem, indexOfLastItem);
-  }, [subCategories, currentPage]);
+    return categories.slice(indexOfFirstItem, indexOfLastItem);
+  }, [categories, currentPage]);
   useEffect(() => {
     const fetchsubCategories = async () => {
       setLoading(true);

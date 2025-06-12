@@ -34,7 +34,7 @@ const Navbar = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
-    router.push("/");
+    router.push("/auth/login");
   };
 
   const getUserFromLocalStorage = () => {

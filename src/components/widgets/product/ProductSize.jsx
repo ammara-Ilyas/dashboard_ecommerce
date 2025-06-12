@@ -52,7 +52,7 @@ const ProductSize = () => {
         if (res.status === "error" || res.status === 400) {
           toast.error(res.message || "Failed to fetch sizes");
         } else {
-          toast.success(res.message || "Sizes fetched successfully");
+          // toast.success(res.message || "Sizes fetched successfully");
           setSizeList(res.sizes || []);
         }
       } catch (error) {

@@ -89,8 +89,7 @@ export const CategoryProvider = ({ children }) => {
           setReviews(reviewRes.reviews);
         }
       } catch (err) {
-        toast.error();
-        "❌ Fetch error:" || err?.message || err;
+        toast.error("❌ Fetch error:" || err?.message || err);
       } finally {
         setLoading(false);
       }

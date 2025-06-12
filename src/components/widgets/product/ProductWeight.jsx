@@ -49,7 +49,7 @@ export default function AddProductWeight() {
         if (res.status === "error" || res.status === 400) {
           toast.error(res.message || "Weights fetch failed");
         } else {
-          toast.success(res.message || "Weights fetched successfully");
+          // toast.success(res.message || "Weights fetched successfully");
           setWeightsList(res.weights);
         }
       } catch (error) {

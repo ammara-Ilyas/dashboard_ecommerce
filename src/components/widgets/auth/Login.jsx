@@ -48,8 +48,11 @@ export default function Login() {
 
         localStorage.setItem("token", res.token);
         localStorage.setItem("user", JSON.stringify(res.user));
-        router.push("/"); // Navigate after success
-        // Reset form
+        window.dispatchEvent(new Event("tokenChanged"));
+
+        setTimeout(() => {
+          router.push("/");
+        }, 100); // Reset form
         setLoginForm({
           email: "",
           password: "",
