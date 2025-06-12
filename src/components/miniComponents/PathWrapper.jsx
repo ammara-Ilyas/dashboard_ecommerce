@@ -22,7 +22,7 @@ const PathnameWrapper = ({ children }) => {
   console.log("token in pathwrapper", token);
 
   const checkAccess = () => {
-    if (token === undefined) return;
+    // if (token === undefined) return;
 
     const isAuthPage =
       pathname === "/auth/login" ||

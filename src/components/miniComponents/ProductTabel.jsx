@@ -159,7 +159,6 @@ const ProductTabel = () => {
 
   return (
     <div className="p-4 dark:bg-gray-900 dark:text-white bg-gray-100">
-      <ToastContainer />
       <div className="flex items-center justify-between my-3 mx-8">
         <div className="flex items-center gap-4">
           {selectedIds.size > 1 && (
@@ -303,6 +302,7 @@ const ProductTabel = () => {
           </div>
         </TableContainer>
       )}
+      <ToastContainer />
     </div>
   );
 };

@@ -13,6 +13,7 @@ const ProductPagination = ({
         <div className="flex justify-center ">
           <Pagination
             count={Math.ceil(filteredProducts?.length / itemsPerPage)}
+            // count={5}
             page={currentPage}
             onChange={handlePageChange}
             color="primary"
