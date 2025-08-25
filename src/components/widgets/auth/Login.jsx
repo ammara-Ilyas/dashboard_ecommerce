@@ -14,8 +14,8 @@ import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [loginForm, setLoginForm] = useState({
-    email: "",
-    password: "",
+    email: "admin@gmail.com",
+    password: "Admin@123",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -40,19 +40,25 @@ export default function Login() {
     }
     try {
       const res = await callPublicApi("/auth/login", "POST", loginForm);
-
+      console.log("res",res);
+      
       if (res.status === "error") {
         toast.error(res.message || "Login failed");
+        console.error(res.message || "Login failed");
       } else {
         toast.success(res.message || "Login successfully");
 
-        localStorage.setItem("token", res.token);
-        localStorage.setItem("user", JSON.stringify(res.user));
+       if(res.data.token || res.data.user){
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
         window.dispatchEvent(new Event("tokenChanged"));
+       }else{
+        toast.error(res.message || "Login failed");
+       }
 
         setTimeout(() => {
           router.push("/");
-        }, 100); // Reset form
+        }, 100); 
         setLoginForm({
           email: "",
           password: "",
@@ -133,7 +139,7 @@ export default function Login() {
         <div className="my-2 text-center text-gray-500">or</div>
 
         {/* Google Sign-In */}
-        <Button
+        {/* <Button
           variant="outlined"
           color="primary"
           startIcon={<FcGoogle />}
@@ -141,7 +147,7 @@ export default function Login() {
           className="mt-4 py-2 font-semibold"
         >
           Sign In With Google
-        </Button>
+        </Button> */}
 
         {/* Register Link */}
         <div className="mt-6 text-center text-sm text-gray-600">

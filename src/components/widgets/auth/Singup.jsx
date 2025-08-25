@@ -208,7 +208,7 @@ export default function Signup() {
           </form>
 
           <div className="mt-4 text-gray-500 text-center">or</div>
-
+{/* 
           <Button
             variant="outlined"
             color="primary"
@@ -216,7 +216,7 @@ export default function Signup() {
             className="mt-4 font-semibold py-2"
           >
             Sign In With Google
-          </Button>
+          </Button> */}
 
           <div className="mt-4 text-sm text-gray-600">
             Don&apos;t have an account?{" "}
